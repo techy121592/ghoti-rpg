@@ -33,8 +33,6 @@ endif ()
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
-include_directories(include)
-
-# Look in the Lesson0 subdirectory to find its CMakeLists.txt so we can build the executable
+# Look in the subdirectorys to find its CMakeLists.txt so we can build the executable and library
 add_subdirectory(game-library)
 add_subdirectory(desktop-client)
