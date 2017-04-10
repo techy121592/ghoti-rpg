@@ -50,6 +50,7 @@ InputData Game::getInput() {
     InputData inputData;
 
     while(SDL_PollEvent(&events)) {
+        // This is where we get input
         if(events.type == SDL_QUIT) {
             inputData.Quit = true;
         }
@@ -62,10 +63,14 @@ void Game::update(uint32_t deltaTime, InputData* inputData) {
     if(inputData->Quit) {
         running = false;
     }
+
+    // This is where I go through all of the game objects and update them
+    // Player character and controls will have to be passed events/input here
 }
 
 void Game::render(SDL_Renderer*& ren, SDL_Texture*& tex) {
     SDL_RenderClear(ren);
+    // Should take a list of drawable things and draw them at their destination
     SDL_RenderCopy(ren, tex, NULL, NULL);
     SDL_RenderPresent(ren);
 }
