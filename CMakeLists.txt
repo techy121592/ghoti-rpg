@@ -33,6 +33,9 @@ endif ()
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
+find_package(SDL2_image REQUIRED)
+include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+
 # Look in the subdirectorys to find its CMakeLists.txt so we can build the executable and library
 add_subdirectory(game-library)
 add_subdirectory(desktop-client)

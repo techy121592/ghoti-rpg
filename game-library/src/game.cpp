@@ -1,7 +1,6 @@
 #include "game.h"
 
 #include <iostream>
-
 #include "res_path.h"
 
 int Game::setupSDL(SDL_Window*& win, SDL_Renderer*& ren) {
@@ -28,16 +27,9 @@ int Game::setupSDL(SDL_Window*& win, SDL_Renderer*& ren) {
     return 0;
 }
 
-int Game::loadImage(std::string fileName, SDL_Renderer* ren, SDL_Texture*& tex) {
-    std::string imagePath = getResourcePath("images") + fileName;
-    SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
-    if (bmp == nullptr) {
-        std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
-
-    tex = SDL_CreateTextureFromSurface(ren, bmp);
-    SDL_FreeSurface(bmp);
+int Game::loadImage(const std::string &fileName, SDL_Renderer* ren, SDL_Texture*& tex) {
+    const std::string imagePath = getResourcePath("images") + fileName;
+    tex = IMG_LoadTexture(ren, imagePath.c_str());
     if (tex == nullptr) {
         std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
         return 1;
@@ -95,6 +87,7 @@ int Game::gameLoop(SDL_Renderer*& ren, SDL_Texture*& tex) {
         int64_t delay = targetFrameLength - deltaTime;
         uint32_t fps = delay >= 0 ? 60 : 1000 / (targetFrameLength - delay);
 
+        // Should print this in-game
         std::cout << "FPS: " << fps << std::endl;
 
         if(delay > 0) {
