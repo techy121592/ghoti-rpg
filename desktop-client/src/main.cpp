@@ -7,5 +7,5 @@ int main(int, char**) {
         then again, most devices probably will be best with all control systems,
         maybe this will just dictate the screen size.
     */
-    return game.run();
+    return game.run(640, 480, 60);
 }
