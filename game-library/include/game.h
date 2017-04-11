@@ -2,21 +2,23 @@
 #define GAME_H
 
 #include <string>
+#include <tuple>
 #include <SDL.h>
+#include <SDL_image.h>
 #include "input-data.h"
 
 class Game {
     bool running;
 
-    int setupSDL(SDL_Window*& win, SDL_Renderer*& ren);
-    int loadImage(std::string fileName, SDL_Renderer* ren, SDL_Texture*& tex);
-    int gameLoop(SDL_Renderer*& ren, SDL_Texture*& tex);
+    std::tuple<SDL_Window*, SDL_Renderer*, const int> setupSDL(const uint32_t width, const uint32_t height);
+    std::tuple<SDL_Texture*, const int> loadImage(const std::string &fileName, SDL_Renderer* ren);
+    int gameLoop(SDL_Renderer* ren, SDL_Texture* tex, const uint32_t maxFPS);
     InputData getInput();
-    void update(uint32_t deltaTime, InputData* inputData);
-    void render(SDL_Renderer*& ren, SDL_Texture*& tex);
+    void update(const uint32_t deltaTime, InputData* inputData);
+    void render(SDL_Renderer* ren, SDL_Texture* tex);
     void closeSDL(SDL_Window*& win, SDL_Renderer*& ren, SDL_Texture*& tex);
 public:
-    int run();
+    int run(const uint32_t width, const uint32_t height, const uint32_t maxFPS);
 };
 
 #endif
