@@ -69,7 +69,8 @@ void Game::render(SDL_Renderer* ren, SDL_Texture* tex) {
 }
 
 int Game::gameLoop(SDL_Renderer* ren, SDL_Texture* tex) {
-    uint32_t maxFPS = 60;
+    const uint32_t maxFPS = 60;
+    const int32_t targetFrameLength = (int64_t)(1000 / maxFPS);
     uint32_t previousTime, currentTime, deltaTime;
 
     currentTime = SDL_GetTicks();
@@ -85,14 +86,14 @@ int Game::gameLoop(SDL_Renderer* ren, SDL_Texture* tex) {
             update(deltaTime, &input);
             render(ren, tex);
 
-            int64_t targetFrameLength = (int64_t)(1000 / maxFPS);
-            int64_t delay = targetFrameLength - deltaTime;
-            uint32_t fps = delay >= 0 ? 60 : 1000 / (targetFrameLength - delay);
-
-            // Should print this in-game
-            std::cout << "FPS: " << fps << std::endl;
+            int32_t delay = targetFrameLength - deltaTime;
+            if(deltaTime > 0) {
+                uint32_t fps = 1000 / deltaTime;
+                std::cout << "FPS: " << fps << std::endl << "Delay: " << delay << std::endl << "Delta: " << deltaTime << std::endl << "Target: " << targetFrameLength << std::endl;
+            }
 
             if(delay > 0) {
+                // This might not be necessary, but it is more friendly.
                 SDL_Delay((uint32_t)delay);
             }
         }
