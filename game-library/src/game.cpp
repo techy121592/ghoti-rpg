@@ -3,17 +3,17 @@
 #include <iostream>
 #include "res_path.h"
 
-std::tuple<SDL_Window*, SDL_Renderer*, const int> Game::setupSDL(const uint32_t width, const uint32_t height) {
+std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return std::make_tuple(nullptr, nullptr, 1);
+        return std::make_tuple(nullptr, nullptr);
     }
 
     SDL_Window* win = SDL_CreateWindow("Hello World!", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {
         std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
-        return std::make_tuple(nullptr, nullptr, 1);
+        return std::make_tuple(nullptr, nullptr);
     }
 
     SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -21,21 +21,21 @@ std::tuple<SDL_Window*, SDL_Renderer*, const int> Game::setupSDL(const uint32_t 
         SDL_DestroyWindow(win);
         std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
-        return std::make_tuple(nullptr, nullptr, 1);
+        return std::make_tuple(nullptr, nullptr);
     }
 
-    return std::make_tuple(win, ren, 0);
+    return std::make_tuple(win, ren);
 }
 
-std::tuple<SDL_Texture*, const int> Game::loadImage(const std::string &fileName, SDL_Renderer* ren) {
+SDL_Texture* Game::loadImage(const std::string &fileName, SDL_Renderer* ren) {
     const std::string imagePath = getResourcePath("images") + fileName;
     SDL_Texture* tex = IMG_LoadTexture(ren, imagePath.c_str());
     if (tex == nullptr) {
         std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
-        return std::make_tuple(nullptr, 1);
+        return nullptr;
     }
 
-    return std::make_tuple(tex, 0);
+    return tex;
 }
 
 InputData Game::getInput() {
@@ -103,44 +103,48 @@ void Game::closeSDL(SDL_Window*& win, SDL_Renderer*& ren, SDL_Texture*& tex) {
     if(tex != nullptr) {
         SDL_DestroyTexture(tex);
     }
-    SDL_DestroyRenderer(ren);
-    SDL_DestroyWindow(win);
+    if(ren != nullptr) {
+        SDL_DestroyRenderer(ren);
+    }
+    if(win != nullptr) {
+        SDL_DestroyWindow(win);
+    }
     SDL_Quit();
 }
 
 int Game::run(const uint32_t width, const uint32_t height, const uint32_t fps) {
     try {
-        std::cout << "Setting up SDL" << std::endl;
-        std::tuple<SDL_Window*, SDL_Renderer*, const int> windowRendererTuple = setupSDL(width, height);
-
-        if (std::get<2>(windowRendererTuple)) {
-            std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
-            return 1;
-        }
-
-        SDL_Window *win = std::get<0>(windowRendererTuple);
-        SDL_Renderer *ren = std::get<1>(windowRendererTuple);
-
-        std::cout << "Resource path is: " << getResourcePath() << std::endl;
-        std::tuple<SDL_Texture*, int> textureTuple = loadImage("hello.bmp", ren);
-
+        SDL_Window *win = nullptr;
+        SDL_Renderer *ren = nullptr;
         SDL_Texture* tex = nullptr;
-        if (std::get<1>(textureTuple)) {
-            std::cout << "Failed to load texture: " << SDL_GetError() << std::endl;
+
+        std::cout << "Setting up SDL" << std::endl;
+        std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = setupSDL(width, height);
+        win = std::get<0>(windowRendererTuple);
+        ren = std::get<1>(windowRendererTuple);
+
+        if (win == nullptr || ren == nullptr) {
+            std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
             closeSDL(win, ren, tex);
             return 1;
         }
 
-        tex = std::get<0>(textureTuple);
+        std::cout << "Resource path is: " << getResourcePath() << std::endl;
+        tex = loadImage("hello.bmp", ren);
 
-        if (gameLoop(ren, tex, fps)) {
-            std::cout << "Game loop failed!" << std::endl;
+        if (tex == nullptr) {
+            std::cout << "Failed to load texture: " << SDL_GetError() << std::endl;
+            closeSDL(win, ren, tex);
             return 1;
-        }
-
-        closeSDL(win, ren, tex);
-        std::cout << "Game completed successfully" << std::endl;
-        return 0;
+        } else if (gameLoop(ren, tex, fps)) {
+            std::cout << "Game loop failed!" << std::endl;
+            closeSDL(win, ren, tex);
+            return 1;
+        } else {
+            closeSDL(win, ren, tex);
+            std::cout << "Game completed successfully" << std::endl;
+            return 0;
+         }
     } catch(std::exception ex) {
         return 1;
     }

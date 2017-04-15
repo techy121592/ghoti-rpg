@@ -10,8 +10,8 @@
 class Game {
     bool running;
 
-    std::tuple<SDL_Window*, SDL_Renderer*, const int> setupSDL(const uint32_t width, const uint32_t height);
-    std::tuple<SDL_Texture*, const int> loadImage(const std::string &fileName, SDL_Renderer* ren);
+    std::tuple<SDL_Window*, SDL_Renderer*> setupSDL(const uint32_t width, const uint32_t height);
+    SDL_Texture* loadImage(const std::string &fileName, SDL_Renderer* ren);
     int gameLoop(SDL_Renderer* ren, SDL_Texture* tex, const uint32_t maxFPS);
     InputData getInput();
     void update(const uint32_t deltaTime, InputData* inputData);
