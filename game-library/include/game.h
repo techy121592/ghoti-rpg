@@ -5,7 +5,7 @@
 #include <tuple>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "input-data.h"
+#include "input_data.h"
 
 class Game {
     bool running;
