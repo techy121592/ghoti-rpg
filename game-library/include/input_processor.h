@@ -11,9 +11,10 @@ public:
         InputData inputData;
 
         while(SDL_PollEvent(&events)) {
-            // This is where we get input
-            if(events.type == SDL_QUIT) {
-                inputData.Quit = true;
+            switch(events.type) {
+                // This is where we get input
+                case SDL_QUIT:
+                    inputData.Quit = true;
             }
         }
 
