@@ -1,8 +1,5 @@
 #include "game.h"
 
-#include <iostream>
-#include "res_path.h"
-
 std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -25,17 +22,6 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, cons
     }
 
     return std::make_tuple(win, ren);
-}
-
-SDL_Texture* Game::loadImage(const std::string &fileName, SDL_Renderer* ren) {
-    const std::string imagePath = getResourcePath("images") + fileName;
-    SDL_Texture* tex = IMG_LoadTexture(ren, imagePath.c_str());
-    if (tex == nullptr) {
-        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
-        return nullptr;
-    }
-
-    return tex;
 }
 
 InputData Game::getInput() {
@@ -129,8 +115,7 @@ int Game::run(const uint32_t width, const uint32_t height, const uint32_t fps) {
             return 1;
         }
 
-        std::cout << "Resource path is: " << getResourcePath() << std::endl;
-        tex = loadImage("hello.bmp", ren);
+        tex = ResourceLoader::LoadImage("hello.bmp", ren);
 
         if (tex == nullptr) {
             std::cout << "Failed to load texture: " << SDL_GetError() << std::endl;

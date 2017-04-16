@@ -1,10 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <iostream>
 #include <string>
 #include <tuple>
 #include <SDL.h>
-#include <SDL_image.h>
+
+#include "resource_loader.h"
 #include "input_data.h"
 
 class Game {
@@ -17,6 +19,7 @@ class Game {
     void update(const uint32_t deltaTime, InputData* inputData);
     void render(SDL_Renderer* ren, SDL_Texture* tex);
     void closeSDL(SDL_Window*& win, SDL_Renderer*& ren, SDL_Texture*& tex);
+
 public:
     int run(const uint32_t width, const uint32_t height, const uint32_t maxFPS);
 };
