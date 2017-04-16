@@ -12,7 +12,7 @@ public:
     ~HelloScreen();
     Screen* Update(const uint32_t deltaTime, InputData* inputData);
     void Render(SDL_Renderer* ren);
-    int CheckSetup();
+    bool CheckSetup();
 };
 
 #endif

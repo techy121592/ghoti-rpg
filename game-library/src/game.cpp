@@ -43,7 +43,7 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
     return std::make_tuple(win, ren);
 }
 
-    bool Game::CheckSetup() {
+bool Game::CheckSetup() {
     return win != nullptr && ren != nullptr;
 }
 
