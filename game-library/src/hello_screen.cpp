@@ -10,10 +10,12 @@ HelloScreen::~HelloScreen() {
     }
 }
 
-void HelloScreen::Render(SDL_Renderer* ren) {
-    SDL_RenderClear(ren);
+bool HelloScreen::CheckSetup() {
+    return helloTexture != nullptr;
+}
+
+void HelloScreen::RenderComponents(SDL_Renderer* ren) {
     SDL_RenderCopy(ren, helloTexture, NULL, NULL);
-    SDL_RenderPresent(ren);
 }
 
 Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
@@ -21,8 +23,4 @@ Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
         return nullptr;
     }
     return this;
-}
-
-int HelloScreen::CheckSetup() {
-    return helloTexture != nullptr;
 }

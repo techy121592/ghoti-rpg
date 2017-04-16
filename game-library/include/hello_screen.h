@@ -10,9 +10,9 @@ class HelloScreen : public Screen {
 public:
     HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
+    bool CheckSetup();
+    void RenderComponents(SDL_Renderer* ren);
     Screen* Update(const uint32_t deltaTime, InputData* inputData);
-    void Render(SDL_Renderer* ren);
-    int CheckSetup();
 };
 
 #endif

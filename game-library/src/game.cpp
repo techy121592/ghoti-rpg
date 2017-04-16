@@ -43,22 +43,24 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
     return std::make_tuple(win, ren);
 }
 
-    bool Game::CheckSetup() {
+bool Game::CheckSetup() {
     return win != nullptr && ren != nullptr;
 }
 
-InputData Game::GetInput() {
-    SDL_Event events;
-    InputData inputData;
-
-    while(SDL_PollEvent(&events)) {
-        // This is where we get input
-        if(events.type == SDL_QUIT) {
-            inputData.Quit = true;
-        }
+void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+    if(screen != nullptr) {
+        delete screen;
     }
 
-    return inputData;
+    if(ren != nullptr) {
+        SDL_DestroyRenderer(ren);
+    }
+
+    if(win != nullptr) {
+        SDL_DestroyWindow(win);
+    }
+
+    SDL_Quit();
 }
 
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
@@ -70,7 +72,7 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
     }
 }
 
-int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
+bool Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
     const int32_t targetFrameLength = (int32_t)(1000 / maxFPS);
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
@@ -81,40 +83,26 @@ int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
 
-            InputData input = GetInput();
+            InputData input = InputProcessor::GetInput();
 
             screen = screen->Update(deltaTime, &input);
             if(screen == nullptr) {
-                return 0;
+                break;
             }
 
-            screen->Render(ren);
+            screen->RenderScreen(ren);
 
             PauseForRestOfFrame(targetFrameLength, deltaTime);
         }
     } catch (const std::exception& ex) {
-        return 1;
+        return false;
     }
-
-    return 0;
-}
-
-void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
-    if(screen != nullptr) {
-        delete screen;
-    }
-    if(ren != nullptr) {
-        SDL_DestroyRenderer(ren);
-    }
-    if(win != nullptr) {
-        SDL_DestroyWindow(win);
-    }
-    SDL_Quit();
+    return true;
 }
 
 int Game::Run() {
     try {
-        if (GameLoop(ren, screen, fps)) {
+        if (!GameLoop(ren, screen, fps)) {
             std::cout << "Game loop failed!" << std::endl;
             CloseSDL(win, ren, screen);
             return 1;
