@@ -21,7 +21,8 @@ class Game {
     std::tuple<SDL_Window*, SDL_Renderer*> SetupSDL(const uint32_t width, const uint32_t height);
     void CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen);
     void PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime);
-    bool GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS);
+    bool Step(const int32_t deltaTime);
+    bool GameLoop();
 
 public:
     Game(const uint32_t width, const uint32_t height, const uint32_t maxFPS);
