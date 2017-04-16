@@ -47,20 +47,6 @@ bool Game::CheckSetup() {
     return win != nullptr && ren != nullptr;
 }
 
-InputData Game::GetInput() {
-    SDL_Event events;
-    InputData inputData;
-
-    while(SDL_PollEvent(&events)) {
-        // This is where we get input
-        if(events.type == SDL_QUIT) {
-            inputData.Quit = true;
-        }
-    }
-
-    return inputData;
-}
-
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
     int32_t delay = targetFrameLength - deltaTime;
 
@@ -81,7 +67,7 @@ bool Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
 
-            InputData input = GetInput();
+            InputData input = InputProcessor::GetInput();
 
             screen = screen->Update(deltaTime, &input);
             if(screen == nullptr) {
@@ -102,12 +88,15 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
     if(screen != nullptr) {
         delete screen;
     }
+
     if(ren != nullptr) {
         SDL_DestroyRenderer(ren);
     }
+
     if(win != nullptr) {
         SDL_DestroyWindow(win);
     }
+
     SDL_Quit();
 }
 
