@@ -47,6 +47,22 @@ bool Game::CheckSetup() {
     return win != nullptr && ren != nullptr;
 }
 
+void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+    if(screen != nullptr) {
+        delete screen;
+    }
+
+    if(ren != nullptr) {
+        SDL_DestroyRenderer(ren);
+    }
+
+    if(win != nullptr) {
+        SDL_DestroyWindow(win);
+    }
+
+    SDL_Quit();
+}
+
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
     int32_t delay = targetFrameLength - deltaTime;
 
@@ -82,22 +98,6 @@ bool Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
         return false;
     }
     return true;
-}
-
-void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
-    if(screen != nullptr) {
-        delete screen;
-    }
-
-    if(ren != nullptr) {
-        SDL_DestroyRenderer(ren);
-    }
-
-    if(win != nullptr) {
-        SDL_DestroyWindow(win);
-    }
-
-    SDL_Quit();
 }
 
 int Game::Run() {
