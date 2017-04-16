@@ -70,7 +70,7 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
     }
 }
 
-int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
+bool Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
     const int32_t targetFrameLength = (int32_t)(1000 / maxFPS);
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
@@ -85,7 +85,7 @@ int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
 
             screen = screen->Update(deltaTime, &input);
             if(screen == nullptr) {
-                return 0;
+                break;
             }
 
             screen->Render(ren);
@@ -93,10 +93,9 @@ int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
             PauseForRestOfFrame(targetFrameLength, deltaTime);
         }
     } catch (const std::exception& ex) {
-        return 1;
+        return false;
     }
-
-    return 0;
+    return true;
 }
 
 void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
@@ -114,7 +113,7 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
 
 int Game::Run() {
     try {
-        if (GameLoop(ren, screen, fps)) {
+        if (!GameLoop(ren, screen, fps)) {
             std::cout << "Game loop failed!" << std::endl;
             CloseSDL(win, ren, screen);
             return 1;
