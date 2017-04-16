@@ -74,7 +74,7 @@ bool Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
                 break;
             }
 
-            screen->Render(ren);
+            screen->RenderScreen(ren);
 
             PauseForRestOfFrame(targetFrameLength, deltaTime);
         }

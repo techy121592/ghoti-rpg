@@ -11,7 +11,7 @@ public:
     HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
     Screen* Update(const uint32_t deltaTime, InputData* inputData);
-    void Render(SDL_Renderer* ren);
+    void RenderComponents(SDL_Renderer* ren);
     bool CheckSetup();
 };
 

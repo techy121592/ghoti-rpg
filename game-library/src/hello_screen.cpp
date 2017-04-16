@@ -10,10 +10,8 @@ HelloScreen::~HelloScreen() {
     }
 }
 
-void HelloScreen::Render(SDL_Renderer* ren) {
-    SDL_RenderClear(ren);
+void HelloScreen::RenderComponents(SDL_Renderer* ren) {
     SDL_RenderCopy(ren, helloTexture, NULL, NULL);
-    SDL_RenderPresent(ren);
 }
 
 Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
