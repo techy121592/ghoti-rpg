@@ -1,8 +1,5 @@
 #include "game.h"
 
-#include <iostream>
-#include "res_path.h"
-
 std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -27,17 +24,6 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, cons
     return std::make_tuple(win, ren);
 }
 
-SDL_Texture* Game::loadImage(const std::string &fileName, SDL_Renderer* ren) {
-    const std::string imagePath = getResourcePath("images") + fileName;
-    SDL_Texture* tex = IMG_LoadTexture(ren, imagePath.c_str());
-    if (tex == nullptr) {
-        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
-        return nullptr;
-    }
-
-    return tex;
-}
-
 InputData Game::getInput() {
     SDL_Event events;
     InputData inputData;
@@ -52,23 +38,7 @@ InputData Game::getInput() {
     return inputData;
 }
 
-void Game::update(const uint32_t deltaTime, InputData* inputData) {
-    if(inputData->Quit) {
-        running = false;
-    }
-
-    // This is where I go through all of the game objects and update them
-    // Player character and controls will have to be passed events/input here
-}
-
-void Game::render(SDL_Renderer* ren, SDL_Texture* tex) {
-    SDL_RenderClear(ren);
-    // Should take a list of drawable things and draw them at their destination
-    SDL_RenderCopy(ren, tex, NULL, NULL);
-    SDL_RenderPresent(ren);
-}
-
-int Game::gameLoop(SDL_Renderer* ren, SDL_Texture* tex, const uint32_t maxFPS) {
+int Game::gameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
     const int32_t targetFrameLength = (int32_t)(1000 / maxFPS);
     uint32_t previousTime, currentTime, deltaTime;
 
@@ -82,8 +52,8 @@ int Game::gameLoop(SDL_Renderer* ren, SDL_Texture* tex, const uint32_t maxFPS) {
             deltaTime = currentTime - previousTime;
 
             InputData input = getInput();
-            update(deltaTime, &input);
-            render(ren, tex);
+            screen = screen->Update(deltaTime, &input);
+            screen->Render(ren);
 
             int32_t delay = targetFrameLength - deltaTime;
 
@@ -99,9 +69,9 @@ int Game::gameLoop(SDL_Renderer* ren, SDL_Texture* tex, const uint32_t maxFPS) {
     return 0;
 }
 
-void Game::closeSDL(SDL_Window*& win, SDL_Renderer*& ren, SDL_Texture*& tex) {
-    if(tex != nullptr) {
-        SDL_DestroyTexture(tex);
+void Game::closeSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+    if(screen != nullptr) {
+        delete screen;
     }
     if(ren != nullptr) {
         SDL_DestroyRenderer(ren);
@@ -116,7 +86,7 @@ int Game::run(const uint32_t width, const uint32_t height, const uint32_t fps) {
     try {
         SDL_Window *win = nullptr;
         SDL_Renderer *ren = nullptr;
-        SDL_Texture* tex = nullptr;
+        Screen* screen = nullptr;
 
         std::cout << "Setting up SDL" << std::endl;
         std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = setupSDL(width, height);
@@ -125,26 +95,24 @@ int Game::run(const uint32_t width, const uint32_t height, const uint32_t fps) {
 
         if (win == nullptr || ren == nullptr) {
             std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
-            closeSDL(win, ren, tex);
+            closeSDL(win, ren, screen);
             return 1;
         }
 
-        std::cout << "Resource path is: " << getResourcePath() << std::endl;
-        tex = loadImage("hello.bmp", ren);
-
-        if (tex == nullptr) {
-            std::cout << "Failed to load texture: " << SDL_GetError() << std::endl;
-            closeSDL(win, ren, tex);
+        screen = new HelloScreen(ren);
+        if(screen->CheckSetup()) {
+            std::cout << "Failed to setup the HelloScreen: " << SDL_GetError() << std::endl;
+            closeSDL(win, ren, screen);
             return 1;
-        } else if (gameLoop(ren, tex, fps)) {
+        } else if (gameLoop(ren, screen, fps)) {
             std::cout << "Game loop failed!" << std::endl;
-            closeSDL(win, ren, tex);
+            closeSDL(win, ren, screen);
             return 1;
         } else {
-            closeSDL(win, ren, tex);
+            closeSDL(win, ren, screen);
             std::cout << "Game completed successfully" << std::endl;
             return 0;
-         }
+        }
     } catch(std::exception ex) {
         return 1;
     }
