@@ -1,6 +1,25 @@
 #include "game.h"
 
-std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, const uint32_t height) {
+Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
+    std::cout << "Setting up SDL" << std::endl;
+    std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = SetupSDL(width, height);
+    this->win = std::get<0>(windowRendererTuple);
+    this->ren = std::get<1>(windowRendererTuple);
+    this->fps = fps;
+
+    if (this->win == nullptr || this->ren == nullptr) {
+        std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
+        CloseSDL(win, ren, screen);
+    }
+
+    screen = new HelloScreen(ren);
+    if(!screen->CheckSetup()) {
+        std::cout << "Failed to setup the HelloScreen: " << SDL_GetError() << std::endl;
+        CloseSDL(win, ren, screen);
+    }
+}
+
+std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return std::make_tuple(nullptr, nullptr);
@@ -24,7 +43,11 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::setupSDL(const uint32_t width, cons
     return std::make_tuple(win, ren);
 }
 
-InputData Game::getInput() {
+    bool Game::CheckSetup() {
+    return win != nullptr && ren != nullptr;
+}
+
+InputData Game::GetInput() {
     SDL_Event events;
     InputData inputData;
 
@@ -38,29 +61,36 @@ InputData Game::getInput() {
     return inputData;
 }
 
-int Game::gameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
+void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
+    int32_t delay = targetFrameLength - deltaTime;
+
+    if(delay > 0) {
+        // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
+        SDL_Delay((uint32_t)delay);
+    }
+}
+
+int Game::GameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
     const int32_t targetFrameLength = (int32_t)(1000 / maxFPS);
     uint32_t previousTime, currentTime, deltaTime;
-
     currentTime = SDL_GetTicks();
-    running = true;
 
     try {
-        while(running) {
+        while(1 == 1) {
             previousTime = currentTime;
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
 
-            InputData input = getInput();
+            InputData input = GetInput();
+
             screen = screen->Update(deltaTime, &input);
+            if(screen == nullptr) {
+                return 0;
+            }
+
             screen->Render(ren);
 
-            int32_t delay = targetFrameLength - deltaTime;
-
-            if(delay > 0) {
-                // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
-                SDL_Delay((uint32_t)delay);
-            }
+            PauseForRestOfFrame(targetFrameLength, deltaTime);
         }
     } catch (const std::exception& ex) {
         return 1;
@@ -69,7 +99,7 @@ int Game::gameLoop(SDL_Renderer* ren, Screen*& screen, const uint32_t maxFPS) {
     return 0;
 }
 
-void Game::closeSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
     if(screen != nullptr) {
         delete screen;
     }
@@ -82,34 +112,14 @@ void Game::closeSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
     SDL_Quit();
 }
 
-int Game::run(const uint32_t width, const uint32_t height, const uint32_t fps) {
+int Game::Run() {
     try {
-        SDL_Window *win = nullptr;
-        SDL_Renderer *ren = nullptr;
-        Screen* screen = nullptr;
-
-        std::cout << "Setting up SDL" << std::endl;
-        std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = setupSDL(width, height);
-        win = std::get<0>(windowRendererTuple);
-        ren = std::get<1>(windowRendererTuple);
-
-        if (win == nullptr || ren == nullptr) {
-            std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
-            closeSDL(win, ren, screen);
-            return 1;
-        }
-
-        screen = new HelloScreen(ren);
-        if(screen->CheckSetup()) {
-            std::cout << "Failed to setup the HelloScreen: " << SDL_GetError() << std::endl;
-            closeSDL(win, ren, screen);
-            return 1;
-        } else if (gameLoop(ren, screen, fps)) {
+        if (GameLoop(ren, screen, fps)) {
             std::cout << "Game loop failed!" << std::endl;
-            closeSDL(win, ren, screen);
+            CloseSDL(win, ren, screen);
             return 1;
         } else {
-            closeSDL(win, ren, screen);
+            CloseSDL(win, ren, screen);
             std::cout << "Game completed successfully" << std::endl;
             return 0;
         }

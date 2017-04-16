@@ -24,8 +24,5 @@ Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
 }
 
 int HelloScreen::CheckSetup() {
-    if (helloTexture == nullptr) {
-        return 1;
-    }
-    return 0;
+    return helloTexture != nullptr;
 }
