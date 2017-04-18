@@ -1,11 +1,14 @@
 #include "game.h"
 
+Screen* Game::screen = nullptr;
+
 Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
+    this->fps = fps;
+
     std::cout << "Setting up SDL" << std::endl;
     std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = SetupSDL(width, height);
     this->win = std::get<0>(windowRendererTuple);
     this->ren = std::get<1>(windowRendererTuple);
-    this->fps = fps;
 
     if (this->win == nullptr || this->ren == nullptr) {
         std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
@@ -72,16 +75,36 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
     }
 }
 
-bool Game::Step(const int32_t deltaTime) {
-    InputData input = InputProcessor::GetInput();
-    screen = screen->Update(deltaTime, &input);
+void Game::UpdateAndSetScreen(const int deltaTime, InputData* input) {
+    screen = screen->Update(deltaTime, input);
+}
 
+void Game::DrawComponents(SDL_Renderer* ren, std::list<DrawableComponent*> drawableComponents) {
+    SDL_RenderClear(ren);
+    for(DrawableComponent* drawableComponent : drawableComponents) {
+        drawableComponent->Draw(ren);
+    }
+    SDL_RenderPresent(ren);
+}
+
+bool Game::Step(const int32_t deltaTime) {
     if(screen == nullptr) {
         return false;
-    } else {
-        screen->RenderScreen(ren);
-        return true;
     }
+
+    InputData prevInputData = inputData;
+
+    std::list<DrawableComponent*> prevDrawableComponentsData = screen->CloneDrawables();
+
+    threads[0] = std::thread(UpdateAndSetScreen, deltaTime, &prevInputData);
+    threads[1] = std::thread(DrawComponents, ren, prevDrawableComponentsData);
+
+    inputData = InputProcessor::GetInput();
+
+    threads[0].join();
+    threads[1].join();
+
+    return true;
 }
 
 bool Game::GameLoop() {
