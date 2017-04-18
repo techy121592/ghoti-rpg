@@ -6,7 +6,7 @@
 #include "input_processor.h"
 
 class InputProcessor {
-    static InputData ProcessKeyDown(SDL_Keycode keycode, InputData inputData) {
+    static InputData ProcessKeyDown(const SDL_Keycode keycode, InputData inputData) {
         switch(keycode) {
             case SDLK_ESCAPE:
                 inputData.Quit = true;

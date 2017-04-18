@@ -5,7 +5,9 @@ HelloScreen::HelloScreen(SDL_Renderer* ren) {
 }
 
 HelloScreen::~HelloScreen() {
-    // Need to implement this
+    for(DrawableComponent* component : components) {
+        delete component;
+    }
 }
 
 bool HelloScreen::CheckSetup() {
