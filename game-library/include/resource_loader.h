@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 
 class ResourceLoader {
+private:
     static std::string GetResourcePath(const std::string &subDir = "") {
     #ifdef _WIN32
         const char PATH_SEP = '\\';

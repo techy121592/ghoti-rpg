@@ -1,25 +1,21 @@
 #include "hello_screen.h"
 
 HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
+    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("hello.bmp", ren)));
 }
 
 HelloScreen::~HelloScreen() {
-    if (helloTexture != nullptr) {
-        SDL_DestroyTexture(helloTexture);
+    for(DrawableComponent* component : components) {
+        delete component;
     }
 }
 
 bool HelloScreen::CheckSetup() {
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::RenderComponents(SDL_Renderer* ren) {
-    SDL_RenderCopy(ren, helloTexture, NULL, NULL);
+    return true;
 }
 
 Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
-    if (inputData->Quit) {
+    if (inputData != nullptr && inputData->Quit) {
         return nullptr;
     }
     return this;

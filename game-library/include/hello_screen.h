@@ -6,12 +6,10 @@
 #include "screen.h"
 
 class HelloScreen : public Screen {
-    SDL_Texture* helloTexture;
 public:
     HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
     bool CheckSetup();
-    void RenderComponents(SDL_Renderer* ren);
     Screen* Update(const uint32_t deltaTime, InputData* inputData);
 };
 

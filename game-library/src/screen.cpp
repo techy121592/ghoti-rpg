@@ -1,7 +1,9 @@
 #include "screen.h"
 
-void Screen::RenderScreen(SDL_Renderer* ren) {
-    SDL_RenderClear(ren);
-    RenderComponents(ren);
-    SDL_RenderPresent(ren);
+std::list<DrawableComponent*> Screen::CloneDrawables() {
+    std::list<DrawableComponent*> tempListOfDrawableComponents = {};
+    for(DrawableComponent* drawableComponent : components) {
+        tempListOfDrawableComponents.push_back(drawableComponent->Clone());
+    }
+    return tempListOfDrawableComponents;
 }
