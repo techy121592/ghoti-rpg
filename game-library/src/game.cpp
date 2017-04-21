@@ -22,6 +22,11 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
     }
 }
 
+Game::~Game() {
+    std::cout << "Killing threads" << std::endl;
+    ThreadPool::TerminateThreads();
+}
+
 std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -69,22 +74,12 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
     int32_t delay = targetFrameLength - deltaTime;
 
+    std::cout << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
+
     if(delay > 0) {
         // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
         SDL_Delay((uint32_t)delay);
     }
-}
-
-void Game::UpdateAndSetScreen(const int deltaTime, InputData* input) {
-    screen = screen->Update(deltaTime, input);
-}
-
-void Game::DrawComponents(SDL_Renderer* ren, std::list<DrawableComponent*> drawableComponents) {
-    SDL_RenderClear(ren);
-    for(DrawableComponent* drawableComponent : drawableComponents) {
-        drawableComponent->Draw(ren);
-    }
-    SDL_RenderPresent(ren);
 }
 
 bool Game::Step(const int32_t deltaTime) {
@@ -94,15 +89,29 @@ bool Game::Step(const int32_t deltaTime) {
 
     InputData prevInputData = inputData;
 
-    std::list<DrawableComponent*> prevDrawableComponentsData = screen->CloneDrawables();
+    std::list<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
+    Screen* tempScreenPointer = screen;
 
-    threads[0] = std::thread(UpdateAndSetScreen, deltaTime, &prevInputData);
-    threads[1] = std::thread(DrawComponents, ren, prevDrawableComponentsData);
+    ThreadPool::AddTask([tempScreenPointer, deltaTime, prevInputData]() {
+        tempScreenPointer->Update(deltaTime, prevInputData);
+    });
 
-    inputData = InputProcessor::GetInput();
+    ThreadPool::AddTask([]() {
+        InputProcessor::GetInputFromDevice();
+    });
 
-    threads[0].join();
-    threads[1].join();
+    SDL_RenderClear(ren);
+    for(DrawableComponent* drawableComponent : drawableComponentsData) {
+        drawableComponent->Draw(ren);
+    }
+    SDL_RenderPresent(ren);
+
+    while(ThreadPool::TasksRunning()) {
+        SDL_Delay(1);
+    }
+
+    screen = screen->NextScreen();
+    inputData = InputProcessor::GetInputData();
 
     return true;
 }
@@ -111,9 +120,11 @@ bool Game::GameLoop() {
     const int32_t targetFrameLength = (int32_t)(1000 / fps);
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
+    InputProcessor::GetInputFromDevice();
+    inputData = InputProcessor::GetInputData();
 
     try {
-        while(1 == 1) {
+        while(1==1) {
             previousTime = currentTime;
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
@@ -122,9 +133,10 @@ bool Game::GameLoop() {
                 break;
             }
 
-            PauseForRestOfFrame(targetFrameLength, deltaTime);
+            PauseForRestOfFrame(targetFrameLength, SDL_GetTicks() - currentTime);
         }
     } catch (const std::exception& ex) {
+        std::cout << "Game::GameLoop() failed: " << ex.what() << std::endl;
         return false;
     }
     return true;
@@ -132,16 +144,17 @@ bool Game::GameLoop() {
 
 int Game::Run() {
     try {
-        if (!GameLoop()) {
+        if (GameLoop() == false) {
             std::cout << "Game loop failed!" << std::endl;
             CloseSDL(win, ren, screen);
             return 1;
         } else {
             CloseSDL(win, ren, screen);
-            std::cout << "Game completed successfully" << std::endl;
+            std::cout << "Successfully closed SDL" << std::endl;
             return 0;
         }
-    } catch(std::exception ex) {
+    } catch(std::exception& ex) {
+        std::cout << "Game::Run() failed: " << ex.what() << std::endl;
         return 1;
     }
 }

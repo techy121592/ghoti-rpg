@@ -10,7 +10,7 @@ public:
     HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
     bool CheckSetup();
-    Screen* Update(const uint32_t deltaTime, InputData* inputData);
+    void Update(const uint32_t deltaTime, const InputData inputData);
 };
 
 #endif
