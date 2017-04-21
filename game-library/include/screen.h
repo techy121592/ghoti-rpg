@@ -9,15 +9,17 @@
 class Screen {
 protected:
     std::list<DrawableComponent*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
+    Screen* nextScreen = this;
 public:
     virtual ~Screen() {
         for(DrawableComponent* component : components) {
             delete component;
         }
     };
-    virtual Screen* Update(const uint32_t deltaTime, InputData* inputData) = 0;
+    virtual void Update(const uint32_t deltaTime, const InputData inputData) = 0;
     virtual bool CheckSetup() = 0;
 
+    Screen* NextScreen();
     std::list<DrawableComponent*> CloneDrawables();
 };
 

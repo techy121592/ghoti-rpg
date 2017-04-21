@@ -14,9 +14,8 @@ bool HelloScreen::CheckSetup() {
     return true;
 }
 
-Screen* HelloScreen::Update(const uint32_t deltaTime, InputData* inputData) {
-    if (inputData != nullptr && inputData->Quit) {
-        return nullptr;
+void HelloScreen::Update(const uint32_t deltaTime, const InputData inputData) {
+    if (inputData.Quit) {
+        nextScreen = nullptr;
     }
-    return this;
 }
