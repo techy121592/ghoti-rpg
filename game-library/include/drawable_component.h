@@ -6,8 +6,9 @@
 class DrawableComponent {
 private:
     SDL_Texture* texture;
-    int x, y, height, width, frame;
+    SDL_Rect sourceRectangle, destinationRectangle;
 public:
+    DrawableComponent(const SDL_Rect destinationRectangle, const SDL_Rect sourceRectangle, SDL_Texture* texture);
     DrawableComponent(const int32_t x, const int32_t y, const int32_t width, const int32_t height, const int32_t frame, SDL_Texture* texture);
     ~DrawableComponent();
     void Draw(SDL_Renderer* ren);

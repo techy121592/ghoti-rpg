@@ -74,7 +74,7 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
     int32_t delay = targetFrameLength - deltaTime;
 
-    std::cout << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
+    std::cout << "FPS: " << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
 
     if(delay > 0) {
         // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
