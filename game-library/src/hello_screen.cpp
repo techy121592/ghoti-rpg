@@ -1,7 +1,8 @@
 #include "hello_screen.h"
 
 HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("hello.bmp", ren)));
+    SDL_Texture* helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
+    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
 }
 
 HelloScreen::~HelloScreen() {
