@@ -26,8 +26,6 @@ private:
     void CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen);
     void PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime);
     bool Step(const int32_t deltaTime);
-    static void UpdateAndSetScreen(const int deltaTime, const InputData input);
-    static void DrawComponents(SDL_Renderer* ren, std::list<DrawableComponent*> drawableComponents);
     bool GameLoop();
 
 public:
