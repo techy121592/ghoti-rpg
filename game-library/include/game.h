@@ -20,14 +20,14 @@ private:
     SDL_Renderer *ren = nullptr;
     static Screen* screen;
     uint32_t fps;
-    InputData inputData;
 
     std::tuple<SDL_Window*, SDL_Renderer*> SetupSDL(const uint32_t width, const uint32_t height);
     void CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen);
     void PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime);
+    void FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData);
+    void Draw(std::list<DrawableComponent*> drawableComponentsData);
     bool Step(const int32_t deltaTime);
     bool GameLoop();
-
 public:
     Game(const uint32_t width, const uint32_t height, const uint32_t maxFPS);
     ~Game();
