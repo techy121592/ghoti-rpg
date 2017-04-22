@@ -6,6 +6,8 @@
 #include "screen.h"
 
 class HelloScreen : public Screen {
+private:
+    SDL_Texture* helloTexture;
 public:
     HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
