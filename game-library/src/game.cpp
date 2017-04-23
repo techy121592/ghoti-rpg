@@ -85,11 +85,11 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
 void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData) {
     ThreadPool::AddTask([screenPointer, deltaTime, inputData]() {
         screenPointer->Update(deltaTime, inputData);
-    });
+    }, true);
 
     ThreadPool::AddTask([]() {
         InputProcessor::GetInputFromDevice();
-    });
+    }, true);
 }
 
 void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
@@ -112,7 +112,7 @@ bool Game::Step(const int32_t deltaTime) {
     FireOffThreadsToUpdateAndGetInput(screen, deltaTime, InputProcessor::GetInputData());
     Draw(drawableComponentsData);
 
-    while(ThreadPool::TasksRunning()) {
+    while(ThreadPool::LoopLocked()) {
         SDL_Delay(1);
     }
 

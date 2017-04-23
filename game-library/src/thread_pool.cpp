@@ -4,14 +4,15 @@ bool ThreadPool::running = false;
 
 uint32_t ThreadPool::threadCount = 0;
 uint32_t ThreadPool::queueCount = 0;
+uint32_t ThreadPool::loopLockCount = 0;
 uint32_t ThreadPool::activeTasksCount = 0;
 uint32_t ThreadPool::maxThreads = 1;
 uint32_t ThreadPool::delayTime = 2;
 
-std::mutex ThreadPool::queueLock, ThreadPool::queueCountLock, ThreadPool::activeTasksCountLock, ThreadPool::runningLock;
+std::mutex ThreadPool::queueLock, ThreadPool::queueCountLock, ThreadPool::loopLockCountLock, ThreadPool::activeTasksCountLock;
 
 std::list<std::thread> ThreadPool::threads = {};
-std::list<std::function<void()>> ThreadPool::tasks = {};
+std::list<std::tuple<std::function<void()>, bool>> ThreadPool::tasks = {};
 
 void ThreadPool::Init() {
     ThreadPool::running = true;
@@ -28,9 +29,7 @@ void ThreadPool::Init(uint32_t maxThreads, uint32_t delayTime) {
 }
 
 void ThreadPool::TerminateThreads() {
-    runningLock.lock();
     running = false;
-    runningLock.unlock();
     for(int i = threadCount; i > 0; i--) {
         std::cout << "Killing a thread" << std::endl;
         std::thread* threadWaitingOn = &threads.front();
@@ -49,9 +48,7 @@ void ThreadPool::StartNewThread() {
 }
 
 void ThreadPool::TaskCheckLoop() {
-    runningLock.lock();
     while(running) {
-        runningLock.unlock();
         queueCountLock.lock();
         if(queueCount == 0) {
             queueCountLock.unlock();
@@ -60,43 +57,60 @@ void ThreadPool::TaskCheckLoop() {
             queueCount--;
             queueLock.lock();
             queueCountLock.unlock();
-            std::function<void()> task = tasks.front();
+            std::tuple<std::function<void()>, bool> task = tasks.front();
             tasks.pop_front();
-            activeTasksCountLock.lock();
             queueLock.unlock();
-            activeTasksCount++;
-            activeTasksCountLock.unlock();
 
-            task();
+            bool locksLoop = std::get<1>(task);
+            std::function<void()> tasksFunction = std::get<0>(task);
 
-            activeTasksCountLock.lock();
-            activeTasksCount--;
-            activeTasksCountLock.unlock();
+            if(locksLoop) {
+                loopLockCountLock.lock();
+                loopLockCount--;
+                activeTasksCountLock.lock();
+                loopLockCountLock.unlock();
+                activeTasksCount++;
+                activeTasksCountLock.unlock();
+            }
+
+            tasksFunction();
+
+            if(locksLoop) {
+                activeTasksCountLock.lock();
+                activeTasksCount--;
+                activeTasksCountLock.unlock();
+            }
         }
-        runningLock.lock();
     }
-    runningLock.unlock();
 }
 
-void ThreadPool::AddTask(std::function<void()> task) {
-    queueLock.lock();
-    tasks.push_back(task);
-    queueLock.unlock();
-
+void ThreadPool::AddTask(std::function<void()> task, bool locksLoop) {
     queueCountLock.lock();
     queueCount++;
+    queueLock.lock();
     queueCountLock.unlock();
+
+    if(locksLoop) {
+        loopLockCountLock.lock();
+        loopLockCount++;
+        loopLockCountLock.unlock();
+        tasks.push_front(std::make_tuple(task, true));
+    } else {
+        tasks.push_back(std::make_tuple(task, false));
+    }
+
+    queueLock.unlock();
 
     if(!running) {
         Init();
     }
 }
 
-bool ThreadPool::TasksRunning() {
+bool ThreadPool::LoopLocked() {
     activeTasksCountLock.lock();
-    queueCountLock.lock();
-    bool tasksRunning = activeTasksCount > 0 || queueCount > 0;
+    loopLockCountLock.lock();
+    bool tasksRunning = activeTasksCount > 0 || loopLockCount > 0;
     activeTasksCountLock.unlock();
-    queueCountLock.unlock();
+    loopLockCountLock.unlock();
     return tasksRunning;
 }
