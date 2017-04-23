@@ -25,4 +25,4 @@ export CXX=/usr/bin/clang++
 cmake -G "CodeBlocks - Unix Makefiles"
 
 echo "Copying resources to build path."
-cp -R game-library/res ./output
+cp -R game-library/res ./output/bin

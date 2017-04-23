@@ -26,8 +26,7 @@ private:
                 return "";
             }
 
-            size_t pos = baseRes.rfind("bin");
-            baseRes = baseRes.substr(0, pos) + "res" + PATH_SEP;
+            baseRes = baseRes + "res" + PATH_SEP;
             std::cout << "Resource path is: " << baseRes << std::endl;
         }
 
