@@ -82,36 +82,43 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
     }
 }
 
-bool Game::Step(const int32_t deltaTime) {
-    if(screen == nullptr) {
-        return false;
-    }
-
-    InputData prevInputData = inputData;
-
-    std::list<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
-    Screen* tempScreenPointer = screen;
-
-    ThreadPool::AddTask([tempScreenPointer, deltaTime, prevInputData]() {
-        tempScreenPointer->Update(deltaTime, prevInputData);
+void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData) {
+    ThreadPool::AddTask([screenPointer, deltaTime, inputData]() {
+        screenPointer->Update(deltaTime, inputData);
     });
 
     ThreadPool::AddTask([]() {
         InputProcessor::GetInputFromDevice();
     });
+}
 
+void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
     SDL_RenderClear(ren);
+
     for(DrawableComponent* drawableComponent : drawableComponentsData) {
         drawableComponent->Draw(ren);
     }
+
     SDL_RenderPresent(ren);
+}
+
+bool Game::Step(const int32_t deltaTime) {
+    if(screen == nullptr) {
+        return false;
+    }
+
+    std::list<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
+
+    FireOffThreadsToUpdateAndGetInput(screen, deltaTime, InputProcessor::GetInputData());
+    Draw(drawableComponentsData);
 
     while(ThreadPool::TasksRunning()) {
         SDL_Delay(1);
     }
 
-    screen = screen->NextScreen();
-    inputData = InputProcessor::GetInputData();
+    if(screen != screen->NextScreen()) {
+        screen = screen->NextScreen();
+    }
 
     return true;
 }
@@ -121,7 +128,6 @@ bool Game::GameLoop() {
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
     InputProcessor::GetInputFromDevice();
-    inputData = InputProcessor::GetInputData();
 
     try {
         while(1==1) {
