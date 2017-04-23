@@ -1,10 +1,12 @@
 #include "thread_pool.h"
 
-bool ThreadPool::running = true;
+bool ThreadPool::running = false;
 
 uint32_t ThreadPool::threadCount = 0;
 uint32_t ThreadPool::queueCount = 0;
 uint32_t ThreadPool::activeTasksCount = 0;
+uint32_t ThreadPool::maxThreads = 1;
+uint32_t ThreadPool::delayTime = 2;
 
 std::mutex ThreadPool::queueLock, ThreadPool::queueCountLock, ThreadPool::activeTasksCountLock, ThreadPool::runningLock;
 
@@ -12,9 +14,17 @@ std::list<std::thread> ThreadPool::threads = {};
 std::list<std::function<void()>> ThreadPool::tasks = {};
 
 void ThreadPool::Init() {
+    ThreadPool::running = true;
     while(threadCount < maxThreads) {
         StartNewThread();
     }
+}
+
+void ThreadPool::Init(uint32_t maxThreads, uint32_t delayTime) {
+    ThreadPool::maxThreads = maxThreads;
+    ThreadPool::delayTime = delayTime;
+
+    Init();
 }
 
 void ThreadPool::TerminateThreads() {
@@ -77,7 +87,7 @@ void ThreadPool::AddTask(std::function<void()> task) {
     queueCount++;
     queueCountLock.unlock();
 
-    if(threadCount < maxThreads) {
+    if(!running) {
         Init();
     }
 }
