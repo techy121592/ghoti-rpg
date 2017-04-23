@@ -1,4 +1,4 @@
-#include "hello_screen.h"
+#include "screens/hello_screen.h"
 
 HelloScreen::HelloScreen(SDL_Renderer* ren) {
     helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
