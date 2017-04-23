@@ -1,4 +1,4 @@
-#include "screen.h"
+#include "screens/screen.h"
 
 Screen* Screen::NextScreen() {
     return nextScreen;

@@ -4,7 +4,7 @@
 #include <list>
 #include <SDL.h>
 #include "input_data.h"
-#include "drawable_component.h"
+#include "components/drawable_component.h"
 
 class Screen {
 protected:
