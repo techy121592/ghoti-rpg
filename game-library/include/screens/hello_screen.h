@@ -13,6 +13,7 @@ public:
     ~HelloScreen();
     bool CheckSetup();
     void Update(const uint32_t deltaTime, const InputData inputData);
+    void MainThreadActivity();
 };
 
 #endif
