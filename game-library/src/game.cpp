@@ -113,10 +113,6 @@ bool Game::Step(const int32_t deltaTime) {
     FireOffThreadsToUpdateAndGetInput(screen, deltaTime, InputProcessor::GetInputData());
     Draw(drawableComponentsData);
 
-    for(auto drawableComponent : drawableComponentsData) {
-        delete drawableComponent;
-    }
-
     drawableComponentsData.clear();
 
     screen->MainThreadActivity();
