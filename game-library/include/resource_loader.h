@@ -35,19 +35,11 @@ private:
 
 public:
     static SDL_Texture* LoadImage(const std::string &fileName, SDL_Renderer* ren) {
-        std::string imagePath;
-        if(imagePath.empty()) {
-            imagePath = ResourceLoader::GetResourcePath("images") + fileName;
-        }
-
-        std::cout << imagePath.c_str() << std::endl;
-
-        SDL_Texture* tex = IMG_LoadTexture(ren, imagePath.c_str());
+        SDL_Texture* tex = IMG_LoadTexture(ren, ResourceLoader::GetResourcePath("images") + fileName);
         if (tex == nullptr) {
             std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
             return nullptr;
         }
-
         return tex;
     }
 };
