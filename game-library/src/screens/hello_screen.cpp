@@ -6,17 +6,11 @@ HelloScreen::HelloScreen(SDL_Renderer* ren) {
 }
 
 HelloScreen::~HelloScreen() {
-    for(DrawableComponent* component : components) {
-        delete component;
-    }
     SDL_DestroyTexture(helloTexture);
 }
 
 bool HelloScreen::CheckSetup() {
-    if(helloTexture == nullptr) {
-        return false;
-    }
-    return true;
+    return helloTexture != nullptr;
 }
 
 void HelloScreen::Update(const uint32_t deltaTime, const InputData inputData) {

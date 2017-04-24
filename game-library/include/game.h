@@ -13,6 +13,7 @@
 #include "components/drawable_component.h"
 #include "screens/screen.h"
 #include "screens/hello_screen.h"
+#include "screens/load_screen.h"
 
 class Game {
 private:

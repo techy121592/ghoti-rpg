@@ -15,9 +15,9 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
         CloseSDL(win, ren, screen);
     }
 
-    screen = new HelloScreen(ren);
+    screen  = new LoadScreen<HelloScreen>(ren);
     if(!screen->CheckSetup()) {
-        std::cout << "Failed to setup the HelloScreen: " << SDL_GetError() << std::endl;
+        std::cout << "Failed to setup the LoadingScreen: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
     }
 }
@@ -74,10 +74,9 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
 void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
     int32_t delay = targetFrameLength - deltaTime;
 
-    std::cout << "FPS: " << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
+    //std::cout << "FPS: " << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
 
     if(delay > 0) {
-        // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
         SDL_Delay((uint32_t)delay);
     }
 }
@@ -112,14 +111,24 @@ bool Game::Step(const int32_t deltaTime) {
     FireOffThreadsToUpdateAndGetInput(screen, deltaTime, InputProcessor::GetInputData());
     Draw(drawableComponentsData);
 
+    drawableComponentsData.clear();
+
     while(ThreadPool::LoopLocked()) {
         SDL_Delay(1);
     }
 
     if(screen != screen->NextScreen()) {
-        screen = screen->NextScreen();
-    }
+        Screen* tempScreen = screen->NextScreen();
+        delete screen;
+        screen = tempScreen;
 
+        if(screen == nullptr) {
+            return false;
+        } else if(!screen->CheckSetup()) {
+            screen = nullptr;
+            return false;
+        }
+    }
     return true;
 }
 

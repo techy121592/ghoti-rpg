@@ -35,10 +35,12 @@ private:
 
 public:
     static SDL_Texture* LoadImage(const std::string &fileName, SDL_Renderer* ren) {
-        static std::string imagePath;
+        std::string imagePath;
         if(imagePath.empty()) {
             imagePath = ResourceLoader::GetResourcePath("images") + fileName;
         }
+
+        std::cout << imagePath.c_str() << std::endl;
 
         SDL_Texture* tex = IMG_LoadTexture(ren, imagePath.c_str());
         if (tex == nullptr) {
