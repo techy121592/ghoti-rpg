@@ -24,11 +24,6 @@ DrawableComponent::~DrawableComponent() {
 }
 
 void DrawableComponent::Draw(SDL_Renderer* ren) {
-    if(texture == nullptr) {
-        std::cout << "no texture" << std::endl;
-    } else {
-        std::cout << "drawing" << std::endl;
-    }
     SDL_RenderCopy(ren, texture, &sourceRectangle, &destinationRectangle);
 }
 

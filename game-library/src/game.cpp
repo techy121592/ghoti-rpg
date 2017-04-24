@@ -16,7 +16,6 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
     }
 
     screen  = new LoadScreen<HelloScreen>(ren);
-    //screen = new HelloScreen(ren);
     if(!screen->CheckSetup()) {
         std::cout << "Failed to setup the LoadingScreen: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
@@ -78,7 +77,6 @@ void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t de
     //std::cout << "FPS: " << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
 
     if(delay > 0) {
-        // This might not be necessary since we are using delta time, but it is more friendly to share processor time.
         SDL_Delay((uint32_t)delay);
     }
 }
@@ -115,27 +113,21 @@ bool Game::Step(const int32_t deltaTime) {
 
     drawableComponentsData.clear();
 
-    screen->MainThreadActivity();
-
     while(ThreadPool::LoopLocked()) {
         SDL_Delay(1);
     }
 
     if(screen != screen->NextScreen()) {
-        std::cout << "changing screen" << std::endl;
         Screen* tempScreen = screen->NextScreen();
         delete screen;
         screen = tempScreen;
-        std::cout << "changed screen" << std::endl;
+
         if(screen == nullptr) {
             return false;
         } else if(!screen->CheckSetup()) {
             screen = nullptr;
             return false;
         }
-        // Doing this trying to figure out why it isn't working...
-        std::cout << "drawing HelloScreen" << std::endl;
-        Draw(screen->CloneDrawables());
     }
     return true;
 }

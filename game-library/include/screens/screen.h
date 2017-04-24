@@ -19,7 +19,6 @@ public:
     };
     virtual void Update(const uint32_t deltaTime, const InputData inputData) = 0;
     virtual bool CheckSetup() = 0;
-    virtual void MainThreadActivity() = 0;
 
     Screen* NextScreen();
     std::list<DrawableComponent*> CloneDrawables();
