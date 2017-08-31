@@ -1,6 +1,6 @@
 #include <iostream>
 #include <game.h>
-#include <thread_pool.h>
+#include <utilities/thread_pool.h>
 
 int main(int, char**) {
     ThreadPool::Init(4, 1);

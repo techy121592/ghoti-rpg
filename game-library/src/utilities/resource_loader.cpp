@@ -1,4 +1,4 @@
-#include "resource_loader.h"
+#include "utilities/resource_loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 #ifdef _WIN32

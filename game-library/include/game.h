@@ -6,10 +6,10 @@
 #include <tuple>
 #include <list>
 #include <SDL.h>
-#include "resource_loader.h"
-#include "input_data.h"
-#include "input_processor.h"
-#include "thread_pool.h"
+#include "utilities/resource_loader.h"
+#include "utilities/input_data.h"
+#include "utilities/input_processor.h"
+#include "utilities/thread_pool.h"
 #include "components/drawable_component.h"
 #include "screens/screen.h"
 #include "screens/hello_screen.h"

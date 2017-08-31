@@ -3,8 +3,8 @@
 
 #include "screen.h"
 #include "hello_screen.h"
-#include "resource_loader.h"
-#include "thread_pool.h"
+#include "utilities/resource_loader.h"
+#include "utilities/thread_pool.h"
 
 template<class T>
 class LoadScreen : public Screen {

@@ -2,7 +2,7 @@
 #define HELLO_SCREEN_H
 
 #include <SDL.h>
-#include "resource_loader.h"
+#include "utilities/resource_loader.h"
 #include "screen.h"
 
 class HelloScreen : public Screen {
