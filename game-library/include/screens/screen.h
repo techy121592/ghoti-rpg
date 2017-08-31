@@ -21,7 +21,7 @@
 
 #include <list>
 #include <SDL.h>
-#include "input_data.h"
+#include "utilities/input_data.h"
 #include "components/drawable_component.h"
 
 class Screen {

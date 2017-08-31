@@ -1,3 +1,4 @@
+<<<<<<< HEAD:game-library/src/thread_pool.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *
@@ -16,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "thread_pool.h"
+#include "utilities/thread_pool.h"
 
 bool ThreadPool::running = false;
 

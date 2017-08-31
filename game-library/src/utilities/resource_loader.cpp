@@ -1,3 +1,4 @@
+<<<<<<< HEAD:game-library/src/resource_loader.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *
@@ -16,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "resource_loader.h"
+#include "utilities/resource_loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 #ifdef _WIN32

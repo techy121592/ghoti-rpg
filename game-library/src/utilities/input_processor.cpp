@@ -1,3 +1,4 @@
+<<<<<<< HEAD:game-library/src/input_processor.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *
@@ -16,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "input_processor.h"
+#include "utilities/input_processor.h"
 
 InputData InputProcessor::inputData;
 
