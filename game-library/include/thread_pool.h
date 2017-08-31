@@ -20,8 +20,9 @@
 #define THREAD_POOL_H
 
 #include <thread>
-#include <list>
+#include <functional>
 #include <mutex>
+#include <list>
 #include <tuple>
 #include <iostream>
 #include <SDL.h>
