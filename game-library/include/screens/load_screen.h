@@ -21,6 +21,7 @@
 
 #include "screen.h"
 #include "hello_screen.h"
+#include "game_screen.h"
 #include "utilities/resource_loader.h"
 #include "utilities/thread_pool.h"
 
@@ -31,10 +32,10 @@ private:
     static bool doneLoading;
     SDL_Texture* loadingTexture;
 public:
-    LoadScreen<T>(SDL_Renderer* ren);
+    explicit LoadScreen<T>(SDL_Renderer* ren);
     ~LoadScreen();
     bool CheckSetup();
-    void Update(const uint32_t deltaTime, const InputData inputData);
+    void Update(uint32_t deltaTime, InputData inputData);
 };
 
 #endif
