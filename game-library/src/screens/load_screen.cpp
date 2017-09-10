@@ -1,5 +1,4 @@
 #include "screens/load_screen.h"
-#include <iostream>
 
 template<class T> bool LoadScreen<T>::doneLoading = false;
 template<class T> Screen* LoadScreen<T>::nextScreenHolder = nullptr;
@@ -22,14 +21,11 @@ LoadScreen<T>::~LoadScreen() {
 
 template<class T>
 bool LoadScreen<T>::CheckSetup() {
-    if(loadingTexture == nullptr) {
-        return false;
-    }
-    return true;
+    return loadingTexture != nullptr;
 }
 
 template<class T>
-void LoadScreen<T>::Update(const uint32_t deltaTime, const InputData inputData) {
+void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
     if(doneLoading) {
         nextScreen = nextScreenHolder;
         nextScreenHolder = nullptr;
@@ -38,3 +34,4 @@ void LoadScreen<T>::Update(const uint32_t deltaTime, const InputData inputData) 
 }
 
 template class LoadScreen<HelloScreen>;
+template class LoadScreen<GameScreen>;
