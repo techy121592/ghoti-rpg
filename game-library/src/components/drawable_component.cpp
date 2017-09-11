@@ -19,13 +19,13 @@
 #include "components/drawable_component.h"
 #include <iostream>
 
-DrawableComponent::DrawableComponent(const int32_t x, const int32_t y, const int32_t width, const int32_t height, const int32_t frame, SDL_Texture* texture) {
+DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture) {
     this->texture = texture;
 
     int32_t textureWidth, textureHeight;
     SDL_QueryTexture(this->texture, nullptr, nullptr, &textureWidth, &textureHeight);
 
-    uint16_t framesWide = textureWidth / width;
+    uint32_t framesWide = textureWidth / width;
 
     this->sourceRectangle = {(frame%framesWide) * width, (frame/framesWide) * height, width, height};
     this->destinationRectangle = {x, y, width, height};

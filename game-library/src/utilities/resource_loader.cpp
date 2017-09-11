@@ -1,4 +1,3 @@
-<<<<<<< HEAD:game-library/src/resource_loader.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *

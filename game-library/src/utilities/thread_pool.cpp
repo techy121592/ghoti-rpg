@@ -1,4 +1,3 @@
-<<<<<<< HEAD:game-library/src/thread_pool.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *
@@ -62,7 +61,7 @@ void ThreadPool::StartNewThread() {
     if(threadCount < maxThreads) {
         threadCount++;
         std::cout << "creating new thread" << std::endl;
-        threads.push_back(std::thread(TaskCheckLoop));
+        threads.emplace_back(std::thread(TaskCheckLoop));
     }
 }
 

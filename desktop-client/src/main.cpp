@@ -18,11 +18,10 @@
 
 #include <iostream>
 #include <game.h>
-#include <utilities/thread_pool.h>
 
 int main(int, char**) {
     ThreadPool::Init(4, 1);
-    Game* game = new Game(640, 480, 60);
+    auto game = new Game(640, 480, 60);
 
     int returnValue = game->Run();
     delete game;

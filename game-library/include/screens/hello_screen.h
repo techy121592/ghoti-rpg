@@ -27,10 +27,10 @@ class HelloScreen : public Screen {
 private:
     SDL_Texture* helloTexture;
 public:
-    HelloScreen(SDL_Renderer* ren);
+    explicit HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
     bool CheckSetup();
-    void Update(const uint32_t deltaTime, const InputData inputData);
+    void Update(uint32_t deltaTime, InputData inputData);
 };
 
 #endif

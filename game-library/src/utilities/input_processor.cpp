@@ -1,4 +1,3 @@
-<<<<<<< HEAD:game-library/src/input_processor.cpp
 /**
  * Copyright (C) 2017  David Welch & Ankit Singhania
  *
@@ -25,6 +24,9 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
     switch(keycode) {
         case SDLK_ESCAPE:
             inputData.Quit = keyDown;
+            break;
+        default:
+            break;
     }
     return inputData;
 }
@@ -46,6 +48,8 @@ void InputProcessor::GetInputFromDevice() {
                 break;
             case SDL_KEYUP:
                 inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, false);
+                break;
+            default:
                 break;
         }
         if(inputData.Quit) {

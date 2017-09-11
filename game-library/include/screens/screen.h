@@ -35,7 +35,7 @@ public:
         }
         components.clear();
     };
-    virtual void Update(const uint32_t deltaTime, const InputData inputData) = 0;
+    virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
     virtual bool CheckSetup() = 0;
 
     Screen* NextScreen();
