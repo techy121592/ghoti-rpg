@@ -16,12 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef INPUT_DATA_H
-#define INPUT_DATA_H
-
-struct InputData {
-public:
-    bool Quit = false;
-};
+#ifndef TILE_H
+#define TILE_H
 
 #endif
