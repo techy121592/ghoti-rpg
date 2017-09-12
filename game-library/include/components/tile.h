@@ -16,22 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
+#ifndef TILE_H
+#define TILE_H
 
-#include <SDL.h>
-#include "utilities/resource_loader.h"
-#include "screen.h"
-#include "components/tile.h"
+#include "drawable_component.h"
 
-class GameScreen : public Screen {
-private:
-    SDL_Texture* tilesetTexture;
+class Tile : public DrawableComponent {
 public:
-    explicit GameScreen(SDL_Renderer* ren);
-    ~GameScreen();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
+    Tile(uint32_t x, uint32_t y, uint32_t type, uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture);
 };
 
 #endif

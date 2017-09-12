@@ -19,58 +19,19 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
-    SDL_Rect sourceRect;
-    sourceRect.h = 16;
-    sourceRect.w = 16;
-    sourceRect.x = 0;
-    sourceRect.y = 0;
-    SDL_Rect destRect;
-    destRect.h = 16;
-    destRect.w = 16;
-    destRect.x = 0;
-    destRect.y = 0;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 16;
-    destRect.y = 0;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 32;
-    destRect.y = 0;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 0;
-    destRect.y = 16;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 16;
-    destRect.y = 16;
-    sourceRect.x = 16;
-    sourceRect.y = 0;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 32;
-    destRect.y = 16;
-    sourceRect.x = 0;
-    sourceRect.y = 0;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 0;
-    destRect.y = 32;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 16;
-    destRect.y = 32;
-    sourceRect.x = 0;
-    sourceRect.y = 16;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
-    destRect.x = 32;
-    destRect.y = 32;
-    sourceRect.x = 16;
-    sourceRect.y = 16;
-    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    tilesetTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
+    components.push_back(new Tile(0, 0, 0, 16, 16, tilesetTexture));
+    components.push_back(new Tile(0, 1, 1, 16, 16, tilesetTexture));
+    components.push_back(new Tile(0, 2, 2, 16, 16, tilesetTexture));
+    components.push_back(new Tile(0, 3, 3, 16, 16, tilesetTexture));
 }
 
 GameScreen::~GameScreen() {
-    SDL_DestroyTexture(helloTexture);
+    SDL_DestroyTexture(tilesetTexture);
 }
 
 bool GameScreen::CheckSetup() {
-    return helloTexture != nullptr;
+    return tilesetTexture != nullptr;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
