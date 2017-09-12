@@ -17,7 +17,6 @@
  */
 
 #include "components/drawable_component.h"
-#include <iostream>
 
 DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture) {
     this->texture = texture;
@@ -46,5 +45,5 @@ void DrawableComponent::Draw(SDL_Renderer* ren) {
 }
 
 DrawableComponent* DrawableComponent::Clone() {
-    return new DrawableComponent(sourceRectangle, destinationRectangle, texture);
+    return new DrawableComponent(destinationRectangle, sourceRectangle, texture);
 }
