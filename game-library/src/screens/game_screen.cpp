@@ -19,8 +19,50 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
+    helloTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
+    SDL_Rect sourceRect;
+    sourceRect.h = 16;
+    sourceRect.w = 16;
+    sourceRect.x = 0;
+    sourceRect.y = 0;
+    SDL_Rect destRect;
+    destRect.h = 16;
+    destRect.w = 16;
+    destRect.x = 0;
+    destRect.y = 0;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 16;
+    destRect.y = 0;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 32;
+    destRect.y = 0;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 0;
+    destRect.y = 16;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 16;
+    destRect.y = 16;
+    sourceRect.x = 16;
+    sourceRect.y = 0;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 32;
+    destRect.y = 16;
+    sourceRect.x = 0;
+    sourceRect.y = 0;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 0;
+    destRect.y = 32;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 16;
+    destRect.y = 32;
+    sourceRect.x = 0;
+    sourceRect.y = 16;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
+    destRect.x = 32;
+    destRect.y = 32;
+    sourceRect.x = 16;
+    sourceRect.y = 16;
+    components.push_back(new DrawableComponent(destRect, sourceRect, helloTexture));
 }
 
 GameScreen::~GameScreen() {
