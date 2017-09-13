@@ -20,7 +20,6 @@
 #define DRAWABLE_COMPONENT_H
 
 #include <SDL.h>
-#include <stdint-gcc.h>
 
 class DrawableComponent {
 private:
