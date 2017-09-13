@@ -19,19 +19,20 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    tilesetTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
-    components.push_back(new Tile(0, 0, 0, 16, 16, tilesetTexture));
-    components.push_back(new Tile(0, 1, 1, 16, 16, tilesetTexture));
-    components.push_back(new Tile(0, 2, 2, 16, 16, tilesetTexture));
-    components.push_back(new Tile(0, 3, 3, 16, 16, tilesetTexture));
+    tileSetTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
+    auto tileSet = new TileSet(16, 16, tileSetTexture); // Need to add properties, for example, damage: 1, location: reset, etc.
+    components.push_back(tileSet->CreateTile(0, 0, 0)); // This will be done by the resource loader rather than in the screen code, but I am just trying to put together the basics that work
+    components.push_back(tileSet->CreateTile(0, 1, 1));
+    components.push_back(tileSet->CreateTile(0, 2, 2));
+    components.push_back(tileSet->CreateTile(0, 3, 3));
 }
 
 GameScreen::~GameScreen() {
-    SDL_DestroyTexture(tilesetTexture);
+    SDL_DestroyTexture(tileSetTexture);
 }
 
 bool GameScreen::CheckSetup() {
-    return tilesetTexture != nullptr;
+    return tileSetTexture != nullptr;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {

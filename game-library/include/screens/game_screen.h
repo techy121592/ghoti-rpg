@@ -23,10 +23,11 @@
 #include "utilities/resource_loader.h"
 #include "screen.h"
 #include "components/tile.h"
+#include "components/tile_set.h"
 
 class GameScreen : public Screen {
 private:
-    SDL_Texture* tilesetTexture;
+    SDL_Texture* tileSetTexture;
 public:
     explicit GameScreen(SDL_Renderer* ren);
     ~GameScreen();

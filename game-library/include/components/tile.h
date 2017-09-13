@@ -19,11 +19,12 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include <SDL.h>
 #include "drawable_component.h"
 
 class Tile : public DrawableComponent {
 public:
-    Tile(uint32_t x, uint32_t y, uint32_t type, uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture);
+    Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture);
 };
 
 #endif

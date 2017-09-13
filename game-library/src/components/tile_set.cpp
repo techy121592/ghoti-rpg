@@ -16,9 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "components/tile.h"
+#include "components/tile_set.h"
 
-Tile::Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture)
-    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, tileIndex, texture) {
+TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture) {
+    this->tileWidth = tileWidth;
+    this->tileHeight = tileHeight;
+    this->texture = texture;
+}
 
+Tile* TileSet::CreateTile(uint32_t x, uint32_t y, uint32_t tileIndex) {
+    return new Tile(x, y, tileIndex, tileWidth, tileHeight, texture);
 }
