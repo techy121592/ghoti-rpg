@@ -34,6 +34,7 @@ private:
 public:
     explicit LoadScreen<T>(SDL_Renderer* ren);
     ~LoadScreen();
+    void Setup();
     bool CheckSetup();
     void Update(uint32_t deltaTime, InputData inputData);
 };

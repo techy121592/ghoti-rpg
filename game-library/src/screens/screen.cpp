@@ -18,6 +18,10 @@
 
 #include "screens/screen.h"
 
+Screen::Screen() {
+    nextScreen = this;
+}
+
 Screen* Screen::NextScreen() {
     return nextScreen;
 }

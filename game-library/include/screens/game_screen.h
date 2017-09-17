@@ -31,6 +31,7 @@ private:
 public:
     explicit GameScreen(SDL_Renderer* ren);
     ~GameScreen();
+    void Setup();
     bool CheckSetup();
     void Update(uint32_t deltaTime, InputData inputData);
 };
