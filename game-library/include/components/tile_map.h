@@ -16,23 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef DRAWABLE_COMPONENT_H
-#define DRAWABLE_COMPONENT_H
+#ifndef TILE_MAP_H
+#define TILE_MAP_H
 
-#include <SDL.h>
+#include <list>
+#include <utility>
+#include "tile.h"
+#include "drawable_component.h"
 
-class DrawableComponent {
-private:
-    SDL_Rect sourceRectangle, destinationRectangle;
-protected:
-    SDL_Texture* texture;
+class TileMap : public DrawableComponent {
+    std::list<Tile*> tiles;
+    void PreRenderMap(SDL_Renderer* ren);
 public:
-    DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
-    DrawableComponent(SDL_Rect destinationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
-    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture);
-    ~DrawableComponent();
-    void Draw(SDL_Renderer* ren);
-    DrawableComponent* Clone();
+    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, std::list<Tile*> tiles, SDL_Renderer* ren);
 };
 
 #endif
