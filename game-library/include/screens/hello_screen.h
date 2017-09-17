@@ -29,6 +29,7 @@ private:
 public:
     explicit HelloScreen(SDL_Renderer* ren);
     ~HelloScreen();
+    void Setup();
     bool CheckSetup();
     void Update(uint32_t deltaTime, InputData inputData);
 };

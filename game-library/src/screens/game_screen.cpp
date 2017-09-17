@@ -20,15 +20,20 @@
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
     tileSetTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
+}
+
+GameScreen::~GameScreen() {
+    SDL_DestroyTexture(tileSetTexture);
+}
+
+void GameScreen::Setup() {
     auto tileSet = new TileSet(16, 16, tileSetTexture); // Need to add properties, for example, damage: 1, location: reset, etc.
     components.push_back(tileSet->CreateTile(0, 0, 0)); // This will be done by the resource loader rather than in the screen code, but I am just trying to put together the basics that work
     components.push_back(tileSet->CreateTile(0, 1, 1));
     components.push_back(tileSet->CreateTile(0, 2, 2));
     components.push_back(tileSet->CreateTile(0, 3, 3));
-}
-
-GameScreen::~GameScreen() {
-    SDL_DestroyTexture(tileSetTexture);
+    // Tiles should be stored in a tilemap so that it can be pre-rendered.
+    // Which means this code will probably have to be moved up to the constructor
 }
 
 bool GameScreen::CheckSetup() {
@@ -39,4 +44,5 @@ void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     if (inputData.Quit) {
         nextScreen = nullptr;
     }
+    std::cout << deltaTime << std::endl;
 }

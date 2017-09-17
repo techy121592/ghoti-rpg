@@ -27,14 +27,16 @@
 class Screen {
 protected:
     std::list<DrawableComponent*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
-    Screen* nextScreen = this;
+    Screen* nextScreen = nullptr;
 public:
+    Screen();
     virtual ~Screen() {
         for(DrawableComponent* component : components) {
             delete component;
         }
         components.clear();
     };
+    virtual void Setup() = 0;
     virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
     virtual bool CheckSetup() = 0;
 

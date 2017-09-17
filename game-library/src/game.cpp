@@ -34,6 +34,7 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
     }
 
     screen  = new LoadScreen<GameScreen>(ren);
+    screen->Setup();
     if(!screen->CheckSetup()) {
         std::cout << "Failed to setup the LoadingScreen: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
