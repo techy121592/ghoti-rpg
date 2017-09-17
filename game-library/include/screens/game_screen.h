@@ -24,6 +24,7 @@
 #include "screen.h"
 #include "components/tile.h"
 #include "components/tile_set.h"
+#include "components/tile_map.h"
 
 class GameScreen : public Screen {
 private:
