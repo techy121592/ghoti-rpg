@@ -30,6 +30,7 @@ public:
     DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
     DrawableComponent(SDL_Rect destinationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
     DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture);
+    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture);
     ~DrawableComponent();
     void Draw(SDL_Renderer* ren);
     DrawableComponent* Clone();

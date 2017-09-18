@@ -19,14 +19,7 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    tileSetTexture = ResourceLoader::LoadImage("test_tileset.png", ren);
-    auto tileSet = new TileSet(16, 16, tileSetTexture); // Need to add properties, for example, damage: 1, location: reset, etc.
-    std::list<Tile*> tiles;
-    tiles.push_back(tileSet->CreateTile(0, 0, 0));
-    tiles.push_back(tileSet->CreateTile(0, 1, 1));
-    tiles.push_back(tileSet->CreateTile(0, 2, 2));
-    tiles.push_back(tileSet->CreateTile(0, 3, 3));
-    components.push_back(new TileMap(4, 1, 16, 16, tiles, ren));
+    components.push_back(ResourceLoader::LoadMap("test.tmx", ren));
 }
 
 GameScreen::~GameScreen() {

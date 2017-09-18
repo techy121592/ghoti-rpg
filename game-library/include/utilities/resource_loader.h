@@ -23,6 +23,10 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "components/tile.h"
+#include "components/tile_map.h"
+#include "components/tile_set.h"
+#include "utilities/tinyxml2.h"
 
 class ResourceLoader {
 private:
@@ -30,6 +34,7 @@ private:
 
 public:
     static SDL_Texture* LoadImage(const std::string &fileName, SDL_Renderer* ren);
+    static TileMap* LoadMap(const std::string &fileName, SDL_Renderer* ren);
 };
 
 #endif

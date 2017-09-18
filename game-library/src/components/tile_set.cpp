@@ -18,12 +18,13 @@
 
 #include "components/tile_set.h"
 
-TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture) {
+TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture) {
     this->tileWidth = tileWidth;
     this->tileHeight = tileHeight;
     this->texture = texture;
+    this->padding = padding;
 }
 
 Tile* TileSet::CreateTile(uint32_t x, uint32_t y, uint32_t tileIndex) {
-    return new Tile(x, y, tileIndex, tileWidth, tileHeight, texture);
+    return new Tile(x, y, tileIndex, tileWidth, tileHeight, padding, texture);
 }

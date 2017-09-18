@@ -23,10 +23,10 @@
 #include "tile.h"
 
 class TileSet {
-    uint32_t tileWidth, tileHeight;
+    uint32_t tileWidth, tileHeight, padding;
     SDL_Texture* texture;
 public:
-    TileSet(uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture);
+    TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
     Tile* CreateTile(uint32_t x, uint32_t y, uint32_t tileIndex);
 };
 

@@ -22,15 +22,19 @@ DrawableComponent::DrawableComponent(uint32_t width, uint32_t height, SDL_Render
         : DrawableComponent(0, 0, width, height, 0, SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height)) {
 }
 
-DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture) {
+DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture)
+        : DrawableComponent(x, y, width, height, 0, frame, texture) {
+}
+
+DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture) {
     this->texture = texture;
 
     int32_t textureWidth, textureHeight;
     SDL_QueryTexture(this->texture, nullptr, nullptr, &textureWidth, &textureHeight);
 
-    uint32_t framesWide = textureWidth / width;
+    uint32_t framesWide = (textureWidth + padding) / (width + padding);
 
-    this->sourceRectangle = {(frame%framesWide) * width, (frame/framesWide) * height, width, height};
+    this->sourceRectangle = {(frame%framesWide) * (width + padding), (frame/framesWide) * (height + padding), width, height};
     this->destinationRectangle = {x, y, width, height};
 }
 
