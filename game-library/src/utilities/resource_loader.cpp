@@ -88,7 +88,6 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
             uint32_t row = 0;
 
             for(auto e = layerElement->FirstChildElement("data")->FirstChildElement("tile"); e != nullptr; e = e->NextSiblingElement("tile")) {
-                col++;
                 if(col >= layerWidth) {
                     col = 0;
                     row++;
@@ -96,9 +95,9 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
                 std::string tileIdString = e->Attribute("gid");
                 auto tileId = std::stoi(tileIdString) - 1;
                 if(tileId > -1) {
-                    std::cout << "TileId: " << tileId << std::endl;
                     tiles.push_back(tileSet->CreateTile(col, row, (uint32_t)tileId));
                 }
+                col++;
             }
         }
         std::cout << "Returning map" << std::endl;
