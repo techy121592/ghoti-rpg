@@ -18,7 +18,7 @@
 
 #include "components/tile.h"
 
-Tile::Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, SDL_Texture* texture)
-    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, tileIndex, texture) {
+Tile::Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture)
+    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
 
 }

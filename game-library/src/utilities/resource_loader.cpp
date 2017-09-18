@@ -52,3 +52,65 @@ SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName, SDL_Renderer
     }
     return tex;
 }
+
+TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren) {
+    try {
+        std::cout << "Starting to load map" << std::endl;
+        std::string filePath = ResourceLoader::GetResourcePath("maps") + fileName;
+        tinyxml2::XMLDocument mapFile;
+        mapFile.LoadFile(filePath.c_str());
+        std::list<Tile*> tiles;
+
+        auto rootElement = mapFile.FirstChildElement("map");
+        auto tileSetElement = rootElement->FirstChildElement("tileset");
+        auto imageElement = tileSetElement->FirstChildElement("image");
+        auto imageFileName = imageElement->Attribute("source");
+        std::string tileWidthString = tileSetElement->Attribute("tilewidth");
+        auto tileWidth = (uint32_t)std::stoi(tileWidthString);
+        std::string tileHeightString = tileSetElement->Attribute("tileheight");
+        auto tileHeight = (uint32_t)std::stoi(tileHeightString);
+
+        auto tileSet = new TileSet(tileWidth, tileHeight, 1, LoadImage(imageFileName, ren));
+
+        uint32_t maxRows = 0;
+        uint32_t maxCols = 0;
+
+        for(auto layerElement = rootElement->FirstChildElement("layer"); layerElement != nullptr; layerElement = layerElement->NextSiblingElement("layer")) {
+            std::string layerWidthString = layerElement->Attribute("width");
+            std::string layerHeightString = layerElement->Attribute("height");
+            auto layerWidth = (uint32_t)std::stoi(layerWidthString);
+            auto layerHeight = (uint32_t)std::stoi(layerHeightString);;
+
+            maxRows = maxRows >= layerHeight ? maxRows : layerHeight;
+            maxCols = maxCols >= layerWidth ? maxCols : layerWidth;
+
+            uint32_t col = 0;
+            uint32_t row = 0;
+
+            for(auto e = layerElement->FirstChildElement("data")->FirstChildElement("tile"); e != nullptr; e = e->NextSiblingElement("tile")) {
+                col++;
+                if(col >= layerWidth) {
+                    col = 0;
+                    row++;
+                }
+                std::string tileIdString = e->Attribute("gid");
+                auto tileId = std::stoi(tileIdString) - 1;
+                if(tileId > -1) {
+                    std::cout << "TileId: " << tileId << std::endl;
+                    tiles.push_back(tileSet->CreateTile(col, row, (uint32_t)tileId));
+                }
+            }
+        }
+        std::cout << "Returning map" << std::endl;
+        std::cout << "Rows: " << maxRows << std::endl;
+        std::cout << "Cols: " << maxCols << std::endl;
+        std::cout << "Tile Width: " << tileWidth << std::endl;
+        std::cout << "Tile Height: " << tileHeight << std::endl;
+        std::cout << "Tile Count: " << tiles.size() << std::endl;
+        return new TileMap(maxRows, maxCols, tileWidth, tileHeight, tiles, ren);
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Game::GameLoop() failed: " << ex.what() << std::endl;
+        return nullptr;
+    }
+}
