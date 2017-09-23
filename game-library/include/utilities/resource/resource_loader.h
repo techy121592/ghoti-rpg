@@ -23,10 +23,10 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "components/tile.h"
-#include "components/tile_map.h"
-#include "components/tile_set.h"
-#include "utilities/tinyxml2.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile_map.h"
+#include "components/drawable-components/tiles/tile_set.h"
+#include "tinyxml2.h"
 
 class ResourceLoader {
 private:

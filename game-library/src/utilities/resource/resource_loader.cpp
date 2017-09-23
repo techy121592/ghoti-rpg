@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/resource_loader.h"
+#include "utilities/resource/resource_loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 #ifdef _WIN32

@@ -16,9 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "components/tile.h"
+#include "components/drawable-components/tiles/tile_map.h"
 
-Tile::Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture)
-    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
+TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, std::list<Tile*> tiles, SDL_Renderer* ren)
+        : DrawableComponent(cols * tileWidth, rows * tileHeight, ren) {
+    this->tiles = std::move(tiles);
+    PreRenderMap(ren);
+}
 
+void TileMap::PreRenderMap(SDL_Renderer* ren) {
+    SDL_SetRenderTarget(ren, texture);
+    for(Tile* tile : tiles) {
+        tile->Draw(ren);
+    }
+    SDL_SetRenderTarget(ren, nullptr);
 }
