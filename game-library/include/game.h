@@ -24,11 +24,11 @@
 #include <tuple>
 #include <list>
 #include <SDL.h>
-#include "utilities/resource_loader.h"
-#include "utilities/input_data.h"
-#include "utilities/input_processor.h"
+#include "utilities/resource/resource_loader.h"
+#include "utilities/input/input_data.h"
+#include "utilities/input/input_processor.h"
 #include "utilities/thread_pool.h"
-#include "components/drawable_component.h"
+#include "components/primitive-components/drawable_component.h"
 #include "screens/screen.h"
 #include "screens/game_screen.h"
 #include "screens/load_screen.h"

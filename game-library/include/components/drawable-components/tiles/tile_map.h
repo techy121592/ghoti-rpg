@@ -22,7 +22,7 @@
 #include <list>
 #include <utility>
 #include "tile.h"
-#include "drawable_component.h"
+#include "components/primitive-components/drawable_component.h"
 
 class TileMap : public DrawableComponent {
     std::list<Tile*> tiles;

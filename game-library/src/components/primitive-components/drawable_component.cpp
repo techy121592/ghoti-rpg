@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "components/drawable_component.h"
+#include "components/primitive-components/drawable_component.h"
 
 DrawableComponent::DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren)
         : DrawableComponent(0, 0, width, height, 0, SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height)) {

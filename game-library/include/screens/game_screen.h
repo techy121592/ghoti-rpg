@@ -20,11 +20,11 @@
 #define GAME_SCREEN_H
 
 #include <SDL.h>
-#include "utilities/resource_loader.h"
+#include "utilities/resource/resource_loader.h"
 #include "screen.h"
-#include "components/tile.h"
-#include "components/tile_set.h"
-#include "components/tile_map.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile_set.h"
+#include "components/drawable-components/tiles/tile_map.h"
 
 class GameScreen : public Screen {
 public:

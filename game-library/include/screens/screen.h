@@ -22,8 +22,8 @@
 #include <list>
 #include <iostream>
 #include <SDL.h>
-#include "utilities/input_data.h"
-#include "components/drawable_component.h"
+#include "utilities/input/input_data.h"
+#include "components/primitive-components/drawable_component.h"
 
 class Screen {
 protected:

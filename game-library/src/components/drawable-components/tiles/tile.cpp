@@ -16,15 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_H
-#define TILE_H
+#include "components/drawable-components/tiles/tile.h"
 
-#include <SDL.h>
-#include "drawable_component.h"
+Tile::Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture)
+    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
 
-class Tile : public DrawableComponent {
-public:
-    Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
-};
-
-#endif
+}
