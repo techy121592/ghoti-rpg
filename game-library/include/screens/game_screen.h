@@ -27,8 +27,6 @@
 #include "components/tile_map.h"
 
 class GameScreen : public Screen {
-private:
-    SDL_Texture* tileSetTexture;
 public:
     explicit GameScreen(SDL_Renderer* ren);
     ~GameScreen();

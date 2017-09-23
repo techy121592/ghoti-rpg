@@ -23,14 +23,18 @@ GameScreen::GameScreen(SDL_Renderer* ren) {
 }
 
 GameScreen::~GameScreen() {
-    SDL_DestroyTexture(tileSetTexture);
+    uint64_t originalComponentCount = components.size();
+    for(uint64_t i = 0; i < originalComponentCount; i++) {
+        components.pop_front();
+    }
 }
 
 void GameScreen::Setup() {
 }
 
 bool GameScreen::CheckSetup() {
-    return tileSetTexture != nullptr;
+    std::cout << "Checking GameScreen setup status" << std::endl;
+    return components.size() == 1;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {

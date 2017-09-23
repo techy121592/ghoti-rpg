@@ -44,13 +44,18 @@ std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 }
 
 SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName, SDL_Renderer* ren) {
-    std::string filePath = ResourceLoader::GetResourcePath("images") + fileName;
-    SDL_Texture* tex = IMG_LoadTexture(ren, filePath.c_str());
-    if (tex == nullptr) {
-        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+    try {
+        std::string filePath = ResourceLoader::GetResourcePath("images") + fileName;
+        SDL_Texture* tex = IMG_LoadTexture(ren, filePath.c_str());
+        if (tex == nullptr) {
+            std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+            return nullptr;
+        }
+        return tex;
+    } catch (const std::exception& ex) {
+        std::cout << "ResourceLoader::LoadImage() failed: " << ex.what() << std::endl;
         return nullptr;
     }
-    return tex;
 }
 
 TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren) {
@@ -107,9 +112,8 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
         std::cout << "Tile Height: " << tileHeight << std::endl;
         std::cout << "Tile Count: " << tiles.size() << std::endl;
         return new TileMap(maxRows, maxCols, tileWidth, tileHeight, tiles, ren);
-    }
-    catch (const std::exception& ex) {
-        std::cout << "Game::GameLoop() failed: " << ex.what() << std::endl;
+    } catch (const std::exception& ex) {
+        std::cout << "ResourceLoader::LoadMap() failed: " << ex.what() << std::endl;
         return nullptr;
     }
 }

@@ -43,6 +43,7 @@ void LoadScreen<T>::Setup() {
 
 template<class T>
 bool LoadScreen<T>::CheckSetup() {
+    std::cout << "Checking LoadScreen setup status" << std::endl;
     return loadingTexture != nullptr;
 }
 
