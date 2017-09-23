@@ -130,8 +130,10 @@ bool Game::Step(const uint32_t deltaTime) {
         screen = tempScreen;
 
         if(screen == nullptr) {
+            std::cout << "Screen is null" << std::endl;
             return false;
         } else if(!screen->CheckSetup()) {
+            std::cout << "Failed setup" << std::endl;
             screen = nullptr;
             return false;
         }
@@ -152,6 +154,7 @@ bool Game::GameLoop() {
             deltaTime = currentTime - previousTime;
 
             if(!Step(deltaTime)) {
+                std::cout << "Breaking loop" << std::endl;
                 break;
             }
 

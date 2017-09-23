@@ -31,6 +31,7 @@ void HelloScreen::Setup() {
 }
 
 bool HelloScreen::CheckSetup() {
+    std::cout << "Checking HelloScreen setup status" << std::endl;
     return helloTexture != nullptr;
 }
 
