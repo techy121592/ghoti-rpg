@@ -20,6 +20,7 @@
 #define SCREEN_H
 
 #include <list>
+#include <iostream>
 #include <SDL.h>
 #include "utilities/input_data.h"
 #include "components/drawable_component.h"

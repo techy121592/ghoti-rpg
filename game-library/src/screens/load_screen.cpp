@@ -23,15 +23,12 @@ template<class T> Screen* LoadScreen<T>::nextScreenHolder = nullptr;
 
 template<class T>
 LoadScreen<T>::LoadScreen(SDL_Renderer* ren) {
-    loadingTexture = ResourceLoader::LoadImage("loading.png", ren);
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, loadingTexture));
+    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png", ren)));
     nextScreenHolder = new T(ren);
 }
 
 template<class T>
-LoadScreen<T>::~LoadScreen() {
-    SDL_DestroyTexture(loadingTexture);
-}
+LoadScreen<T>::~LoadScreen() = default;
 
 template <class T>
 void LoadScreen<T>::Setup() {
@@ -44,7 +41,7 @@ void LoadScreen<T>::Setup() {
 template<class T>
 bool LoadScreen<T>::CheckSetup() {
     std::cout << "Checking LoadScreen setup status" << std::endl;
-    return loadingTexture != nullptr;
+    return components.size() == 1;
 }
 
 template<class T>
