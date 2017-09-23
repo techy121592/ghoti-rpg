@@ -19,6 +19,7 @@
 #ifndef DRAWABLE_COMPONENT_H
 #define DRAWABLE_COMPONENT_H
 
+#include <iostream>
 #include <SDL.h>
 
 class DrawableComponent {

@@ -22,12 +22,7 @@ GameScreen::GameScreen(SDL_Renderer* ren) {
     components.push_back(ResourceLoader::LoadMap("test.tmx", ren));
 }
 
-GameScreen::~GameScreen() {
-    uint64_t originalComponentCount = components.size();
-    for(uint64_t i = 0; i < originalComponentCount; i++) {
-        components.pop_front();
-    }
-}
+GameScreen::~GameScreen() = default;
 
 void GameScreen::Setup() {
 }

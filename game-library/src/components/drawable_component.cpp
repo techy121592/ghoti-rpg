@@ -45,6 +45,7 @@ DrawableComponent::DrawableComponent(const SDL_Rect destinationRectangle, const 
 }
 
 DrawableComponent::~DrawableComponent() {
+    std::cout << "Destroying texture" << std::endl;
     SDL_DestroyTexture(texture);
 }
 
