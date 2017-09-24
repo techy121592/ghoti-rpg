@@ -25,6 +25,18 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
         case SDLK_ESCAPE:
             inputData.Quit = keyDown;
             break;
+        case SDLK_UP: case SDLK_w:
+            inputData.MoveUp = keyDown;
+            break;
+        case SDLK_DOWN: case SDLK_s:
+            inputData.MoveDown = keyDown;
+            break;
+        case SDLK_LEFT: case SDLK_a:
+            inputData.MoveLeft = keyDown;
+            break;
+        case SDLK_RIGHT: case SDLK_d:
+            inputData.MoveRight = keyDown;
+            break;
         default:
             break;
     }
