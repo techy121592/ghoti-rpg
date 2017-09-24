@@ -81,7 +81,6 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
 
         for(auto layerElement = rootElement->FirstChildElement("layer"); layerElement != nullptr; layerElement = layerElement->NextSiblingElement("layer")) {
             auto layerZ = (uint32_t)std::stoi(layerElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value"));
-            std::cout << "LayerZ: " << layerZ << std::endl;
             std::string layerWidthString = layerElement->Attribute("width");
             std::string layerHeightString = layerElement->Attribute("height");
             auto layerWidth = (uint32_t)std::stoi(layerWidthString);
@@ -100,7 +99,6 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
                 }
                 auto tileId = std::stoi(tileElement->Attribute("gid")) - 1;
                 if(tileId > -1) {
-                    std::cout << "Adding tile to layer" << std::endl;
                     tiles.push_back(tileSet->CreateTile(col, row, layerZ, (uint32_t)tileId));
                 }
                 col++;
