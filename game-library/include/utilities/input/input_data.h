@@ -21,7 +21,7 @@
 
 struct InputData {
 public:
-    bool Quit = false;
+    bool Quit, MoveUp, MoveDown, MoveLeft, MoveRight = false;
 };
 
 #endif
