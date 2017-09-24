@@ -16,23 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/screen.h"
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
-Screen::Screen() {
-    nextScreen = this;
-}
+class Component {
+public:
+    virtual ~Component() {}
+};
 
-Screen* Screen::NextScreen() {
-    return nextScreen;
-}
-
-std::list<DrawableComponent*> Screen::CloneDrawables() {
-    std::list<DrawableComponent*> tempListOfDrawableComponents = {};
-    for(Component* component : components) {
-        auto drawableComponent = dynamic_cast<DrawableComponent*>(component);
-        if(drawableComponent != nullptr) {
-            tempListOfDrawableComponents.push_back(drawableComponent->Clone());
-        }
-    }
-    return tempListOfDrawableComponents;
-}
+#endif
