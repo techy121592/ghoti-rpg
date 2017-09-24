@@ -33,10 +33,14 @@ protected:
 public:
     Screen();
     virtual ~Screen() {
+        std::cout << "Deconstructing screen" << std::endl;
         for(Component* component : components) {
+            std::cout << "Deleting component" << std::endl;
             delete component;
         }
+        std::cout << "Clearing component list" << std::endl;
         components.clear();
+        std::cout << "Done deconstructing screen" << std::endl;
     };
     virtual void Setup() = 0;
     virtual void Update(uint32_t deltaTime, InputData inputData) = 0;

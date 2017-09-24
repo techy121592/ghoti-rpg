@@ -16,24 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_MAP_H
-#define TILE_MAP_H
-
-#include <list>
-#include <utility>
-#include "tile.h"
-#include "components/primitive-components/drawable_component.h"
 #include "components/primitive-components/rendererable_drawable_component.h"
 
-class TileMap : public Component {
-    std::list<Tile*> tiles;
-    void PreRenderMap(uint32_t playerZ, SDL_Renderer* ren);
-    RenderableDrawableComponent* topLayer;
-    RenderableDrawableComponent* bottomLayer;
-public:
-    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles, SDL_Renderer* ren);
-    DrawableComponent* GetTopLayer();
-    DrawableComponent* GetBottomLayer();
-};
+RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren)
+        : DrawableComponent(width, height, ren) {}
 
-#endif
+SDL_Texture* RenderableDrawableComponent::GetTexture() {
+    return texture;
+}
