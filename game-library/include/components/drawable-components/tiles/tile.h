@@ -23,8 +23,10 @@
 #include "components/primitive-components/drawable_component.h"
 
 class Tile : public DrawableComponent {
+    uint32_t z;
 public:
-    Tile(uint32_t x, uint32_t y, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
+    Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
+    uint32_t GetZ();
 };
 
 #endif

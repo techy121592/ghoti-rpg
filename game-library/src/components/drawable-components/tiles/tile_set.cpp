@@ -25,6 +25,6 @@ TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_
     this->padding = padding;
 }
 
-Tile* TileSet::CreateTile(uint32_t x, uint32_t y, uint32_t tileIndex) {
-    return new Tile(x, y, tileIndex, tileWidth, tileHeight, padding, texture);
+Tile* TileSet::CreateTile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex) {
+    return new Tile(x, y, z, tileIndex, tileWidth, tileHeight, padding, texture);
 }

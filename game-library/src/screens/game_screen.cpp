@@ -19,7 +19,10 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    components.push_back(ResourceLoader::LoadMap("test.tmx", ren));
+    auto tileMap = ResourceLoader::LoadMap("test.tmx", ren);
+    components.push_back(tileMap);
+    components.push_back(tileMap->GetTopLayer());
+    components.push_back(tileMap->GetBottomLayer());
 }
 
 GameScreen::~GameScreen() = default;
@@ -29,11 +32,12 @@ void GameScreen::Setup() {
 
 bool GameScreen::CheckSetup() {
     std::cout << "Checking GameScreen setup status" << std::endl;
-    return components.size() == 1;
+    return components.size() == 3;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     if (inputData.Quit) {
+        std::cout << "Setting nextScreen to nullptr" << std::endl;
         nextScreen = nullptr;
     }
     std::cout << deltaTime << std::endl;
