@@ -67,6 +67,8 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
         return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
+    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+
     return std::make_tuple(win, ren);
 }
 

@@ -28,6 +28,7 @@ DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uin
 
 DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture) {
     this->texture = texture;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     int32_t textureWidth, textureHeight;
     SDL_QueryTexture(this->texture, nullptr, nullptr, &textureWidth, &textureHeight);
@@ -42,6 +43,7 @@ DrawableComponent::DrawableComponent(const SDL_Rect destinationRectangle, const 
     this->destinationRectangle = destinationRectangle;
     this->sourceRectangle = sourceRectangle;
     this->texture = texture;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 
 DrawableComponent::~DrawableComponent() {
