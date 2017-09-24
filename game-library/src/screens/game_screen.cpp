@@ -21,8 +21,9 @@
 GameScreen::GameScreen(SDL_Renderer* ren) {
     auto tileMap = ResourceLoader::LoadMap("test.tmx", ren);
     components.push_back(tileMap);
-    components.push_back(tileMap->GetTopLayer());
     components.push_back(tileMap->GetBottomLayer());
+    components.push_back(new Character(16, 16, 16, 16, 0, ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
+    components.push_back(tileMap->GetTopLayer());
 }
 
 GameScreen::~GameScreen() = default;
@@ -32,7 +33,7 @@ void GameScreen::Setup() {
 
 bool GameScreen::CheckSetup() {
     std::cout << "Checking GameScreen setup status" << std::endl;
-    return components.size() == 3;
+    return components.size() == 4;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
@@ -40,5 +41,11 @@ void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
         std::cout << "Setting nextScreen to nullptr" << std::endl;
         nextScreen = nullptr;
     }
-    std::cout << deltaTime << std::endl;
+
+    for(auto component : components) {
+        auto character = dynamic_cast<Character*>(component);
+        if(character != nullptr) {
+            character->Update(deltaTime, inputData);
+        }
+    }
 }

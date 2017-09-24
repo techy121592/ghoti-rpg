@@ -16,27 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef DRAWABLE_COMPONENT_H
-#define DRAWABLE_COMPONENT_H
+#ifndef CHARACTER_H
+#define CHARACTER_H
 
-#include <iostream>
-#include <SDL.h>
-#include "component.h"
+#include "components/primitive-components/drawable_component.h"
+#include "utilities/input/input_data.h"
 
-class DrawableComponent : public Component {
-private:
-    SDL_Rect sourceRectangle;
-protected:
-    SDL_Texture* texture;
-    SDL_Rect destinationRectangle;
+class Character : public DrawableComponent {
+    float speed;
 public:
-    DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
-    DrawableComponent(SDL_Rect destinationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
-    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture);
-    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture);
-    ~DrawableComponent();
-    void Draw(SDL_Renderer* ren);
-    DrawableComponent* Clone();
+    Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed);
+    void Update(uint32_t deltaTime, InputData inputData);
 };
+
 
 #endif

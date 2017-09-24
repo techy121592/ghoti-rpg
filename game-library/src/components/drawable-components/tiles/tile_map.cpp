@@ -36,7 +36,7 @@ void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
         std::cout << "Rendering to " << (graphicalLayerCount < 1 ? "bottom layer" : "top layer") << std::endl;
 
         for(Tile* tile : tiles) {
-            if(tile->GetZ() < playerZ && graphicalLayerCount < 1 || tile->GetZ() > playerZ) {
+            if(tile->GetZ() < playerZ && graphicalLayerCount == 0 || tile->GetZ() > playerZ && graphicalLayerCount == 1) {
                 renderCheck = true;
                 tile->Draw(ren);
             }
