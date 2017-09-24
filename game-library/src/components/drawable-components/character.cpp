@@ -42,8 +42,7 @@ void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
     if(inputData.MoveRight) {
         destinationRectangle.x += amountToMove;
     }
-    destinationRectangle = CalculateValidPosition(destinationRectangle, tileMap);
-    locationRectangle = destinationRectangle;
+    locationRectangle = CalculateValidPosition(destinationRectangle, tileMap);
 }
 
 SDL_Rect Character::CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap) {

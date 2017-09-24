@@ -31,7 +31,9 @@ public:
     void SetInput(InputData inputData);
     void Update(uint32_t deltaTime, TileMap* tileMap);
     SDL_Rect CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap);
+public:
+    Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed);
+    void Update(uint32_t deltaTime, InputData inputData);
 };
-
 
 #endif
