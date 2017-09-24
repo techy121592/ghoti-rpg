@@ -16,24 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
-
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_set.h"
-#include "components/drawable-components/tiles/tile_map.h"
 #include "components/drawable-components/character.h"
 
-class GameScreen : public Screen {
-public:
-    explicit GameScreen(SDL_Renderer* ren);
-    ~GameScreen();
-    void Setup();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
-};
+Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed)
+        : DrawableComponent(x, y, width, height, frame, texture) {
+    this->speed = speed;
+}
 
-#endif
+void Character::Update(uint32_t deltaTime, InputData inputData) {
+    uint32_t amountToMove = speed * deltaTime;
+    if(inputData.MoveUp) {
+        destinationRectangle.y -= amountToMove;
+    }
+    if(inputData.MoveDown) {
+        destinationRectangle.y += amountToMove;
+    }
+    if(inputData.MoveLeft) {
+        destinationRectangle.x -= amountToMove;
+    }
+    if(inputData.MoveRight) {
+        destinationRectangle.x += amountToMove;
+    }
+}
