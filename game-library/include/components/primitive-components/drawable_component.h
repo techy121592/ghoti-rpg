@@ -21,8 +21,9 @@
 
 #include <iostream>
 #include <SDL.h>
+#include "component.h"
 
-class DrawableComponent {
+class DrawableComponent : public Component {
 private:
     SDL_Rect sourceRectangle, destinationRectangle;
 protected:

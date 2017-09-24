@@ -23,16 +23,17 @@
 #include <iostream>
 #include <SDL.h>
 #include "utilities/input/input_data.h"
+#include "components/primitive-components/component.h"
 #include "components/primitive-components/drawable_component.h"
 
 class Screen {
 protected:
-    std::list<DrawableComponent*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
+    std::list<Component*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
     Screen* nextScreen = nullptr;
 public:
     Screen();
     virtual ~Screen() {
-        for(DrawableComponent* component : components) {
+        for(Component* component : components) {
             delete component;
         }
         components.clear();
