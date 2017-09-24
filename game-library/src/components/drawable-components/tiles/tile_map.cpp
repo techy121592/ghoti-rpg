@@ -28,6 +28,11 @@ TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tile
 
 void TileMap::PreRenderMap(SDL_Renderer* ren) {
     std::cout << "PlayerZIndex: " << playerZIndex << std::endl;
+    PreRenderMap(playerZIndex, ren);
+}
+
+void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
+    std::cout << "PlayerZ: " << playerZ << std::endl;
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
         SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
                                  bottomLayer->GetTexture() :
@@ -38,6 +43,7 @@ void TileMap::PreRenderMap(SDL_Renderer* ren) {
 
         for(Tile* tile : tiles) {
             if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
+            if(tile->GetZ() < playerZ && graphicalLayerCount < 1 || tile->GetZ() > playerZ) {
                 renderCheck = true;
                 tile->Draw(ren);
             }
@@ -72,4 +78,12 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
         }
     }
     return tilesColliding;
+}
+
+DrawableComponent* TileMap::GetTopLayer() {
+    return topLayer;
+}
+
+DrawableComponent* TileMap::GetBottomLayer() {
+    return bottomLayer;
 }

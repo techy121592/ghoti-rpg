@@ -4,7 +4,7 @@
   <property name="player-z" type="int" value="3"/>
  </properties>
  <tileset firstgid="1" name="Rogue-like Dungeon" tilewidth="16" tileheight="16" spacing="1" tilecount="522" columns="29">
-  <image source="roguelikeDungeon_transparent.png" width="492" height="305"/>
+  <image source="../../../../../../ownCloud/Shared Stuff/Kenney Assets/Version 1/Art/Roguelike cave &amp; dungeon pack (520 assets)/Spritesheet/roguelikeDungeon_transparent.png" width="492" height="305"/>
  </tileset>
  <layer name="Ground" width="13" height="13">
   <properties>
