@@ -28,10 +28,10 @@ private:
     SDL_Rect sourceRectangle;
 protected:
     SDL_Texture* texture;
-    SDL_Rect destinationRectangle;
+    SDL_Rect locationRectangle;
 public:
     DrawableComponent(int32_t width, int32_t height, SDL_Renderer* ren);
-    DrawableComponent(SDL_Rect destinationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
+    DrawableComponent(SDL_Rect locationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
     DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, SDL_Texture* texture);
     DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, SDL_Texture* texture);
     ~DrawableComponent();

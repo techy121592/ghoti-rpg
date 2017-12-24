@@ -23,8 +23,13 @@ Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, ui
     this->speed = speed;
 }
 
-void Character::Update(uint32_t deltaTime, InputData inputData) {
-    uint32_t amountToMove = speed * deltaTime;
+void Character::SetInput(InputData inputData) {
+    this->inputData = inputData;
+}
+
+void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
+    auto amountToMove = (uint32_t)(speed * deltaTime);
+    SDL_Rect destinationRectangle = locationRectangle;
     if(inputData.MoveUp) {
         destinationRectangle.y -= amountToMove;
     }
@@ -37,4 +42,14 @@ void Character::Update(uint32_t deltaTime, InputData inputData) {
     if(inputData.MoveRight) {
         destinationRectangle.x += amountToMove;
     }
+    destinationRectangle = CalculateValidPosition(destinationRectangle, tileMap);
+    locationRectangle = destinationRectangle;
+}
+
+SDL_Rect Character::CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap) {
+    auto collidingTiles = tileMap->CheckCollision(targetRectangle);
+    if(!collidingTiles.empty()) {
+        return locationRectangle;
+    }
+    return targetRectangle;
 }

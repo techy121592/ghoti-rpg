@@ -27,13 +27,15 @@
 
 class TileMap : public Component {
     std::list<Tile*> tiles;
-    void PreRenderMap(uint32_t playerZ, SDL_Renderer* ren);
+    void PreRenderMap(SDL_Renderer* ren);
     RenderableDrawableComponent* topLayer;
     RenderableDrawableComponent* bottomLayer;
+    int playerZIndex;
 public:
     TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles, SDL_Renderer* ren);
     DrawableComponent* GetTopLayer();
     DrawableComponent* GetBottomLayer();
+    std::list<Tile*> CheckCollision(SDL_Rect targetRectangle);
 };
 
 #endif

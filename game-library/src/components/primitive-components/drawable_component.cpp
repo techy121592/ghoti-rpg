@@ -36,11 +36,11 @@ DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_
     int32_t framesWide = (textureWidth + padding) / (width + padding);
 
     this->sourceRectangle = {(frame%framesWide) * (width + padding), (frame/framesWide) * (height + padding), width, height};
-    this->destinationRectangle = {x, y, width, height};
+    this->locationRectangle = {x, y, width, height};
 }
 
-DrawableComponent::DrawableComponent(const SDL_Rect destinationRectangle, const SDL_Rect sourceRectangle, SDL_Texture* texture) {
-    this->destinationRectangle = destinationRectangle;
+DrawableComponent::DrawableComponent(const SDL_Rect locationRectangle, const SDL_Rect sourceRectangle, SDL_Texture* texture) {
+    this->locationRectangle = locationRectangle;
     this->sourceRectangle = sourceRectangle;
     this->texture = texture;
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -52,9 +52,9 @@ DrawableComponent::~DrawableComponent() {
 }
 
 void DrawableComponent::Draw(SDL_Renderer* ren) {
-    SDL_RenderCopy(ren, texture, &sourceRectangle, &destinationRectangle);
+    SDL_RenderCopy(ren, texture, &sourceRectangle, &locationRectangle);
 }
 
 DrawableComponent* DrawableComponent::Clone() {
-    return new DrawableComponent(destinationRectangle, sourceRectangle, texture);
+    return new DrawableComponent(locationRectangle, sourceRectangle, texture);
 }
