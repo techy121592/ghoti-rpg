@@ -67,20 +67,26 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
         return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
+    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+
     return std::make_tuple(win, ren);
 }
 
 void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+    std::cout << "Deleting last screen" << std::endl;
     delete screen;
 
     if(ren != nullptr) {
+        std::cout << "Destroying renderer" << std::endl;
         SDL_DestroyRenderer(ren);
     }
 
     if(win != nullptr) {
+        std::cout << "Destroying window" << std::endl;
         SDL_DestroyWindow(win);
     }
 
+    std::cout << "Quitting SDL" << std::endl;
     SDL_Quit();
 }
 
@@ -125,9 +131,17 @@ bool Game::Step(const uint32_t deltaTime) {
     }
 
     if(screen != screen->NextScreen()) {
+        std::cout << "Getting next screen" << std::endl;
         Screen* tempScreen = screen->NextScreen();
+        if(tempScreen == nullptr) {
+            std::cout << "Next screen null" << std::endl;
+            return false;
+        }
+        std::cout << "Deleting old screen" << std::endl;
         delete screen;
+        std::cout << "Swapping screens" << std::endl;
         screen = tempScreen;
+        std::cout << "Swapped screens" << std::endl;
 
         if(screen == nullptr) {
             std::cout << "Screen is null" << std::endl;

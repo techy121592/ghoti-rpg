@@ -18,21 +18,22 @@
 
 #include "components/primitive-components/drawable_component.h"
 
-DrawableComponent::DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren)
+DrawableComponent::DrawableComponent(int32_t width, int32_t height, SDL_Renderer* ren)
         : DrawableComponent(0, 0, width, height, 0, SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height)) {
 }
 
-DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture)
+DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, SDL_Texture* texture)
         : DrawableComponent(x, y, width, height, 0, frame, texture) {
 }
 
-DrawableComponent::DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture) {
+DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, SDL_Texture* texture) {
     this->texture = texture;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     int32_t textureWidth, textureHeight;
     SDL_QueryTexture(this->texture, nullptr, nullptr, &textureWidth, &textureHeight);
 
-    uint32_t framesWide = (textureWidth + padding) / (width + padding);
+    int32_t framesWide = (textureWidth + padding) / (width + padding);
 
     this->sourceRectangle = {(frame%framesWide) * (width + padding), (frame/framesWide) * (height + padding), width, height};
     this->destinationRectangle = {x, y, width, height};
@@ -42,6 +43,7 @@ DrawableComponent::DrawableComponent(const SDL_Rect destinationRectangle, const 
     this->destinationRectangle = destinationRectangle;
     this->sourceRectangle = sourceRectangle;
     this->texture = texture;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 
 DrawableComponent::~DrawableComponent() {

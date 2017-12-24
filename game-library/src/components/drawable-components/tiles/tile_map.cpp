@@ -18,16 +18,40 @@
 
 #include "components/drawable-components/tiles/tile_map.h"
 
-TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, std::list<Tile*> tiles, SDL_Renderer* ren)
-        : DrawableComponent(cols * tileWidth, rows * tileHeight, ren) {
+TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::list<Tile*> tiles, SDL_Renderer* ren) : Component() {
+    topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
+    bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
     this->tiles = std::move(tiles);
-    PreRenderMap(ren);
+    PreRenderMap(playerZIndex, ren);
 }
 
-void TileMap::PreRenderMap(SDL_Renderer* ren) {
-    SDL_SetRenderTarget(ren, texture);
-    for(Tile* tile : tiles) {
-        tile->Draw(ren);
+void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
+    std::cout << "PlayerZ: " << playerZ << std::endl;
+    for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
+        SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
+                                 bottomLayer->GetTexture() :
+                                 topLayer->GetTexture());
+
+        bool renderCheck = false;
+        std::cout << "Rendering to " << (graphicalLayerCount < 1 ? "bottom layer" : "top layer") << std::endl;
+
+        for(Tile* tile : tiles) {
+            if(tile->GetZ() < playerZ && graphicalLayerCount == 0 || tile->GetZ() > playerZ && graphicalLayerCount == 1) {
+                renderCheck = true;
+                tile->Draw(ren);
+            }
+        }
+
+        std::cout << (renderCheck ? "Successfully" : "Failed") << " to render to layer" << std::endl;
+
+        SDL_SetRenderTarget(ren, nullptr);
     }
-    SDL_SetRenderTarget(ren, nullptr);
+}
+
+DrawableComponent* TileMap::GetTopLayer() {
+    return topLayer;
+}
+
+DrawableComponent* TileMap::GetBottomLayer() {
+    return bottomLayer;
 }

@@ -25,6 +25,7 @@
 #include "components/drawable-components/tiles/tile.h"
 #include "components/drawable-components/tiles/tile_set.h"
 #include "components/drawable-components/tiles/tile_map.h"
+#include "components/drawable-components/character.h"
 
 class GameScreen : public Screen {
 public:

@@ -16,24 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_MAP_H
-#define TILE_MAP_H
+#include "components/drawable-components/character.h"
 
-#include <list>
-#include <utility>
-#include "tile.h"
-#include "components/primitive-components/drawable_component.h"
-#include "components/primitive-components/rendererable_drawable_component.h"
+Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed)
+        : DrawableComponent(x, y, width, height, frame, texture) {
+    this->speed = speed;
+}
 
-class TileMap : public Component {
-    std::list<Tile*> tiles;
-    void PreRenderMap(uint32_t playerZ, SDL_Renderer* ren);
-    RenderableDrawableComponent* topLayer;
-    RenderableDrawableComponent* bottomLayer;
-public:
-    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles, SDL_Renderer* ren);
-    DrawableComponent* GetTopLayer();
-    DrawableComponent* GetBottomLayer();
-};
-
-#endif
+void Character::Update(uint32_t deltaTime, InputData inputData) {
+    uint32_t amountToMove = speed * deltaTime;
+    if(inputData.MoveUp) {
+        destinationRectangle.y -= amountToMove;
+    }
+    if(inputData.MoveDown) {
+        destinationRectangle.y += amountToMove;
+    }
+    if(inputData.MoveLeft) {
+        destinationRectangle.x -= amountToMove;
+    }
+    if(inputData.MoveRight) {
+        destinationRectangle.x += amountToMove;
+    }
+}
