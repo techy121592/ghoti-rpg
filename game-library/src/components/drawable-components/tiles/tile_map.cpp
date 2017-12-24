@@ -22,11 +22,12 @@ TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tile
     topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
     bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
     this->tiles = std::move(tiles);
-    PreRenderMap(playerZIndex, ren);
+    this->playerZIndex = playerZIndex;
+    PreRenderMap(ren);
 }
 
-void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
-    std::cout << "PlayerZ: " << playerZ << std::endl;
+void TileMap::PreRenderMap(SDL_Renderer* ren) {
+    std::cout << "PlayerZIndex: " << playerZIndex << std::endl;
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
         SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
                                  bottomLayer->GetTexture() :
@@ -36,7 +37,7 @@ void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
         std::cout << "Rendering to " << (graphicalLayerCount < 1 ? "bottom layer" : "top layer") << std::endl;
 
         for(Tile* tile : tiles) {
-            if(tile->GetZ() < playerZ && graphicalLayerCount == 0 || tile->GetZ() > playerZ && graphicalLayerCount == 1) {
+            if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
                 renderCheck = true;
                 tile->Draw(ren);
             }
@@ -54,4 +55,21 @@ DrawableComponent* TileMap::GetTopLayer() {
 
 DrawableComponent* TileMap::GetBottomLayer() {
     return bottomLayer;
+}
+
+std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
+    std::list<Tile*> tilesColliding;
+    for(auto tile : tiles) {
+        auto tileLocation = tile->GetLocation();
+
+        if((targetRect.x >= tileLocation.x && targetRect.x <= tileLocation.x + tileLocation.w ||
+                targetRect.x + targetRect.w >= tileLocation.x && targetRect.x + targetRect.w <= tileLocation.x + tileLocation.w) &&
+                (targetRect.y >= tileLocation.y && targetRect.y <= tileLocation.y + tileLocation.h ||
+                 targetRect.y + targetRect.h >= tileLocation.y && targetRect.y + targetRect.h <= tileLocation.y + tileLocation.h) &&
+                tile->GetZ() == playerZIndex - 1) {
+            std::cout << "Collision detected" << std::endl;
+            tilesColliding.push_back(tile);
+        }
+    }
+    return tilesColliding;
 }

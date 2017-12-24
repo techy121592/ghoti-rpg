@@ -26,3 +26,7 @@ Tile::Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tile
 uint32_t Tile::GetZ() {
     return z;
 }
+
+SDL_Rect Tile::GetLocation() {
+    return locationRectangle;
+}

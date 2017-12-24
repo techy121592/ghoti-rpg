@@ -19,7 +19,7 @@
 #include "screens/game_screen.h"
 
 GameScreen::GameScreen(SDL_Renderer* ren) {
-    auto tileMap = ResourceLoader::LoadMap("test.tmx", ren);
+    tileMap = ResourceLoader::LoadMap("test.tmx", ren);
     components.push_back(tileMap);
     components.push_back(tileMap->GetBottomLayer());
     components.push_back(new Character(16, 16, 16, 16, 0, ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
@@ -45,7 +45,8 @@ void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     for(auto component : components) {
         auto character = dynamic_cast<Character*>(component);
         if(character != nullptr) {
-            character->Update(deltaTime, inputData);
+            character->SetInput(inputData);
+            character->Update(deltaTime, tileMap);
         }
     }
 }

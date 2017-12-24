@@ -20,13 +20,17 @@
 #define CHARACTER_H
 
 #include "components/primitive-components/drawable_component.h"
+#include "components/drawable-components/tiles/tile_map.h"
 #include "utilities/input/input_data.h"
 
 class Character : public DrawableComponent {
     float speed;
+    InputData inputData;
 public:
     Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed);
-    void Update(uint32_t deltaTime, InputData inputData);
+    void SetInput(InputData inputData);
+    void Update(uint32_t deltaTime, TileMap* tileMap);
+    SDL_Rect CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap);
 };
 
 
