@@ -28,6 +28,7 @@
 #include "components/drawable-components/character.h"
 
 class GameScreen : public Screen {
+    TileMap* tileMap;
 public:
     explicit GameScreen(SDL_Renderer* ren);
     ~GameScreen();
