@@ -16,28 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#include "components/drawable-components/tiles/tile_map.h"
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
+TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, std::list<Tile*> tiles, SDL_Renderer* ren)
+        : DrawableComponent(cols * tileWidth, rows * tileHeight, ren) {
+    this->tiles = std::move(tiles);
+    PreRenderMap(ren);
 }
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
-
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
-
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
+void TileMap::PreRenderMap(SDL_Renderer* ren) {
+    SDL_SetRenderTarget(ren, texture);
+    for(Tile* tile : tiles) {
+        tile->Draw(ren);
     }
-    std::cout << deltaTime << std::endl;
+    SDL_SetRenderTarget(ren, nullptr);
 }

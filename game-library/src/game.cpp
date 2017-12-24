@@ -1,3 +1,21 @@
+/**
+ * Copyright (C) 2017  David Welch & Ankit Singhania
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "game.h"
 
 Screen* Game::screen = nullptr;
@@ -15,7 +33,8 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
         CloseSDL(win, ren, screen);
     }
 
-    screen  = new LoadScreen<HelloScreen>(ren);
+    screen  = new LoadScreen<GameScreen>(ren);
+    screen->Setup();
     if(!screen->CheckSetup()) {
         std::cout << "Failed to setup the LoadingScreen: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
@@ -30,14 +49,14 @@ Game::~Game() {
 std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return std::make_tuple(nullptr, nullptr);
+        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
-    SDL_Window* win = SDL_CreateWindow("Hello World!", 100, 100, width, height, SDL_WINDOW_SHOWN);
+    SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {
         std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
-        return std::make_tuple(nullptr, nullptr);
+        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
     SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -45,20 +64,14 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
         SDL_DestroyWindow(win);
         std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
-        return std::make_tuple(nullptr, nullptr);
+        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
     return std::make_tuple(win, ren);
 }
 
-bool Game::CheckSetup() {
-    return win != nullptr && ren != nullptr;
-}
-
 void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
-    if(screen != nullptr) {
-        delete screen;
-    }
+    delete screen;
 
     if(ren != nullptr) {
         SDL_DestroyRenderer(ren);
@@ -71,14 +84,8 @@ void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
     SDL_Quit();
 }
 
-void Game::PauseForRestOfFrame(const int32_t targetFrameLength, const int32_t deltaTime) {
-    int32_t delay = targetFrameLength - deltaTime;
-
-    //std::cout << "FPS: " << 1000.0f / (deltaTime + (delay > 0 ? delay : 0)) << std::endl;
-
-    if(delay > 0) {
-        SDL_Delay((uint32_t)delay);
-    }
+void Game::PauseForRestOfFrame(const uint32_t targetFrameLength, const uint32_t deltaTime) {
+    if(targetFrameLength > deltaTime) SDL_Delay((uint32_t)(targetFrameLength - deltaTime));
 }
 
 void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData) {
@@ -101,7 +108,7 @@ void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
     SDL_RenderPresent(ren);
 }
 
-bool Game::Step(const int32_t deltaTime) {
+bool Game::Step(const uint32_t deltaTime) {
     if(screen == nullptr) {
         return false;
     }
@@ -123,8 +130,10 @@ bool Game::Step(const int32_t deltaTime) {
         screen = tempScreen;
 
         if(screen == nullptr) {
+            std::cout << "Screen is null" << std::endl;
             return false;
         } else if(!screen->CheckSetup()) {
+            std::cout << "Failed setup" << std::endl;
             screen = nullptr;
             return false;
         }
@@ -133,18 +142,19 @@ bool Game::Step(const int32_t deltaTime) {
 }
 
 bool Game::GameLoop() {
-    const int32_t targetFrameLength = (int32_t)(1000 / fps);
+    auto targetFrameLength = (uint32_t)(1000 / fps);
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
     InputProcessor::GetInputFromDevice();
 
     try {
-        while(1==1) {
+        while(true) {
             previousTime = currentTime;
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
 
             if(!Step(deltaTime)) {
+                std::cout << "Breaking loop" << std::endl;
                 break;
             }
 
@@ -159,7 +169,7 @@ bool Game::GameLoop() {
 
 int Game::Run() {
     try {
-        if (GameLoop() == false) {
+        if (!GameLoop()) {
             std::cout << "Game loop failed!" << std::endl;
             CloseSDL(win, ren, screen);
             return 1;

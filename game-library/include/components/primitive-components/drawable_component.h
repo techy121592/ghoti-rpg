@@ -16,34 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef DRAWABLE_COMPONENT_H
+#define DRAWABLE_COMPONENT_H
 
-#include <list>
 #include <iostream>
 #include <SDL.h>
-#include "utilities/input/input_data.h"
-#include "components/primitive-components/component.h"
-#include "components/primitive-components/drawable_component.h"
+#include "component.h"
 
-class Screen {
+class DrawableComponent : public Component {
+private:
+    SDL_Rect sourceRectangle, destinationRectangle;
 protected:
-    std::list<Component*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
-    Screen* nextScreen = nullptr;
+    SDL_Texture* texture;
 public:
-    Screen();
-    virtual ~Screen() {
-        for(Component* component : components) {
-            delete component;
-        }
-        components.clear();
-    };
-    virtual void Setup() = 0;
-    virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
-    virtual bool CheckSetup() = 0;
-
-    Screen* NextScreen();
-    std::list<DrawableComponent*> CloneDrawables();
+    DrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
+    DrawableComponent(SDL_Rect destinationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
+    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture);
+    DrawableComponent(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t padding, uint32_t frame, SDL_Texture* texture);
+    ~DrawableComponent();
+    void Draw(SDL_Renderer* ren);
+    DrawableComponent* Clone();
 };
 
 #endif

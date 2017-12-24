@@ -16,28 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#ifndef TILE_MAP_H
+#define TILE_MAP_H
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-}
+#include <list>
+#include <utility>
+#include "tile.h"
+#include "components/primitive-components/drawable_component.h"
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
+class TileMap : public DrawableComponent {
+    std::list<Tile*> tiles;
+    void PreRenderMap(SDL_Renderer* ren);
+public:
+    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, std::list<Tile*> tiles, SDL_Renderer* ren);
+};
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
-
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-    std::cout << deltaTime << std::endl;
-}
+#endif

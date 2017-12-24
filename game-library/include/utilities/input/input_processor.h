@@ -16,28 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#ifndef INPUT_PROCESSOR_H
+#define INPUT_PROCESSOR_H
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-}
+#include <iostream>
+#include <SDL.h>
+#include "input_processor.h"
+#include "input_data.h"
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
+class InputProcessor {
+private:
+    static InputData inputData;
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
+    static InputData ProcessKeyEvent(const SDL_Keycode keycode, InputData inputData, const bool keyDown);
+public:
+    static InputData GetInputData();
+    static void GetInputFromDevice();
+};
 
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-    std::cout << deltaTime << std::endl;
-}
+#endif

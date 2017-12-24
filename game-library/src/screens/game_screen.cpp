@@ -16,26 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#include "screens/game_screen.h"
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
+GameScreen::GameScreen(SDL_Renderer* ren) {
+    components.push_back(ResourceLoader::LoadMap("test.tmx", ren));
 }
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
+GameScreen::~GameScreen() = default;
+
+void GameScreen::Setup() {
 }
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
+bool GameScreen::CheckSetup() {
+    std::cout << "Checking GameScreen setup status" << std::endl;
+    return components.size() == 1;
 }
 
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
+void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     if (inputData.Quit) {
         nextScreen = nullptr;
     }
