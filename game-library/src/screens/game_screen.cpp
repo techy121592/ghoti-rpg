@@ -45,12 +45,8 @@ void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     for(auto component : components) {
         auto character = dynamic_cast<Character*>(component);
         if(character != nullptr) {
-<<<<<<< HEAD
             character->SetInput(inputData);
             character->Update(deltaTime, tileMap);
-=======
-            character->Update(deltaTime, inputData);
->>>>>>> Added a new place holder image for the character
         }
     }
 }

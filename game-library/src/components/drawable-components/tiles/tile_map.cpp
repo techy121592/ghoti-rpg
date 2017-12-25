@@ -29,10 +29,7 @@ TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tile
 void TileMap::PreRenderMap(SDL_Renderer* ren) {
     std::cout << "PlayerZIndex: " << playerZIndex << std::endl;
     PreRenderMap(playerZIndex, ren);
-}
 
-void TileMap::PreRenderMap(uint32_t playerZ, SDL_Renderer* ren) {
-    std::cout << "PlayerZ: " << playerZ << std::endl;
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
         SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
                                  bottomLayer->GetTexture() :
