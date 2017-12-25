@@ -73,6 +73,34 @@ SDL_Rect Character::DealWithVerticalOverlap(SDL_Rect targetRectangle, SDL_Rect t
     return newTargetRectangle;
 }
 
+SDL_Rect Character::DealWithHorizontalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle) {
+    auto newTargetRectangle = targetRectangle;
+    if(locationRectangle.x + locationRectangle.w <= tileRectangle.x &&
+       newTargetRectangle.x + newTargetRectangle.w >= tileRectangle.x) {
+        // Started to the left of tile & now colliding on given axis
+        newTargetRectangle.x = tileRectangle.x - (newTargetRectangle.w + 1);
+    } else if(locationRectangle.x >= tileRectangle.x + tileRectangle.w &&
+              newTargetRectangle.x <= tileRectangle.x + tileRectangle.w) {
+        // Started to the right of tile & now colliding on given axis
+        newTargetRectangle.x = tileRectangle.x + (tileRectangle.w + 1);
+    }
+    return newTargetRectangle;
+}
+
+SDL_Rect Character::DealWithVerticalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle) {
+    auto newTargetRectangle = targetRectangle;
+    if(locationRectangle.y + locationRectangle.h <= tileRectangle.y &&
+           newTargetRectangle.y + newTargetRectangle.h >= tileRectangle.y) {
+        // Started above tile & now colliding on given axis
+        newTargetRectangle.y = tileRectangle.y - (newTargetRectangle.h + 1);
+    } else if(locationRectangle.y >= tileRectangle.y + tileRectangle.h &&
+              newTargetRectangle.y <= tileRectangle.y + tileRectangle.h) {
+        // Started bellow tile & now colliding on given axis
+        newTargetRectangle.y = tileRectangle.y + (tileRectangle.h + 1);
+    }
+    return newTargetRectangle;
+}
+
 SDL_Rect Character::CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap) {
     auto newTargetRectangle = targetRectangle;
     auto collidingTiles = tileMap->CheckCollision(targetRectangle);
