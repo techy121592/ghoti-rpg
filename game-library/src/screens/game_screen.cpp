@@ -22,7 +22,7 @@ GameScreen::GameScreen(SDL_Renderer* ren) {
     tileMap = ResourceLoader::LoadMap("test.tmx", ren);
     components.push_back(tileMap);
     components.push_back(tileMap->GetBottomLayer());
-    components.push_back(new Character(16, 16, 16, 16, 0, ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
+    components.push_back(new Character(23, 23, 14, 14, 0, ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
     components.push_back(tileMap->GetTopLayer());
 }
 
