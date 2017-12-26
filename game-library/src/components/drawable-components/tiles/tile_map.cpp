@@ -62,10 +62,10 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
     for(auto tile : tiles) {
         auto tileLocation = tile->GetLocation();
 
-        if((targetRect.x >= tileLocation.x && targetRect.x <= tileLocation.x + tileLocation.w ||
-                targetRect.x + targetRect.w >= tileLocation.x && targetRect.x + targetRect.w <= tileLocation.x + tileLocation.w) &&
-                (targetRect.y >= tileLocation.y && targetRect.y <= tileLocation.y + tileLocation.h ||
-                 targetRect.y + targetRect.h >= tileLocation.y && targetRect.y + targetRect.h <= tileLocation.y + tileLocation.h) &&
+        if((targetRect.x >= tileLocation.x && targetRect.x < tileLocation.x + tileLocation.w ||
+                targetRect.x + targetRect.w > tileLocation.x && targetRect.x + targetRect.w < tileLocation.x + tileLocation.w) &&
+                (targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h ||
+                 targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h) &&
                 tile->GetZ() == playerZIndex - 1) {
             std::cout << "Collision detected" << std::endl;
             tilesColliding.push_back(tile);
