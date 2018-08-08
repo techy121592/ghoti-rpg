@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,8 @@ GameScreen::GameScreen(SDL_Renderer* ren) {
     tileMap = ResourceLoader::LoadMap("test.tmx", ren);
     components.push_back(tileMap);
     components.push_back(tileMap->GetBottomLayer());
-    components.push_back(new Character(23, 23, 14, 14, 0, ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
+    components.push_back(new Character(23, 23, 14, 14, 0,
+                                       ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
     components.push_back(tileMap->GetTopLayer());
 }
 
@@ -32,13 +33,11 @@ void GameScreen::Setup() {
 }
 
 bool GameScreen::CheckSetup() {
-    std::cout << "Checking GameScreen setup status" << std::endl;
     return components.size() == 4;
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
     if (inputData.Quit) {
-        std::cout << "Setting nextScreen to nullptr" << std::endl;
         nextScreen = nullptr;
     }
 

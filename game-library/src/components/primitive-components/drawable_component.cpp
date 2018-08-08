@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,6 @@ DrawableComponent::DrawableComponent(const SDL_Rect locationRectangle, const SDL
 }
 
 DrawableComponent::~DrawableComponent() {
-    std::cout << "Destroying texture" << std::endl;
     SDL_DestroyTexture(texture);
 }
 

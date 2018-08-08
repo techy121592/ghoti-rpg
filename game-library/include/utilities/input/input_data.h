@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 struct InputData {
 public:
-    bool Quit, MoveUp, MoveDown, MoveLeft, MoveRight = false;
+    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ class InputProcessor {
 private:
     static InputData inputData;
 
-    static InputData ProcessKeyEvent(const SDL_Keycode keycode, InputData inputData, const bool keyDown);
+    static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
 public:
     static InputData GetInputData();
     static void GetInputFromDevice();

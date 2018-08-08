@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,18 +49,15 @@ void ThreadPool::Init(uint32_t maxThreads, uint32_t delayTime) {
 void ThreadPool::TerminateThreads() {
     running = false;
     for(int i = threadCount; i > 0; i--) {
-        std::cout << "Killing a thread" << std::endl;
         std::thread* threadWaitingOn = &threads.front();
         threadWaitingOn->join();
         threads.pop_front();
-        std::cout << "Thread killed" << std::endl;
     }
 }
 
 void ThreadPool::StartNewThread() {
     if(threadCount < maxThreads) {
         threadCount++;
-        std::cout << "creating new thread" << std::endl;
         threads.emplace_back(std::thread(TaskCheckLoop));
     }
 }
@@ -114,7 +111,7 @@ void ThreadPool::AddTask(std::function<void()> task, bool locksLoop) {
         loopLockCountLock.unlock();
         tasks.push_front(std::make_tuple(task, true));
     } else {
-        tasks.push_back(std::make_tuple(task, false));
+        tasks.emplace_back(std::make_tuple(task, false));
     }
 
     queueLock.unlock();

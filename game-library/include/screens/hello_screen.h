@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,10 +28,10 @@ private:
     SDL_Texture* helloTexture;
 public:
     explicit HelloScreen(SDL_Renderer* ren);
-    ~HelloScreen();
-    void Setup();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
+    void Setup() override;
+    ~HelloScreen() override;
+    bool CheckSetup() override;
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif
