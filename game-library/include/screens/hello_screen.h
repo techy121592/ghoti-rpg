@@ -28,10 +28,10 @@ private:
     SDL_Texture* helloTexture;
 public:
     explicit HelloScreen(SDL_Renderer* ren);
-    override ~HelloScreen();
-    override Setup();
-    override CheckSetup();
-    override Update(uint32_t deltaTime, InputData inputData);
+    void Setup() override;
+    ~HelloScreen() override;
+    bool CheckSetup() override;
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif

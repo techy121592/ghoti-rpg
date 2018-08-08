@@ -32,10 +32,10 @@ private:
     static bool doneLoading;
 public:
     explicit LoadScreen<T>(SDL_Renderer* ren);
-    override ~LoadScreen();
-    override Setup();
-    override CheckSetup();
-    override Update(uint32_t deltaTime, InputData inputData);
+    ~LoadScreen() override;
+    void Setup() override;
+    bool CheckSetup() override;
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif
