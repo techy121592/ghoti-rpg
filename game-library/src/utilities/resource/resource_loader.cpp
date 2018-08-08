@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@ std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
         }
 
         baseRes = baseRes + "res" + PATH_SEP;
-        std::cout << "Resource path is: " << baseRes << std::endl;
     }
 
     return subDir.empty() ? baseRes : baseRes + subDir + PATH_SEP;
@@ -60,7 +59,6 @@ SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName, SDL_Renderer
 
 TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren) {
     try {
-        std::cout << "Starting to load map" << std::endl;
         std::string filePath = ResourceLoader::GetResourcePath("maps") + fileName;
         tinyxml2::XMLDocument mapFile;
         mapFile.LoadFile(filePath.c_str());
@@ -104,12 +102,6 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
                 col++;
             }
         }
-        std::cout << "Returning map" << std::endl;
-        std::cout << "Rows: " << maxRows << std::endl;
-        std::cout << "Cols: " << maxCols << std::endl;
-        std::cout << "Tile Width: " << tileWidth << std::endl;
-        std::cout << "Tile Height: " << tileHeight << std::endl;
-        std::cout << "Tile Count: " << tiles.size() << std::endl;
         return new TileMap(maxRows, maxCols, tileWidth, tileHeight, playerZ, tiles, ren);
     } catch (const std::exception& ex) {
         std::cout << "ResourceLoader::LoadMap() failed: " << ex.what() << std::endl;

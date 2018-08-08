@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,38 +23,32 @@ Screen* Game::screen = nullptr;
 Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
     this->fps = fps;
 
-    std::cout << "Setting up SDL" << std::endl;
     std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = SetupSDL(width, height);
     this->win = std::get<0>(windowRendererTuple);
     this->ren = std::get<1>(windowRendererTuple);
 
     if (this->win == nullptr || this->ren == nullptr) {
-        std::cout << "Failed to setup SDL: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
     }
 
     screen  = new LoadScreen<GameScreen>(ren);
     screen->Setup();
     if(!screen->CheckSetup()) {
-        std::cout << "Failed to setup the LoadingScreen: " << SDL_GetError() << std::endl;
         CloseSDL(win, ren, screen);
     }
 }
 
 Game::~Game() {
-    std::cout << "Killing threads" << std::endl;
     ThreadPool::TerminateThreads();
 }
 
 std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
 
     SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {
-        std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
     }
@@ -73,20 +67,16 @@ std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, cons
 }
 
 void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
-    std::cout << "Deleting last screen" << std::endl;
     delete screen;
 
     if(ren != nullptr) {
-        std::cout << "Destroying renderer" << std::endl;
         SDL_DestroyRenderer(ren);
     }
 
     if(win != nullptr) {
-        std::cout << "Destroying window" << std::endl;
         SDL_DestroyWindow(win);
     }
 
-    std::cout << "Quitting SDL" << std::endl;
     SDL_Quit();
 }
 
@@ -131,23 +121,17 @@ bool Game::Step(const uint32_t deltaTime) {
     }
 
     if(screen != screen->NextScreen()) {
-        std::cout << "Getting next screen" << std::endl;
         Screen* tempScreen = screen->NextScreen();
         if(tempScreen == nullptr) {
-            std::cout << "Next screen null" << std::endl;
             return false;
         }
-        std::cout << "Deleting old screen" << std::endl;
+
         delete screen;
-        std::cout << "Swapping screens" << std::endl;
         screen = tempScreen;
-        std::cout << "Swapped screens" << std::endl;
 
         if(screen == nullptr) {
-            std::cout << "Screen is null" << std::endl;
             return false;
         } else if(!screen->CheckSetup()) {
-            std::cout << "Failed setup" << std::endl;
             screen = nullptr;
             return false;
         }
@@ -168,7 +152,6 @@ bool Game::GameLoop() {
             deltaTime = currentTime - previousTime;
 
             if(!Step(deltaTime)) {
-                std::cout << "Breaking loop" << std::endl;
                 break;
             }
 
@@ -189,7 +172,6 @@ int Game::Run() {
             return 1;
         } else {
             CloseSDL(win, ren, screen);
-            std::cout << "Successfully closed SDL" << std::endl;
             return 0;
         }
     } catch(std::exception& ex) {

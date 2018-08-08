@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,23 +27,16 @@ TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tile
 }
 
 void TileMap::PreRenderMap(SDL_Renderer* ren) {
-    std::cout << "PlayerZIndex: " << playerZIndex << std::endl;
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
         SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
                                  bottomLayer->GetTexture() :
                                  topLayer->GetTexture());
 
-        bool renderCheck = false;
-        std::cout << "Rendering to " << (graphicalLayerCount < 1 ? "bottom layer" : "top layer") << std::endl;
-
         for(Tile* tile : tiles) {
             if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
-                renderCheck = true;
                 tile->Draw(ren);
             }
         }
-
-        std::cout << (renderCheck ? "Successfully" : "Failed") << " to render to layer" << std::endl;
 
         SDL_SetRenderTarget(ren, nullptr);
     }
@@ -67,7 +60,6 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
                 (targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h ||
                  targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h) &&
                 tile->GetZ() == playerZIndex - 1) {
-            std::cout << "Collision detected" << std::endl;
             tilesColliding.push_back(tile);
         }
     }

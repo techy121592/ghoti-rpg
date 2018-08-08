@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@ void LoadScreen<T>::Setup() {
 
 template<class T>
 bool LoadScreen<T>::CheckSetup() {
-    std::cout << "Checking LoadScreen setup status" << std::endl;
     return components.size() == 1;
 }
 
@@ -53,7 +52,6 @@ void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
     } else if(inputData.Quit) {
         nextScreen = nullptr;
     }
-    std::cout << deltaTime << std::endl;
 }
 
 template class LoadScreen<HelloScreen>;

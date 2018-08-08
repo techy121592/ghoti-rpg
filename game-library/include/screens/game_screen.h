@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017  David Welch & Ankit Singhania
+ * Copyright (C) 2018 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,10 @@ class GameScreen : public Screen {
     TileMap* tileMap;
 public:
     explicit GameScreen(SDL_Renderer* ren);
-    ~GameScreen();
-    void Setup();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
+    override ~GameScreen();
+    override Setup();
+    override CheckSetup();
+    override Update(uint32_t deltaTime, InputData inputData);
 };
 
 #endif
