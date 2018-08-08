@@ -16,20 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RESOURCE_LOADER_H
-#define RESOURCE_LOADER_H
+#ifndef RENDERERABLE_DRAWABLE_COMPONENT_H
+#define RENDERERABLE_DRAWABLE_COMPONENT_H
 
-#include <iostream>
-#include <string>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "drawable_component.h"
 
-class ResourceLoader {
-private:
-    static std::string GetResourcePath(const std::string &subDir = "");
-
+class RenderableDrawableComponent : public DrawableComponent {
 public:
-    static SDL_Texture* LoadImage(const std::string &fileName, SDL_Renderer* ren);
+    RenderableDrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
+    SDL_Texture* GetTexture();
 };
 
 #endif

@@ -16,21 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef DRAWABLE_COMPONENT_H
-#define DRAWABLE_COMPONENT_H
+#ifndef TILE_H
+#define TILE_H
 
 #include <SDL.h>
+#include "components/primitive-components/drawable_component.h"
 
-class DrawableComponent {
-private:
-    SDL_Texture* texture;
-    SDL_Rect sourceRectangle, destinationRectangle;
+class Tile : public DrawableComponent {
+    uint32_t z;
 public:
-    DrawableComponent(const SDL_Rect destinationRectangle, const SDL_Rect sourceRectangle, SDL_Texture* texture);
-    DrawableComponent(const int32_t x, const int32_t y, const int32_t width, const int32_t height, const int32_t frame, SDL_Texture* texture);
-    ~DrawableComponent();
-    void Draw(SDL_Renderer* ren);
-    DrawableComponent* Clone();
+    Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
+    uint32_t GetZ();
+    SDL_Rect GetLocation();
 };
 
 #endif

@@ -20,22 +20,30 @@
 #define SCREEN_H
 
 #include <list>
+#include <iostream>
 #include <SDL.h>
-#include "input_data.h"
-#include "components/drawable_component.h"
+#include "utilities/input/input_data.h"
+#include "components/primitive-components/component.h"
+#include "components/primitive-components/drawable_component.h"
 
 class Screen {
 protected:
-    std::list<DrawableComponent*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
-    Screen* nextScreen = this;
+    std::list<Component*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
+    Screen* nextScreen = nullptr;
 public:
+    Screen();
     virtual ~Screen() {
-        for(DrawableComponent* component : components) {
+        std::cout << "Deconstructing screen" << std::endl;
+        for(Component* component : components) {
+            std::cout << "Deleting component" << std::endl;
             delete component;
         }
+        std::cout << "Clearing component list" << std::endl;
         components.clear();
+        std::cout << "Done deconstructing screen" << std::endl;
     };
-    virtual void Update(const uint32_t deltaTime, const InputData inputData) = 0;
+    virtual void Setup() = 0;
+    virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
     virtual bool CheckSetup() = 0;
 
     Screen* NextScreen();

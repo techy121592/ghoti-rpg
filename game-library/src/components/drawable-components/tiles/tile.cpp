@@ -16,28 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#include "components/drawable-components/tiles/tile.h"
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
+Tile::Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture)
+    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
+    this->z = z;
 }
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
+uint32_t Tile::GetZ() {
+    return z;
 }
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
-
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-    std::cout << deltaTime << std::endl;
+SDL_Rect Tile::GetLocation() {
+    return locationRectangle;
 }

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "thread_pool.h"
+#include "utilities/thread_pool.h"
 
 bool ThreadPool::running = false;
 
@@ -61,7 +61,7 @@ void ThreadPool::StartNewThread() {
     if(threadCount < maxThreads) {
         threadCount++;
         std::cout << "creating new thread" << std::endl;
-        threads.push_back(std::thread(TaskCheckLoop));
+        threads.emplace_back(std::thread(TaskCheckLoop));
     }
 }
 

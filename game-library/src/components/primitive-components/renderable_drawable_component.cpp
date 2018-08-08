@@ -16,28 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#include "components/primitive-components/rendererable_drawable_component.h"
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-}
+RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren)
+        : DrawableComponent(width, height, ren) {}
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
-
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
-
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-    std::cout << deltaTime << std::endl;
+SDL_Texture* RenderableDrawableComponent::GetTexture() {
+    return texture;
 }

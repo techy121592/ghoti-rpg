@@ -16,22 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef HELLO_SCREEN_H
-#define HELLO_SCREEN_H
+#ifndef THREAD_POOL_H
+#define THREAD_POOL_H
 
+#include <thread>
+#include <functional>
+#include <mutex>
+#include <list>
+#include <tuple>
+#include <iostream>
 #include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
 
-class HelloScreen : public Screen {
+class ThreadPool {
 private:
-    SDL_Texture* helloTexture;
+    static bool running;
+    static uint32_t threadCount, queueCount, loopLockCount, activeTasksCount, maxThreads, delayTime;
+    static std::mutex queueLock, queueCountLock, loopLockCountLock, activeTasksCountLock;
+
+    static std::list<std::thread> threads;
+    static std::list<std::tuple<std::function<void()>, bool>> tasks;
+
+    static void TaskCheckLoop();
+    static void StartNewThread();
 public:
-    explicit HelloScreen(SDL_Renderer* ren);
-    ~HelloScreen();
-    void Setup();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
+    static void Init();
+    static void Init(uint32_t maxThreads, uint32_t delayTime);
+    static void TerminateThreads();
+    static void AddTask(std::function<void()> task, bool locksLoop);
+    static bool LoopLocked();
 };
 
 #endif

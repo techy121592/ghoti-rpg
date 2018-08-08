@@ -16,33 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef THREAD_POOL_H
-#define THREAD_POOL_H
+#ifndef CHARACTER_H
+#define CHARACTER_H
 
-#include <thread>
-#include <list>
-#include <mutex>
-#include <tuple>
-#include <iostream>
-#include <SDL.h>
+#include "components/primitive-components/drawable_component.h"
+#include "components/drawable-components/tiles/tile_map.h"
+#include "utilities/input/input_data.h"
 
-class ThreadPool {
-private:
-    static bool running;
-    static uint32_t threadCount, queueCount, loopLockCount, activeTasksCount, maxThreads, delayTime;
-    static std::mutex queueLock, queueCountLock, loopLockCountLock, activeTasksCountLock;
-
-    static std::list<std::thread> threads;
-    static std::list<std::tuple<std::function<void()>, bool>> tasks;
-
-    static void TaskCheckLoop();
-    static void StartNewThread();
+class Character : public DrawableComponent {
+    float speed;
+    InputData inputData;
+    SDL_Rect CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap);
+    SDL_Rect DealWithHorizontalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle);
+    SDL_Rect DealWithVerticalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle);
 public:
-    static void Init();
-    static void Init(uint32_t maxThreads, uint32_t delayTime);
-    static void TerminateThreads();
-    static void AddTask(std::function<void()> task, bool locksLoop);
-    static bool LoopLocked();
+    Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed);
+    void SetInput(InputData inputData);
+    void Update(uint32_t deltaTime, TileMap* tileMap);
 };
 
 #endif

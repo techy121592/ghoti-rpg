@@ -16,22 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef HELLO_SCREEN_H
-#define HELLO_SCREEN_H
+#ifndef DRAWABLE_COMPONENT_H
+#define DRAWABLE_COMPONENT_H
 
+#include <iostream>
 #include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
+#include "component.h"
 
-class HelloScreen : public Screen {
+class DrawableComponent : public Component {
 private:
-    SDL_Texture* helloTexture;
+    SDL_Rect sourceRectangle;
+protected:
+    SDL_Texture* texture;
+    SDL_Rect locationRectangle;
 public:
-    explicit HelloScreen(SDL_Renderer* ren);
-    ~HelloScreen();
-    void Setup();
-    bool CheckSetup();
-    void Update(uint32_t deltaTime, InputData inputData);
+    DrawableComponent(int32_t width, int32_t height, SDL_Renderer* ren);
+    DrawableComponent(SDL_Rect locationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
+    DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, SDL_Texture* texture);
+    DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, SDL_Texture* texture);
+    ~DrawableComponent();
+    void Draw(SDL_Renderer* ren);
+    DrawableComponent* Clone();
 };
 
 #endif

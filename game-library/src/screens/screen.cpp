@@ -18,14 +18,21 @@
 
 #include "screens/screen.h"
 
+Screen::Screen() {
+    nextScreen = this;
+}
+
 Screen* Screen::NextScreen() {
     return nextScreen;
 }
 
 std::list<DrawableComponent*> Screen::CloneDrawables() {
     std::list<DrawableComponent*> tempListOfDrawableComponents = {};
-    for(DrawableComponent* drawableComponent : components) {
-        tempListOfDrawableComponents.push_back(drawableComponent->Clone());
+    for(Component* component : components) {
+        auto drawableComponent = dynamic_cast<DrawableComponent*>(component);
+        if(drawableComponent != nullptr) {
+            tempListOfDrawableComponents.push_back(drawableComponent->Clone());
+        }
     }
     return tempListOfDrawableComponents;
 }

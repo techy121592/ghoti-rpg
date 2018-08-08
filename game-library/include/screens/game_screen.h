@@ -16,28 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#ifndef GAME_SCREEN_H
+#define GAME_SCREEN_H
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-}
+#include <SDL.h>
+#include "utilities/resource/resource_loader.h"
+#include "screen.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile_set.h"
+#include "components/drawable-components/tiles/tile_map.h"
+#include "components/drawable-components/character.h"
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
+class GameScreen : public Screen {
+    TileMap* tileMap;
+public:
+    explicit GameScreen(SDL_Renderer* ren);
+    ~GameScreen();
+    void Setup();
+    bool CheckSetup();
+    void Update(uint32_t deltaTime, InputData inputData);
+};
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
-}
-
-bool HelloScreen::CheckSetup() {
-    std::cout << "Checking HelloScreen setup status" << std::endl;
-    return helloTexture != nullptr;
-}
-
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-    std::cout << deltaTime << std::endl;
-}
+#endif

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "input_processor.h"
+#include "utilities/input/input_processor.h"
 
 InputData InputProcessor::inputData;
 
@@ -24,6 +24,21 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
     switch(keycode) {
         case SDLK_ESCAPE:
             inputData.Quit = keyDown;
+            break;
+        case SDLK_UP: case SDLK_w:
+            inputData.MoveUp = keyDown;
+            break;
+        case SDLK_DOWN: case SDLK_s:
+            inputData.MoveDown = keyDown;
+            break;
+        case SDLK_LEFT: case SDLK_a:
+            inputData.MoveLeft = keyDown;
+            break;
+        case SDLK_RIGHT: case SDLK_d:
+            inputData.MoveRight = keyDown;
+            break;
+        default:
+            break;
     }
     return inputData;
 }
@@ -45,6 +60,8 @@ void InputProcessor::GetInputFromDevice() {
                 break;
             case SDL_KEYUP:
                 inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, false);
+                break;
+            default:
                 break;
         }
         if(inputData.Quit) {
