@@ -30,7 +30,7 @@
 #include "utilities/thread_pool.h"
 #include "components/primitive-components/drawable_component.h"
 #include "screens/screen.h"
-#include "screens/game_screen.h"
+#include "screens/main_menu_screen.h"
 #include "screens/load_screen.h"
 
 class Game {

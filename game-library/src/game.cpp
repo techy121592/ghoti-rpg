@@ -31,8 +31,8 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
         CloseSDL(win, ren, screen);
     }
 
-    screen  = new LoadScreen<GameScreen>(ren);
-    screen->Setup();
+    screen  = new LoadScreen<MainMenuScreen>();
+    screen->Setup(ren);
     if(!screen->CheckSetup()) {
         CloseSDL(win, ren, screen);
     }
@@ -125,6 +125,8 @@ bool Game::Step(const uint32_t deltaTime) {
         if(tempScreen == nullptr) {
             return false;
         }
+
+        tempScreen->Setup(ren);
 
         delete screen;
         screen = tempScreen;

@@ -16,21 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef HELLO_SCREEN_H
-#define HELLO_SCREEN_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
+#include <functional>
+#include "components/primitive-components/drawable_component.h"
 
-class HelloScreen : public Screen {
-private:
-    SDL_Texture* helloTexture;
+class Button : public DrawableComponent {
+    std::function<void()> onClick;
 public:
-    void Setup(SDL_Renderer* ren) override;
-    ~HelloScreen() override;
-    bool CheckSetup() override;
-    void Update(uint32_t deltaTime, InputData inputData) override;
+    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, std::function<void()> onClick);
+    void Click();
 };
 
 #endif

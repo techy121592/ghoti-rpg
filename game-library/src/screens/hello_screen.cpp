@@ -18,16 +18,12 @@
 
 #include "screens/hello_screen.h"
 
-HelloScreen::HelloScreen(SDL_Renderer* ren) {
-    helloTexture = ResourceLoader::LoadImage("hello.bmp", ren);
-}
-
 HelloScreen::~HelloScreen() {
     SDL_DestroyTexture(helloTexture);
 }
 
-void HelloScreen::Setup() {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, helloTexture));
+void HelloScreen::Setup(SDL_Renderer* ren) {
+    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("hello.bmp", ren)));
 }
 
 bool HelloScreen::CheckSetup() {

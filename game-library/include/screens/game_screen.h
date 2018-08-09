@@ -30,9 +30,7 @@
 class GameScreen : public Screen {
     TileMap* tileMap;
 public:
-    explicit GameScreen(SDL_Renderer* ren);
-    ~GameScreen() override;
-    void Setup() override;
+    void Setup(SDL_Renderer* ren) override;
     bool CheckSetup() override;
     void Update(uint32_t deltaTime, InputData inputData) override;
 };

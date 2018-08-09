@@ -60,7 +60,7 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
                 (targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h ||
                  targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h) &&
                 tile->GetZ() == playerZIndex - 1) {
-            tilesColliding.push_back(tile);
+            tilesColliding.emplace_back(tile);
         }
     }
     return tilesColliding;

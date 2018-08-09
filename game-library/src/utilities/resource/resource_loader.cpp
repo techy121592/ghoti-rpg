@@ -97,7 +97,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
                 }
                 auto tileId = std::stoi(tileElement->Attribute("gid")) - 1;
                 if(tileId > -1) {
-                    tiles.push_back(tileSet->CreateTile(col, row, layerZ, (uint32_t)tileId));
+                    tiles.emplace_back(tileSet->CreateTile(col, row, layerZ, (uint32_t)tileId));
                 }
                 col++;
             }

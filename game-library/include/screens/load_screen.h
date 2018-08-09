@@ -22,6 +22,7 @@
 #include "screen.h"
 #include "hello_screen.h"
 #include "game_screen.h"
+#include "main_menu_screen.h"
 #include "utilities/resource/resource_loader.h"
 #include "utilities/thread_pool.h"
 
@@ -31,9 +32,7 @@ private:
     static Screen* nextScreenHolder;
     static bool doneLoading;
 public:
-    explicit LoadScreen<T>(SDL_Renderer* ren);
-    ~LoadScreen() override;
-    void Setup() override;
+    void Setup(SDL_Renderer* ren) override;
     bool CheckSetup() override;
     void Update(uint32_t deltaTime, InputData inputData) override;
 };

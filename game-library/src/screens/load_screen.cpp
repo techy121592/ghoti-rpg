@@ -21,19 +21,12 @@
 template<class T> bool LoadScreen<T>::doneLoading = false;
 template<class T> Screen* LoadScreen<T>::nextScreenHolder = nullptr;
 
-template<class T>
-LoadScreen<T>::LoadScreen(SDL_Renderer* ren) {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png", ren)));
-    nextScreenHolder = new T(ren);
-}
-
-template<class T>
-LoadScreen<T>::~LoadScreen() = default;
-
 template <class T>
-void LoadScreen<T>::Setup() {
-    ThreadPool::AddTask([](){
-        nextScreenHolder->Setup();
+void LoadScreen<T>::Setup(SDL_Renderer* ren) {
+    nextScreenHolder = new T();
+    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png", ren)));
+    ThreadPool::AddTask([ren](){
+        nextScreenHolder->Setup(ren);
         doneLoading = true;
     }, false);
 }
@@ -56,3 +49,4 @@ void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
 
 template class LoadScreen<HelloScreen>;
 template class LoadScreen<GameScreen>;
+template class LoadScreen<MainMenuScreen>;

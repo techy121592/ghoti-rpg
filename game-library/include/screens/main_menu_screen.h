@@ -16,19 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef HELLO_SCREEN_H
-#define HELLO_SCREEN_H
+#ifndef MAIN_MENU_SCREEN_H
+#define MAIN_MENU_SCREEN_H
 
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
 #include "screen.h"
 
-class HelloScreen : public Screen {
-private:
-    SDL_Texture* helloTexture;
+class MainMenuScreen : public Screen {
 public:
     void Setup(SDL_Renderer* ren) override;
-    ~HelloScreen() override;
     bool CheckSetup() override;
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
