@@ -20,11 +20,13 @@
 #define MAIN_MENU_SCREEN_H
 
 #include "screen.h"
+#include "load_screen.h"
+#include "game_screen.h"
+#include "components/drawable-components/button.h"
 
 class MainMenuScreen : public Screen {
 public:
-    void Setup(SDL_Renderer* ren) override;
-    bool CheckSetup() override;
+    MainMenuScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

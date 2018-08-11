@@ -18,5 +18,19 @@
 
 #ifndef THREAD_SAFE_RENDERER_H
 #define THREAD_SAFE_RENDERER_H
-BLAHGLAKSDJ!*
+
+#include <mutex>
+#include <SDL.h>
+
+class ThreadSafeRenderer {
+    static SDL_Renderer* renderer;
+    static std::mutex rendererLock;
+public:
+    SDL_Renderer* Renderer;
+
+    ThreadSafeRenderer();
+    ~ThreadSafeRenderer();
+    static void SetUpRenderer(SDL_Window* win);
+};
+
 #endif

@@ -16,25 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "utilities/thread_safe_renderer.h"
 #include "game.h"
 
 Screen* Game::screen = nullptr;
 
 Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
-    this->fps = fps;
+    try {
+        this->fps = fps;
 
-    std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = SetupSDL(width, height);
-    this->win = std::get<0>(windowRendererTuple);
-    this->ren = std::get<1>(windowRendererTuple);
+        win = SetupSDL(width, height);
+        std::cout << "Trying to get ThreadSafeRender to check renderer status" << std::endl;
+        auto threadSafeRenderer = new ThreadSafeRenderer();
+        std::cout << "Got ThreadSafeRender to check renderer status" << std::endl;
+        if (this->win == nullptr || threadSafeRenderer->Renderer == nullptr) {
+            CloseSDL(win, screen);
+        }
+        delete threadSafeRenderer;
+        std::cout << "Done checking status" << std::endl;
 
-    if (this->win == nullptr || this->ren == nullptr) {
-        CloseSDL(win, ren, screen);
-    }
-
-    screen  = new LoadScreen<MainMenuScreen>();
-    screen->Setup(ren);
-    if(!screen->CheckSetup()) {
-        CloseSDL(win, ren, screen);
+        screen  = new LoadScreen<MainMenuScreen>();
+    } catch(std::exception& exception) {
+        CloseSDL(win, screen);
+        //TODO: Log exception
     }
 }
 
@@ -42,36 +46,39 @@ Game::~Game() {
     ThreadPool::TerminateThreads();
 }
 
-std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
+SDL_Window* Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
+        return nullptr;
     }
 
     SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {
         SDL_Quit();
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
+        return nullptr;
     }
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (ren == nullptr) {
-        SDL_DestroyWindow(win);
-        std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
-    }
+    ThreadSafeRenderer::SetUpRenderer(win);
+    std::cout << "Trying to get ThreadSafeRender to set blend mode" << std::endl;
+    auto threadSafeRenderer = new ThreadSafeRenderer();
+    std::cout << "Got ThreadSafeRender to set blend mode" << std::endl;
+    SDL_SetRenderDrawBlendMode(threadSafeRenderer->Renderer, SDL_BLENDMODE_BLEND);
+    delete threadSafeRenderer;
+    std::cout << "Done setting blend mode" << std::endl;
 
-    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
-
-    return std::make_tuple(win, ren);
+    return win;
 }
 
-void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+void Game::CloseSDL(SDL_Window*& win, Screen*& screen) {
     delete screen;
 
-    if(ren != nullptr) {
-        SDL_DestroyRenderer(ren);
+    std::cout << "Trying to lock renderer to close SDL" << std::endl;
+    auto threadSafeRenderer = new ThreadSafeRenderer();
+    std::cout << "Got ThreadSafeRender to close SDL" << std::endl;
+    if(threadSafeRenderer->Renderer != nullptr) {
+        SDL_DestroyRenderer(threadSafeRenderer->Renderer);
     }
+    delete threadSafeRenderer;
+    std::cout << "Done closing SDL" << std::endl;
 
     if(win != nullptr) {
         SDL_DestroyWindow(win);
@@ -95,13 +102,18 @@ void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32
 }
 
 void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
-    SDL_RenderClear(ren);
+    std::cout << "Trying to lock renderer to render screen" << std::endl;
+    auto threadSafeRenderer = new ThreadSafeRenderer();
+    std::cout << "Got ThreadSafeRender to render screen" << std::endl;
+    SDL_RenderClear(threadSafeRenderer->Renderer);
 
     for(DrawableComponent* drawableComponent : drawableComponentsData) {
-        drawableComponent->Draw(ren);
+        drawableComponent->Draw(threadSafeRenderer->Renderer);
     }
 
-    SDL_RenderPresent(ren);
+    SDL_RenderPresent(threadSafeRenderer->Renderer);
+    delete threadSafeRenderer;
+    std::cout << "Done rendering screen" << std::endl;
 }
 
 bool Game::Step(const uint32_t deltaTime) {
@@ -126,15 +138,10 @@ bool Game::Step(const uint32_t deltaTime) {
             return false;
         }
 
-        tempScreen->Setup(ren);
-
         delete screen;
         screen = tempScreen;
 
         if(screen == nullptr) {
-            return false;
-        } else if(!screen->CheckSetup()) {
-            screen = nullptr;
             return false;
         }
     }
@@ -170,10 +177,10 @@ int Game::Run() {
     try {
         if (!GameLoop()) {
             std::cout << "Game loop failed!" << std::endl;
-            CloseSDL(win, ren, screen);
+            CloseSDL(win, screen);
             return 1;
         } else {
-            CloseSDL(win, ren, screen);
+            CloseSDL(win, screen);
             return 0;
         }
     } catch(std::exception& ex) {

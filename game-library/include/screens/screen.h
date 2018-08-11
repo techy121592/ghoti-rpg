@@ -40,10 +40,7 @@ public:
         components.clear();
     };
 
-    virtual void Setup(SDL_Renderer* ren) = 0;
     virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
-    virtual bool CheckSetup() = 0;
-
     Screen* NextScreen();
     std::list<DrawableComponent*> CloneDrawables();
 };

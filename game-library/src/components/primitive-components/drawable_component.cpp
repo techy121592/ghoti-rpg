@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "utilities/thread_safe_renderer.h"
 #include "components/primitive-components/drawable_component.h"
 
 DrawableComponent::DrawableComponent(int32_t width, int32_t height, SDL_Renderer* ren)

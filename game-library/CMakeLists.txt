@@ -8,4 +8,4 @@ file(GLOB HEADER_FILES include/*.h include/*/*.h)
 
 include_directories(include)
 
-add_library(${PROJECT_NAME} STATIC ${CPP_FILES} ${HEADER_FILES})
+add_library(${PROJECT_NAME} STATIC ${CPP_FILES} ${HEADER_FILES} src/utilities/thread_safe_renderer.cpp)

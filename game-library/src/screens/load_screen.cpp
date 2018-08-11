@@ -16,33 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "utilities/thread_safe_renderer.h"
 #include "screens/load_screen.h"
 
-template<class T> bool LoadScreen<T>::doneLoading = false;
-template<class T> Screen* LoadScreen<T>::nextScreenHolder = nullptr;
-
 template <class T>
-void LoadScreen<T>::Setup(SDL_Renderer* ren) {
-    nextScreenHolder = new T();
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png", ren)));
-    ThreadPool::AddTask([ren](){
-        nextScreenHolder->Setup(ren);
-        doneLoading = true;
-    }, false);
-}
+LoadScreen<T>::LoadScreen() {
+    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png")));
 
-template<class T>
-bool LoadScreen<T>::CheckSetup() {
-    return components.size() == 1;
+    //ThreadPool::AddTask([this](){
+    //    std::cout << "Creating next screen on background thread" << std::endl;
+        nextScreen = new T();
+    //    std::cout << "Done creating next screen" << std::endl;
+    //}, false);
 }
 
 template<class T>
 void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
-    if(doneLoading) {
-        nextScreen = nextScreenHolder;
-        nextScreenHolder = nullptr;
-        doneLoading = false;
-    } else if(inputData.Quit) {
+    std::cout << "LoadScreen" << std::endl;
+    if(inputData.Quit) {
         nextScreen = nullptr;
     }
 }

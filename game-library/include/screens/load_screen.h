@@ -28,12 +28,8 @@
 
 template<class T>
 class LoadScreen : public Screen {
-private:
-    static Screen* nextScreenHolder;
-    static bool doneLoading;
 public:
-    void Setup(SDL_Renderer* ren) override;
-    bool CheckSetup() override;
+    LoadScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

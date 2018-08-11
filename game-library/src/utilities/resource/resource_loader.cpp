@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "utilities/thread_safe_renderer.h"
 #include "utilities/resource/resource_loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
@@ -42,10 +43,15 @@ std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
     return subDir.empty() ? baseRes : baseRes + subDir + PATH_SEP;
 }
 
-SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName, SDL_Renderer* ren) {
+SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName) {
     try {
         std::string filePath = ResourceLoader::GetResourcePath("images") + fileName;
-        SDL_Texture* tex = IMG_LoadTexture(ren, filePath.c_str());
+        std::cout << "Trying to get ThreadSafeRender to load image" << std::endl;
+        auto threadSafeRenderer = new ThreadSafeRenderer();
+        std::cout << "Got ThreadSafeRender to load image" << std::endl;
+        SDL_Texture* tex = IMG_LoadTexture(threadSafeRenderer->Renderer, filePath.c_str());
+        delete threadSafeRenderer;
+        std::cout << "Done loading image" << std::endl;
         if (tex == nullptr) {
             std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
             return nullptr;
@@ -57,7 +63,7 @@ SDL_Texture* ResourceLoader::LoadImage(const std::string &fileName, SDL_Renderer
     }
 }
 
-TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren) {
+TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
     try {
         std::string filePath = ResourceLoader::GetResourcePath("maps") + fileName;
         tinyxml2::XMLDocument mapFile;
@@ -72,7 +78,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
         auto tileWidth = (uint32_t)std::stoi(tileSetElement->Attribute("tilewidth"));
         auto tileHeight = (uint32_t)std::stoi(tileSetElement->Attribute("tileheight"));
 
-        auto tileSet = new TileSet(tileWidth, tileHeight, 1, LoadImage(imageFileName, ren));
+        auto tileSet = new TileSet(tileWidth, tileHeight, 1, LoadImage(imageFileName));
 
         uint32_t maxRows = 0;
         uint32_t maxCols = 0;
@@ -102,7 +108,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName, SDL_Renderer* ren)
                 col++;
             }
         }
-        return new TileMap(maxRows, maxCols, tileWidth, tileHeight, playerZ, tiles, ren);
+        return new TileMap(maxRows, maxCols, tileWidth, tileHeight, playerZ, tiles);
     } catch (const std::exception& ex) {
         std::cout << "ResourceLoader::LoadMap() failed: " << ex.what() << std::endl;
         return nullptr;

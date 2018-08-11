@@ -18,20 +18,18 @@
 
 #include "screens/game_screen.h"
 
-void GameScreen::Setup(SDL_Renderer* ren) {
-    tileMap = ResourceLoader::LoadMap("test.tmx", ren);
+GameScreen::GameScreen() {
+    tileMap = ResourceLoader::LoadMap("test.tmx");
+    auto characterTexture = ResourceLoader::LoadImage("character_placeholder.png");
+
     components.emplace_back(tileMap);
     components.emplace_back(tileMap->GetBottomLayer());
-    components.emplace_back(new Character(23, 23, 14, 14, 0,
-                                          ResourceLoader::LoadImage("character_placeholder.png", ren), 0.075));
+    components.emplace_back(new Character(23, 23, 14, 14, 0, characterTexture, 0.075));
     components.emplace_back(tileMap->GetTopLayer());
 }
 
-bool GameScreen::CheckSetup() {
-    return components.size() == 4;
-}
-
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
+    std::cout << "GameScreen" << std::endl;
     if (inputData.Quit) {
         nextScreen = nullptr;
     }

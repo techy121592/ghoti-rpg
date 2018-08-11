@@ -27,9 +27,8 @@ class HelloScreen : public Screen {
 private:
     SDL_Texture* helloTexture;
 public:
-    void Setup(SDL_Renderer* ren) override;
+    HelloScreen();
     ~HelloScreen() override;
-    bool CheckSetup() override;
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

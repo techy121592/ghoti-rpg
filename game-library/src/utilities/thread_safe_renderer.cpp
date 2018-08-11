@@ -16,20 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <iostream>
 #include "utilities/thread_safe_renderer.h"
-#include "screens/hello_screen.h"
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
+SDL_Renderer* ThreadSafeRenderer::renderer;
+std::mutex ThreadSafeRenderer::rendererLock;
+
+ThreadSafeRenderer::ThreadSafeRenderer() {
+    if(renderer == nullptr) throw std::runtime_error("Renderer needs to be set up before it can be locked.");
+    rendererLock.lock();
+    Renderer = renderer;
 }
 
-HelloScreen::HelloScreen() {
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("hello.bmp")));
+ThreadSafeRenderer::~ThreadSafeRenderer() {
+    rendererLock.unlock();
 }
 
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    std::cout << "HelloScreen" << std::endl;
-    if (inputData.Quit) {
-        nextScreen = nullptr;
+void ThreadSafeRenderer::SetUpRenderer(SDL_Window *win) {
+    if(renderer == nullptr) {
+        renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        if(renderer == nullptr) {
+            SDL_DestroyWindow(win);
+            std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+            SDL_Quit();
+        }
     }
 }

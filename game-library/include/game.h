@@ -36,12 +36,11 @@
 class Game {
 private:
     SDL_Window *win = nullptr;
-    SDL_Renderer *ren = nullptr;
     static Screen* screen;
     uint32_t fps;
 
-    std::tuple<SDL_Window*, SDL_Renderer*> SetupSDL(uint32_t width, uint32_t height);
-    void CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen);
+    SDL_Window* SetupSDL(uint32_t width, uint32_t height);
+    void CloseSDL(SDL_Window*& win, Screen*& screen);
     void PauseForRestOfFrame(uint32_t targetFrameLength, uint32_t deltaTime);
     void FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, uint32_t deltaTime, InputData inputData);
     void Draw(std::list<DrawableComponent*> drawableComponentsData);
