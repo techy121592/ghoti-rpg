@@ -31,14 +31,3 @@ ThreadSafeRenderer::ThreadSafeRenderer() {
 ThreadSafeRenderer::~ThreadSafeRenderer() {
     rendererLock.unlock();
 }
-
-void ThreadSafeRenderer::SetUpRenderer(SDL_Window *win) {
-    if(renderer == nullptr) {
-        renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-        if(renderer == nullptr) {
-            SDL_DestroyWindow(win);
-            std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-            SDL_Quit();
-        }
-    }
-}

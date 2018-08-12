@@ -41,7 +41,7 @@ void TileMap::PreRenderMap() {
                                  bottomLayer->GetTexture() :
                                  topLayer->GetTexture());
 
-        for(Tile* tile : tiles) {
+        for(auto tile : tiles) {
             if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
                 tile->Draw(threadSafeRenderer->Renderer);
             }
