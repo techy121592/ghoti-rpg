@@ -20,16 +20,14 @@
 
 GameScreen::GameScreen() {
     tileMap = ResourceLoader::LoadMap("test.tmx");
-    auto characterTexture = ResourceLoader::LoadImage("character_placeholder.png");
 
     components.emplace_back(tileMap);
     components.emplace_back(tileMap->GetBottomLayer());
-    components.emplace_back(new Character(23, 23, 14, 14, 0, characterTexture, 0.075));
+    components.emplace_back(new Character(23, 23, 14, 14, 0, "character_placeholder.png", 0.075));
     components.emplace_back(tileMap->GetTopLayer());
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
-    std::cout << "GameScreen" << std::endl;
     if (inputData.Quit) {
         nextScreen = nullptr;
     }

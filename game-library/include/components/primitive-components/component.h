@@ -19,9 +19,14 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <mutex>
+
 class Component {
+protected:
+    bool ready = false;
 public:
     virtual ~Component() = default;
+    bool IsReady();
 };
 
 #endif

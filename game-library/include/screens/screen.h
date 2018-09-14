@@ -26,9 +26,15 @@
 #include "components/primitive-components/component.h"
 #include "components/primitive-components/drawable_component.h"
 
+/*
+ * Notes:
+ * Any screens implementing this class needs to set doneLoading once done loading resources.
+ * Otherwise, you will be stuck on the load screen
+ */
+
 class Screen {
 protected:
-    std::list<Component*> components = {}; // Should probably make some other type to hold on, but for now this is good enough
+    std::list<Component*> components = {};
     Screen* nextScreen = nullptr;
 public:
     Screen();
@@ -42,6 +48,7 @@ public:
 
     virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
     Screen* NextScreen();
+    bool IsReady();
     std::list<DrawableComponent*> CloneDrawables();
 };
 

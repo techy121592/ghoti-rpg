@@ -25,7 +25,7 @@
 class Button : public DrawableComponent {
     std::function<void()> onClick;
 public:
-    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, std::function<void()> onClick);
+    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, std::function<void()> onClick);
     void Click();
 };
 

@@ -23,7 +23,7 @@
 
 class RenderableDrawableComponent : public DrawableComponent {
 public:
-    RenderableDrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren);
+    RenderableDrawableComponent(uint32_t width, uint32_t height);
     SDL_Texture* GetTexture();
 };
 

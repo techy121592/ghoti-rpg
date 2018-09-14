@@ -24,11 +24,8 @@
 #include "screen.h"
 
 class HelloScreen : public Screen {
-private:
-    SDL_Texture* helloTexture;
 public:
     HelloScreen();
-    ~HelloScreen() override;
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

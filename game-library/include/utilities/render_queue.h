@@ -19,40 +19,75 @@
 #ifndef RENDER_QUEUE_H
 #define RENDER_QUEUE_H
 
+#include <atomic>
 #include <list>
 #include <mutex>
 #include <thread>
+#include <iostream>
 #include <SDL.h>
-
-enum RendererAction {
-    SetUpRenderer,
-    Draw,
-
-};
+#include <SDL_image.h>
+#include "utilities/resource/resource_loader.h"
 
 class RenderQueue {
+    enum RendererAction {
+        SetUpRenderer,
+        ConvertSurfaceToTexture,
+        CreateTexture,
+        Draw,
+        Clear,
+        Present,
+        SetRenderTarget,
+        QueryTexture
+    };
+
+    struct DrawInfo {
+        SDL_Texture* texture;
+        SDL_Rect sourceRect, destRect;
+        DrawInfo(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect) {
+            this->texture = texture;
+            this->sourceRect = sourceRect;
+            this->destRect = destRect;
+        }
+    };
+
+    struct TextureInfo {
+        uint32_t format;
+        int access, width, height;
+    };
+
     struct RenderQueueEntry {
-        RendererAction Action;
-        void* Data;
-        RenderQueueEntry(RendererAction action, void* data) {
-            Action = action;
-            Data = data;
+        RendererAction action;
+        void* data;
+        std::function<void(void*)> callback;
+        RenderQueueEntry(RendererAction action, void* data, std::function<void(void*)> callback) {
+            this->action = action;
+            this->data = data;
+            this->callback = callback;
         }
     };
 
     static std::list<RenderQueueEntry> queue;
     static std::mutex queueLock;
+    static SDL_Renderer* renderer;
     static bool running;
+
     static void WatchLoop();
-    static void ProcessEntry(RenderQueueEntry entry, SDL_Renderer* renderer);
-    static void CreateRenderer(SDL_Window *win, SDL_Renderer* renderer);
+    static void ProcessEntry(RenderQueueEntry entry);
+    static void CreateRenderer(SDL_Window *win);
 
 public:
     RenderQueue();
     ~RenderQueue();
     static void StartQueueWatcher();
     static void StopQueueWatcher();
-    void Add(RendererAction action, void* data = nullptr);
+    static void AddSetUpRenderer(SDL_Window* window, std::function<void()> callback);
+    static void AddConvertSurfaceToTexture(SDL_Surface* surface, std::function<void(SDL_Texture*)> callback);
+    static void AddCreateTexture(SDL_Point* size, std::function<void(SDL_Texture*)> callback);
+    static void AddDraw(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect, std::function<void()> callback);
+    static void AddClear(std::function<void()> callback);
+    static void AddPresent(std::function<void()> callback);
+    static void AddSetRenderTarget(SDL_Texture* texture, std::function<void()> callback);
+    static void AddQueryTexture(SDL_Texture* texture, std::function<void(uint32_t, int, int, int)> callback);
 };
 
 #endif

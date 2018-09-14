@@ -16,19 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/thread_safe_renderer.h"
 #include "screens/hello_screen.h"
 
-HelloScreen::~HelloScreen() {
-    SDL_DestroyTexture(helloTexture);
-}
-
 HelloScreen::HelloScreen() {
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("hello.bmp")));
+    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, "hello.bmp"));
 }
 
 void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    std::cout << "HelloScreen" << std::endl;
     if (inputData.Quit) {
         nextScreen = nullptr;
     }

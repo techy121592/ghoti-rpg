@@ -26,6 +26,15 @@ Screen* Screen::NextScreen() {
     return nextScreen;
 }
 
+bool Screen::IsReady() {
+    for(auto component : components) {
+        if(!component->IsReady()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::list<DrawableComponent*> Screen::CloneDrawables() {
     std::list<DrawableComponent*> tempListOfDrawableComponents = {};
     for(Component* component : components) {

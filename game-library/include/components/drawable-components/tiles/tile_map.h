@@ -30,7 +30,7 @@ class TileMap : public Component {
     void PreRenderMap();
     RenderableDrawableComponent* topLayer;
     RenderableDrawableComponent* bottomLayer;
-    int playerZIndex;
+    uint32_t playerZIndex;
 public:
     TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles);
     DrawableComponent* GetTopLayer();

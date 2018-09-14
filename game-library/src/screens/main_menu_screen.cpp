@@ -24,6 +24,7 @@ MainMenuScreen::MainMenuScreen() {
     //startButton = new Button(100,  100, 200, 75, 0, ResourceLoader::LoadImage("start_button.png"),
     //    [this]() {
     //        std::cout << "Start button clicked" << std::endl;
+    std::cout << "MainMenuScreen->LoadScreen" << std::endl;
             this->nextScreen = new LoadScreen<GameScreen>();
     //        std::cout << "Start button click end" << std::endl;
     //    });

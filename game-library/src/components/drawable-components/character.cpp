@@ -18,8 +18,8 @@
 
 #include "components/drawable-components/character.h"
 
-Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, SDL_Texture* texture, float speed)
-        : DrawableComponent(x, y, width, height, frame, texture) {
+Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, float speed)
+        : DrawableComponent(x, y, width, height, frame, path) {
     this->speed = speed;
 }
 

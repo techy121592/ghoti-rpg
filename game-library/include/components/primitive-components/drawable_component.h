@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <SDL.h>
+#include "utilities/render_queue.h"
 #include "component.h"
 
 class DrawableComponent : public Component {
@@ -30,12 +31,13 @@ protected:
     SDL_Texture* texture;
     SDL_Rect locationRectangle;
 public:
-    DrawableComponent(int32_t width, int32_t height, SDL_Renderer* ren);
+    DrawableComponent(int32_t width, int32_t height);
     DrawableComponent(SDL_Rect locationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
-    DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, SDL_Texture* texture);
+    DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, std::string path);
+    DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, std::string path);
     DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, SDL_Texture* texture);
     ~DrawableComponent() override;
-    void Draw(SDL_Renderer* ren);
+    void Draw(RenderQueue* renderQueue);
     DrawableComponent* Clone();
 };
 

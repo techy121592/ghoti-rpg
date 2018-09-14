@@ -16,41 +16,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/thread_safe_renderer.h"
 #include "components/drawable-components/tiles/tile_map.h"
 
 TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::list<Tile*> tiles) : Component() {
-    std::cout << "Trying to get ThreadSafeRender to load map" << std::endl;
-    auto threadSafeRenderer = new ThreadSafeRenderer();
-    std::cout << "Got ThreadSafeRender to load map" << std::endl;
-    topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, threadSafeRenderer->Renderer);
-    bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, threadSafeRenderer->Renderer);
-    delete threadSafeRenderer;
-    std::cout << "Done loading map" << std::endl;
+    topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
+    bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
+
     this->tiles = std::move(tiles);
     this->playerZIndex = playerZIndex;
     PreRenderMap();
 }
 
 void TileMap::PreRenderMap() {
-    std::cout << "Trying to get ThreadSafeRender to prerender map" << std::endl;
-    auto threadSafeRenderer = new ThreadSafeRenderer();
-    std::cout << "Got ThreadSafeRender to prerender map" << std::endl;
+    while(!topLayer->IsReady() || !bottomLayer->IsReady()) {
+        SDL_Delay(10);
+    }
+    auto renderQueue = new RenderQueue();
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
-        SDL_SetRenderTarget(threadSafeRenderer->Renderer, graphicalLayerCount < 1 ?
-                                 bottomLayer->GetTexture() :
-                                 topLayer->GetTexture());
-
+        renderQueue->AddSetRenderTarget(graphicalLayerCount < 1 ? bottomLayer->GetTexture() : topLayer->GetTexture(), [](){});
         for(auto tile : tiles) {
-            if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
-                tile->Draw(threadSafeRenderer->Renderer);
+            while(!tile->IsReady()) {
+                SDL_Delay(10);
+            }
+            if((tile->GetZ() < playerZIndex && graphicalLayerCount == 0) || (tile->GetZ() > playerZIndex && graphicalLayerCount == 1)) {
+                tile->Draw(renderQueue);
             }
         }
-
-        SDL_SetRenderTarget(threadSafeRenderer->Renderer, nullptr);
     }
-    delete threadSafeRenderer;
-    std::cout << "Done prerendering map" << std::endl;
+    renderQueue->AddSetRenderTarget(nullptr, [this]() {
+        ready = true;
+    });
+    delete renderQueue;
 }
 
 DrawableComponent* TileMap::GetTopLayer() {
@@ -66,10 +62,10 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
     for(auto tile : tiles) {
         auto tileLocation = tile->GetLocation();
 
-        if((targetRect.x >= tileLocation.x && targetRect.x < tileLocation.x + tileLocation.w ||
-                targetRect.x + targetRect.w > tileLocation.x && targetRect.x + targetRect.w < tileLocation.x + tileLocation.w) &&
-                (targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h ||
-                 targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h) &&
+        if(((targetRect.x >= tileLocation.x && targetRect.x < tileLocation.x + tileLocation.w) ||
+                (targetRect.x + targetRect.w > tileLocation.x && targetRect.x + targetRect.w < tileLocation.x + tileLocation.w)) &&
+                ((targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h) ||
+                        (targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h)) &&
                 tile->GetZ() == playerZIndex - 1) {
             tilesColliding.emplace_back(tile);
         }

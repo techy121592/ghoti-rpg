@@ -19,7 +19,7 @@
 #include "components/drawable-components/tiles/tile.h"
 
 Tile::Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture)
-    : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
+        : DrawableComponent(x * tileWidth, y * tileHeight, tileWidth, tileHeight, padding, tileIndex, texture) {
     this->z = z;
 }
 

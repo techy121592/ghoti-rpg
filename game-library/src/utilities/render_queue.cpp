@@ -16,8 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <iostream>
 #include "utilities/render_queue.h"
+
+std::mutex RenderQueue::queueLock;
+bool RenderQueue::running;
+SDL_Renderer* RenderQueue::renderer;
+std::list<RenderQueue::RenderQueueEntry> RenderQueue::queue;
 
 RenderQueue::RenderQueue() {
     queueLock.lock();
@@ -27,50 +31,129 @@ RenderQueue::~RenderQueue() {
     queueLock.unlock();
 }
 
-void RenderQueue::Add(RendererAction action, void* data) {
-    queue.emplace_back(RenderQueueEntry(action, data));
+void RenderQueue::AddSetUpRenderer(SDL_Window* window, std::function<void()> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::SetUpRenderer, window, [callback](void* data) {
+        callback();
+    }));
+}
+
+void RenderQueue::AddConvertSurfaceToTexture(SDL_Surface* surface, std::function<void(SDL_Texture*)> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::ConvertSurfaceToTexture, surface, [callback](void* data) {
+        callback((SDL_Texture*)data);
+    }));
+}
+
+void RenderQueue::AddCreateTexture(SDL_Point* size, std::function<void(SDL_Texture*)> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::CreateTexture, size, [callback](void* data) {
+        callback((SDL_Texture*)data);
+    }));
+}
+
+void RenderQueue::AddDraw(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect, std::function<void()> callback) {
+    queue.emplace_back(RendererAction::Draw, new DrawInfo(texture, sourceRect, destRect), [callback](void* data) {
+        callback();
+    });
+}
+
+void RenderQueue::AddClear(std::function<void()> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::Clear, nullptr, [callback](void* data) {
+        callback();
+    }));
+}
+
+void RenderQueue::AddPresent(std::function<void()> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::Present, nullptr, [callback](void* data) {
+        callback();
+    }));
+}
+
+void RenderQueue::AddSetRenderTarget(SDL_Texture* texture, std::function<void()> callback) {
+    queue.emplace_back(RenderQueueEntry(RendererAction::SetRenderTarget, texture, [callback](void* data) {
+        callback();
+    }));
+}
+
+void RenderQueue::AddQueryTexture(SDL_Texture* texture, std::function<void(uint32_t, int, int, int)> callback) {
+    queue.emplace_back(RendererAction::QueryTexture, texture, [callback](void* data) {
+        auto textureInfo = (TextureInfo*)data;
+        callback(textureInfo->format, textureInfo->access, textureInfo->width, textureInfo->height);
+    });
 }
 
 void RenderQueue::WatchLoop() {
-    SDL_Renderer* renderer;
     while(running) {
         if(queue.size() > 0) {
             queueLock.lock();
             auto currentEntry = queue.front();
             queue.pop_front();
             queueLock.unlock();
-            ProcessEntry(currentEntry, renderer);
+            ProcessEntry(currentEntry);
         } else {
             SDL_Delay(1);
         }
     }
+    if(renderer != nullptr) SDL_DestroyRenderer(renderer);
 }
 
-void RenderQueue::ProcessEntry(RenderQueue::RenderQueueEntry entry, SDL_Renderer* renderer) {
-    switch(entry.Action) {
-        case SetUpRenderer:
-            CreateRenderer((SDL_Window*)entry.Data, renderer);
+void RenderQueue::ProcessEntry(RenderQueue::RenderQueueEntry entry) {
+    void* output = nullptr;
+    switch(entry.action) {
+        case RendererAction::SetUpRenderer:
+            CreateRenderer((SDL_Window*)entry.data);
             break;
-        case Draw:
+        case RendererAction::ConvertSurfaceToTexture:
+            output = SDL_CreateTextureFromSurface(renderer, (SDL_Surface*)entry.data);
             break;
+        case RendererAction::CreateTexture:
+        {
+            auto size = (SDL_Point*)entry.data;
+            output = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, size->x, size->y);
+            break;
+        }
+        case RendererAction::Draw:
+        {
+            auto drawInfo = (DrawInfo*)entry.data;;
+            SDL_RenderCopy(renderer, drawInfo->texture, &drawInfo->sourceRect, &drawInfo->destRect);
+            break;
+        }
+        case RendererAction::Clear:
+            SDL_RenderClear(renderer);
+            break;
+        case RendererAction::Present:
+            SDL_RenderPresent(renderer);
+            break;
+        case RendererAction::SetRenderTarget:
+            SDL_SetRenderTarget(renderer, (SDL_Texture*)entry.data);
+            break;
+        case RendererAction::QueryTexture:
+        {
+            auto textureInfo = new TextureInfo();
+            SDL_QueryTexture((SDL_Texture*)entry.data, &textureInfo->format, &textureInfo->access, &textureInfo->width, &textureInfo->height);
+            output = textureInfo;
+            break;
+        }
+    }
+    if(entry.callback != nullptr) {
+        entry.callback(output);
     }
 }
 
 void RenderQueue::StartQueueWatcher() {
-    std::thread(WatchLoop);
+    static auto loopThread = std::thread([] {
+        running = true;
+        WatchLoop();
+    });
 }
 
 void RenderQueue::StopQueueWatcher() {
     running = false;
 }
 
-void RenderQueue::CreateRenderer(SDL_Window *win, SDL_Renderer* renderer) {
+void RenderQueue::CreateRenderer(SDL_Window *win) {
+    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(renderer == nullptr) {
-        renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-        if(renderer == nullptr) {
-            SDL_DestroyWindow(win);
-            std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-            SDL_Quit();
-        }
+        SDL_DestroyWindow(win);
+        SDL_Quit();
     }
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }

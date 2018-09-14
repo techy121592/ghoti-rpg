@@ -25,8 +25,10 @@
 class TileSet {
     uint32_t tileWidth, tileHeight, padding;
     SDL_Texture* texture;
+    bool ready;
 public:
-    TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
+    TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, std::string path);
+    bool IsReady();
     Tile* CreateTile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex);
 };
 

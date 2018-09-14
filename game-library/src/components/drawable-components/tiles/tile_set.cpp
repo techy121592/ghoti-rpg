@@ -16,15 +16,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <SDL_image.h>
+#include <utilities/resource/resource_loader.h>
 #include "components/drawable-components/tiles/tile_set.h"
 
-TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture) {
+TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, std::string path) {
     this->tileWidth = tileWidth;
     this->tileHeight = tileHeight;
-    this->texture = texture;
     this->padding = padding;
+    auto surface = ResourceLoader::LoadImage(path);
+    auto renderQueue = new RenderQueue();
+    renderQueue->AddConvertSurfaceToTexture(surface, [this](void* data) {
+        texture = (SDL_Texture*)data;
+        ready = true;
+    });
+    delete renderQueue;
+}
+
+bool TileSet::IsReady() {
+    return ready;
 }
 
 Tile* TileSet::CreateTile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex) {
+    while(!IsReady()) {
+        SDL_Delay(10);
+    }
     return new Tile(x, y, z, tileIndex, tileWidth, tileHeight, padding, texture);
 }

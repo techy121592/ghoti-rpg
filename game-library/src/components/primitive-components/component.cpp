@@ -17,17 +17,8 @@
  */
 
 #include <iostream>
-#include "utilities/thread_safe_renderer.h"
+#include "components/primitive-components/component.h"
 
-SDL_Renderer* ThreadSafeRenderer::renderer;
-std::mutex ThreadSafeRenderer::rendererLock;
-
-ThreadSafeRenderer::ThreadSafeRenderer() {
-    if(renderer == nullptr) throw std::runtime_error("Renderer needs to be set up before it can be locked.");
-    rendererLock.lock();
-    Renderer = renderer;
-}
-
-ThreadSafeRenderer::~ThreadSafeRenderer() {
-    rendererLock.unlock();
+bool Component::IsReady() {
+    return ready;
 }
