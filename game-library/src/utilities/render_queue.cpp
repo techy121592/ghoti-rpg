@@ -157,3 +157,7 @@ void RenderQueue::CreateRenderer(SDL_Window *win) {
     }
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
+
+bool RenderQueue::IsEmpty() {
+    return queue.size() == 0;
+}

@@ -87,6 +87,7 @@ public:
     static void AddPresent(std::function<void()> callback);
     static void AddSetRenderTarget(SDL_Texture* texture, std::function<void()> callback);
     static void AddQueryTexture(SDL_Texture* texture, std::function<void(uint32_t, int, int, int)> callback);
+    static bool IsEmpty();
 };
 
 #endif

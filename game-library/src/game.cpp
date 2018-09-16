@@ -108,7 +108,7 @@ bool Game::Step(const uint32_t deltaTime) {
 
     drawableComponentsData.clear();
 
-    while(ThreadPool::LoopLocked()) {
+    while(ThreadPool::LoopLocked() || !RenderQueue::IsEmpty()) {
         SDL_Delay(1);
     }
 
