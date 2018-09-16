@@ -21,6 +21,7 @@
 #include "components/drawable-components/tiles/tile_set.h"
 
 TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, std::string path) {
+    this->ready = false;
     this->tileWidth = tileWidth;
     this->tileHeight = tileHeight;
     this->padding = padding;
