@@ -109,7 +109,8 @@ bool Game::Step(const uint32_t deltaTime) {
     drawableComponentsData.clear();
 
     while(ThreadPool::LoopLocked() || !RenderQueue::IsEmpty()) {
-        SDL_Delay(1);
+        SDL_Delay(5);
+        std::cout << "Sleeping" << std::endl;
     }
 
     if(screen != screen->NextScreen()) {
