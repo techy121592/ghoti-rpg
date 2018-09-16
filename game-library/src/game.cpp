@@ -21,20 +21,19 @@
 Screen* Game::screen = nullptr;
 
 Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
-    this->fps = fps;
-
-    std::tuple<SDL_Window*, SDL_Renderer*> windowRendererTuple = SetupSDL(width, height);
-    this->win = std::get<0>(windowRendererTuple);
-    this->ren = std::get<1>(windowRendererTuple);
-
-    if (this->win == nullptr || this->ren == nullptr) {
-        CloseSDL(win, ren, screen);
-    }
-
-    screen  = new LoadScreen<GameScreen>(ren);
-    screen->Setup();
-    if(!screen->CheckSetup()) {
-        CloseSDL(win, ren, screen);
+    try {
+        this->fps = fps;
+        win = SetupSDL(width, height);
+        if (this->win == nullptr) {
+            CloseSDL(win, screen);
+        }
+        screen  = new LoadScreen<GameScreen>();
+        while(!screen->IsReady()) {
+            SDL_Delay(10);
+        }
+    } catch(std::exception& exception) {
+        CloseSDL(win, screen);
+        //TODO: Log exception
     }
 }
 
@@ -42,37 +41,28 @@ Game::~Game() {
     ThreadPool::TerminateThreads();
 }
 
-std::tuple<SDL_Window*, SDL_Renderer*> Game::SetupSDL(const uint32_t width, const uint32_t height) {
+SDL_Window* Game::SetupSDL(const uint32_t width, const uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
+        return nullptr;
     }
 
     SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {
         SDL_Quit();
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
+        return nullptr;
     }
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (ren == nullptr) {
-        SDL_DestroyWindow(win);
-        std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return std::make_tuple<SDL_Window*, SDL_Renderer*>(nullptr, nullptr);
-    }
+    RenderQueue::StartQueueWatcher();
+    auto renderQueue = new RenderQueue();
+    renderQueue->AddSetUpRenderer(win, [](){});
+    delete renderQueue;
 
-    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
-
-    return std::make_tuple(win, ren);
+    return win;
 }
 
-void Game::CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen) {
+void Game::CloseSDL(SDL_Window*& win, Screen*& screen) {
     delete screen;
-
-    if(ren != nullptr) {
-        SDL_DestroyRenderer(ren);
-    }
-
+    RenderQueue::StopQueueWatcher();
     if(win != nullptr) {
         SDL_DestroyWindow(win);
     }
@@ -95,18 +85,20 @@ void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32
 }
 
 void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
-    SDL_RenderClear(ren);
-
+    auto renderQueue = new RenderQueue();
+    renderQueue->AddClear([](){});
     for(DrawableComponent* drawableComponent : drawableComponentsData) {
-        drawableComponent->Draw(ren);
+        drawableComponent->Draw(renderQueue);
     }
-
-    SDL_RenderPresent(ren);
+    renderQueue->AddPresent([](){});
+    delete renderQueue;
 }
 
 bool Game::Step(const uint32_t deltaTime) {
     if(screen == nullptr) {
         return false;
+    } else if(!screen->IsReady()) {
+        return true;
     }
 
     std::list<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
@@ -116,8 +108,9 @@ bool Game::Step(const uint32_t deltaTime) {
 
     drawableComponentsData.clear();
 
-    while(ThreadPool::LoopLocked()) {
-        SDL_Delay(1);
+    while(ThreadPool::LoopLocked() || !RenderQueue::IsEmpty()) {
+        SDL_Delay(5);
+        std::cout << "Sleeping" << std::endl;
     }
 
     if(screen != screen->NextScreen()) {
@@ -130,9 +123,6 @@ bool Game::Step(const uint32_t deltaTime) {
         screen = tempScreen;
 
         if(screen == nullptr) {
-            return false;
-        } else if(!screen->CheckSetup()) {
-            screen = nullptr;
             return false;
         }
     }
@@ -158,7 +148,7 @@ bool Game::GameLoop() {
             PauseForRestOfFrame(targetFrameLength, SDL_GetTicks() - currentTime);
         }
     } catch (const std::exception& ex) {
-        std::cout << "Game::GameLoop() failed: " << ex.what() << std::endl;
+        std::cerr << "Game::GameLoop() failed: " << ex.what() << std::endl;
         return false;
     }
     return true;
@@ -167,15 +157,15 @@ bool Game::GameLoop() {
 int Game::Run() {
     try {
         if (!GameLoop()) {
-            std::cout << "Game loop failed!" << std::endl;
-            CloseSDL(win, ren, screen);
+            std::cerr << "Game loop failed!" << std::endl;
+            CloseSDL(win, screen);
             return 1;
         } else {
-            CloseSDL(win, ren, screen);
+            CloseSDL(win, screen);
             return 0;
         }
     } catch(std::exception& ex) {
-        std::cout << "Game::Run() failed: " << ex.what() << std::endl;
+        std::cerr << "Game::Run() failed: " << ex.what() << std::endl;
         return 1;
     }
 }

@@ -18,8 +18,8 @@
 
 #include "components/primitive-components/rendererable_drawable_component.h"
 
-RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height, SDL_Renderer* ren)
-        : DrawableComponent(width, height, ren) {}
+RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height)
+        : DrawableComponent(width, height) {}
 
 SDL_Texture* RenderableDrawableComponent::GetTexture() {
     return texture;

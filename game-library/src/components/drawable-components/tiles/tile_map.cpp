@@ -18,28 +18,35 @@
 
 #include "components/drawable-components/tiles/tile_map.h"
 
-TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::list<Tile*> tiles, SDL_Renderer* ren) : Component() {
-    topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
-    bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight, ren);
+TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::list<Tile*> tiles) : Component() {
+    topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
+    bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
+
     this->tiles = std::move(tiles);
     this->playerZIndex = playerZIndex;
-    PreRenderMap(ren);
+    PreRenderMap();
 }
 
-void TileMap::PreRenderMap(SDL_Renderer* ren) {
+void TileMap::PreRenderMap() {
+    while(!topLayer->IsReady() || !bottomLayer->IsReady()) {
+        SDL_Delay(10);
+    }
+    auto renderQueue = new RenderQueue();
     for(int graphicalLayerCount = 0; graphicalLayerCount < 2; graphicalLayerCount++) {
-        SDL_SetRenderTarget(ren, graphicalLayerCount < 1 ?
-                                 bottomLayer->GetTexture() :
-                                 topLayer->GetTexture());
-
-        for(Tile* tile : tiles) {
-            if(tile->GetZ() < playerZIndex && graphicalLayerCount == 0 || tile->GetZ() > playerZIndex && graphicalLayerCount == 1) {
-                tile->Draw(ren);
+        renderQueue->AddSetRenderTarget(graphicalLayerCount < 1 ? bottomLayer->GetTexture() : topLayer->GetTexture(), [](){});
+        for(auto tile : tiles) {
+            while(!tile->IsReady()) {
+                SDL_Delay(10);
+            }
+            if((tile->GetZ() < playerZIndex && graphicalLayerCount == 0) || (tile->GetZ() > playerZIndex && graphicalLayerCount == 1)) {
+                tile->Draw(renderQueue);
             }
         }
-
-        SDL_SetRenderTarget(ren, nullptr);
     }
+    renderQueue->AddSetRenderTarget(nullptr, [this]() {
+        ready = true;
+    });
+    delete renderQueue;
 }
 
 DrawableComponent* TileMap::GetTopLayer() {
@@ -55,12 +62,12 @@ std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
     for(auto tile : tiles) {
         auto tileLocation = tile->GetLocation();
 
-        if((targetRect.x >= tileLocation.x && targetRect.x < tileLocation.x + tileLocation.w ||
-                targetRect.x + targetRect.w > tileLocation.x && targetRect.x + targetRect.w < tileLocation.x + tileLocation.w) &&
-                (targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h ||
-                 targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h) &&
+        if(((targetRect.x >= tileLocation.x && targetRect.x < tileLocation.x + tileLocation.w) ||
+                (targetRect.x + targetRect.w > tileLocation.x && targetRect.x + targetRect.w < tileLocation.x + tileLocation.w)) &&
+                ((targetRect.y >= tileLocation.y && targetRect.y < tileLocation.y + tileLocation.h) ||
+                        (targetRect.y + targetRect.h > tileLocation.y && targetRect.y + targetRect.h < tileLocation.y + tileLocation.h)) &&
                 tile->GetZ() == playerZIndex - 1) {
-            tilesColliding.push_back(tile);
+            tilesColliding.emplace_back(tile);
         }
     }
     return tilesColliding;

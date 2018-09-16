@@ -4,7 +4,7 @@ set(GAME_LIBRARY GhotiRPGLibrary)
 project(${GAME_LIBRARY})
 
 file(GLOB CPP_FILES src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp)
-file(GLOB HEADER_FILES include/*.h include/*/*.h)
+file(GLOB HEADER_FILES include/*.h include/*/*.h include/*/*/*.h include/*/*/*/*.h)
 
 include_directories(include)
 

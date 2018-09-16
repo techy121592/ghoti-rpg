@@ -16,22 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
+#include "components/drawable-components/button.h"
 
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_set.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "components/drawable-components/character.h"
+Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path,
+               std::function<void()> onClick)
+        : DrawableComponent(x, y, width, height, frame, path) {
+    std::cout << "Initiating button" << std::endl;
+    this->onClick = onClick;
+}
 
-class GameScreen : public Screen {
-    TileMap* tileMap;
-public:
-    GameScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
-};
-
-#endif
+void Button::Click() {
+    onClick();
+}

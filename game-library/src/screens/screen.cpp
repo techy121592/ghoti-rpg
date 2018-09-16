@@ -26,12 +26,21 @@ Screen* Screen::NextScreen() {
     return nextScreen;
 }
 
+bool Screen::IsReady() {
+    for(auto component : components) {
+        if(!component->IsReady()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::list<DrawableComponent*> Screen::CloneDrawables() {
     std::list<DrawableComponent*> tempListOfDrawableComponents = {};
     for(Component* component : components) {
         auto drawableComponent = dynamic_cast<DrawableComponent*>(component);
         if(drawableComponent != nullptr) {
-            tempListOfDrawableComponents.push_back(drawableComponent->Clone());
+            tempListOfDrawableComponents.emplace_back(drawableComponent->Clone());
         }
     }
     return tempListOfDrawableComponents;

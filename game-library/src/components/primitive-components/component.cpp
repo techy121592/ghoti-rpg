@@ -16,22 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
+#include <iostream>
+#include "components/primitive-components/component.h"
 
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_set.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "components/drawable-components/character.h"
-
-class GameScreen : public Screen {
-    TileMap* tileMap;
-public:
-    GameScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
-};
-
-#endif
+bool Component::IsReady() {
+    return ready;
+}

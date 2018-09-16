@@ -28,20 +28,20 @@
 #include "utilities/input/input_data.h"
 #include "utilities/input/input_processor.h"
 #include "utilities/thread_pool.h"
+#include "utilities/render_queue.h"
 #include "components/primitive-components/drawable_component.h"
 #include "screens/screen.h"
-#include "screens/game_screen.h"
+#include "screens/main_menu_screen.h"
 #include "screens/load_screen.h"
 
 class Game {
 private:
     SDL_Window *win = nullptr;
-    SDL_Renderer *ren = nullptr;
     static Screen* screen;
     uint32_t fps;
 
-    std::tuple<SDL_Window*, SDL_Renderer*> SetupSDL(uint32_t width, uint32_t height);
-    void CloseSDL(SDL_Window*& win, SDL_Renderer*& ren, Screen*& screen);
+    SDL_Window* SetupSDL(uint32_t width, uint32_t height);
+    void CloseSDL(SDL_Window*& win, Screen*& screen);
     void PauseForRestOfFrame(uint32_t targetFrameLength, uint32_t deltaTime);
     void FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, uint32_t deltaTime, InputData inputData);
     void Draw(std::list<DrawableComponent*> drawableComponentsData);

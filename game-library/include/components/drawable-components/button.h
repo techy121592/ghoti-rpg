@@ -16,23 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CHARACTER_H
-#define CHARACTER_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
+#include <functional>
 #include "components/primitive-components/drawable_component.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "utilities/input/input_data.h"
 
-class Character : public DrawableComponent {
-    float speed;
-    InputData inputData;
-    SDL_Rect CalculateValidPosition(SDL_Rect targetRectangle, TileMap* tileMap);
-    SDL_Rect DealWithHorizontalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle);
-    SDL_Rect DealWithVerticalOverlap(SDL_Rect targetRectangle, SDL_Rect tileRectangle);
+class Button : public DrawableComponent {
+    std::function<void()> onClick;
 public:
-    Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, float speed);
-    void SetInput(InputData inputData);
-    void Update(uint32_t deltaTime, TileMap* tileMap);
+    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, std::function<void()> onClick);
+    void Click();
 };
 
 #endif

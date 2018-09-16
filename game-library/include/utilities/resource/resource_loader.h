@@ -33,8 +33,8 @@ private:
     static std::string GetResourcePath(const std::string &subDir = "");
 
 public:
-    static SDL_Texture* LoadImage(const std::string &fileName, SDL_Renderer* ren);
-    static TileMap* LoadMap(const std::string &fileName, SDL_Renderer* ren);
+    static SDL_Surface* LoadImage(const std::string &fileName);
+    static TileMap* LoadMap(const std::string &fileName);
 };
 
 #endif

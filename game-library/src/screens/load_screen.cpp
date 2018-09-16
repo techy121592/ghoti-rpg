@@ -18,41 +18,22 @@
 
 #include "screens/load_screen.h"
 
-template<class T> bool LoadScreen<T>::doneLoading = false;
-template<class T> Screen* LoadScreen<T>::nextScreenHolder = nullptr;
-
-template<class T>
-LoadScreen<T>::LoadScreen(SDL_Renderer* ren) {
-    components.push_back(new DrawableComponent(0, 0, 640, 480, 0, ResourceLoader::LoadImage("loading.png", ren)));
-    nextScreenHolder = new T(ren);
-}
-
-template<class T>
-LoadScreen<T>::~LoadScreen() = default;
-
 template <class T>
-void LoadScreen<T>::Setup() {
-    ThreadPool::AddTask([](){
-        nextScreenHolder->Setup();
-        doneLoading = true;
+LoadScreen<T>::LoadScreen() {
+    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+
+    ThreadPool::AddTask([this](){
+        nextScreen = new T();
     }, false);
 }
 
 template<class T>
-bool LoadScreen<T>::CheckSetup() {
-    return components.size() == 1;
-}
-
-template<class T>
 void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
-    if(doneLoading) {
-        nextScreen = nextScreenHolder;
-        nextScreenHolder = nullptr;
-        doneLoading = false;
-    } else if(inputData.Quit) {
+    if(inputData.Quit) {
         nextScreen = nullptr;
     }
 }
 
 template class LoadScreen<HelloScreen>;
 template class LoadScreen<GameScreen>;
+template class LoadScreen<MainMenuScreen>;
