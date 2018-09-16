@@ -27,7 +27,7 @@ Game::Game(const uint32_t width, const uint32_t height, const uint32_t fps) {
         if (this->win == nullptr) {
             CloseSDL(win, screen);
         }
-        screen  = new LoadScreen<GameScreen>();
+        screen  = new LoadScreen<MainMenuScreen>();
         while(!screen->IsReady()) {
             SDL_Delay(10);
         }

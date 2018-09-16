@@ -18,30 +18,25 @@
 
 #include "screens/main_menu_screen.h"
 
-Button* startButton = nullptr;
-
 MainMenuScreen::MainMenuScreen() {
-    //startButton = new Button(100,  100, 200, 75, 0, ResourceLoader::LoadImage("start_button.png"),
-    //    [this]() {
-    //        std::cout << "Start button clicked" << std::endl;
-    std::cout << "MainMenuScreen->LoadScreen" << std::endl;
+    startButton = new Button(100,  100, 200, 75, 0, "start_button.png",
+        [this]() {
             this->nextScreen = new LoadScreen<GameScreen>();
-    //        std::cout << "Start button click end" << std::endl;
-    //    });
-    //components.emplace_back(startButton);
-    //components.emplace_back(new Button(100, 200, 200, 75, 0, ResourceLoader::LoadImage("start_button.png"),
-    //    [this](){
-    //        std::cout << "Exit button clicked" << std::endl;
-    //        nextScreen = nullptr;
-    //        std::cout << "Exit button click end" << std::endl;
-    //    }));
-    //std::cout << "Button creation end" << std::endl;
+        });
+    exitButton = new Button(100, 200, 200, 75, 0, "exit_button.png",
+        [this](){
+            nextScreen = nullptr;
+        });
+    components.emplace_back(startButton);
+    components.emplace_back(exitButton);
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
     std::cout << "MainMenuScreen" << std::endl;
     if(inputData.MoveUp) {
         startButton->Click();
+    } else if(inputData.MoveDown) {
+        exitButton->Click();
     } else if(inputData.Quit) {
         nextScreen = nullptr;
     }

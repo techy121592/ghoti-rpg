@@ -25,6 +25,8 @@
 #include "components/drawable-components/button.h"
 
 class MainMenuScreen : public Screen {
+    Button* startButton;
+    Button* exitButton;
 public:
     MainMenuScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;

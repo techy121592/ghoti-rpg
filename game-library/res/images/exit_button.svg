@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="start_button.svg">
+   sodipodi:docname="exit_button.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -56,8 +56,8 @@
        id="rect3680"
        width="198.03607"
        height="73.036072"
-       x="-268.04315"
-       y="-583.23358"
+       x="-281.4404"
+       y="-584.05353"
        style="fill:none;stroke:#ff0000;stroke-width:1.96392655;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        xml:space="preserve"
@@ -69,6 +69,6 @@
          id="tspan4487"
          x="-233.27393"
          y="-527.90637"
-         style="fill:#ff0000;stroke-width:1.29178822">Start</tspan></text>
+         style="fill:#ff0000;stroke-width:1.29178822">Exit</tspan></text>
   </g>
 </svg>
