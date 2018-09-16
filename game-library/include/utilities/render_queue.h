@@ -26,7 +26,6 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "utilities/resource/resource_loader.h"
 
 class RenderQueue {
     enum RendererAction {
