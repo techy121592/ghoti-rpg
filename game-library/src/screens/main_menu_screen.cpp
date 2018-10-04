@@ -32,7 +32,6 @@ MainMenuScreen::MainMenuScreen() {
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
-    std::cout << "MainMenuScreen" << std::endl;
     if(inputData.MoveUp) {
         startButton->Click();
     } else if(inputData.MoveDown) {
