@@ -29,6 +29,7 @@
 
 class GameScreen : public Screen {
     TileMap* tileMap;
+    Character* character;
 public:
     GameScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;

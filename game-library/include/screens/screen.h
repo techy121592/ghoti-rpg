@@ -54,6 +54,7 @@ public:
             for(auto clickableComponent : clickableComponents) {
                 if(clickableComponent->WithinButton(inputData.LeftClick.X, inputData.LeftClick.Y)) {
                     clickableComponent->Click();
+                    break;
                 }
             }
         }
