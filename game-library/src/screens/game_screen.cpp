@@ -28,9 +28,7 @@ GameScreen::GameScreen() {
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
+    Screen::Update(deltaTime, inputData);
 
     for(auto component : components) {
         auto character = dynamic_cast<Character*>(component);

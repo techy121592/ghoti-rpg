@@ -27,6 +27,7 @@ class Button : public DrawableComponent {
 public:
     Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, std::function<void()> onClick);
     void Click();
+    bool WithinButton(int32_t x, int32_t y);
 };
 
 #endif

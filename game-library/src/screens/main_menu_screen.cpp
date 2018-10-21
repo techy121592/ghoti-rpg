@@ -21,7 +21,7 @@
 MainMenuScreen::MainMenuScreen() {
     startButton = new Button(100,  100, 200, 75, 0, "start_button.png",
         [this]() {
-            this->nextScreen = new LoadScreen<GameScreen>();
+            nextScreen = new LoadScreen<GameScreen>();
         });
     exitButton = new Button(100, 200, 200, 75, 0, "exit_button.png",
         [this](){
@@ -32,11 +32,5 @@ MainMenuScreen::MainMenuScreen() {
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if(inputData.MoveUp) {
-        startButton->Click();
-    } else if(inputData.MoveDown) {
-        exitButton->Click();
-    } else if(inputData.Quit) {
-        nextScreen = nullptr;
-    }
+    Screen::Update(deltaTime, inputData);
 }

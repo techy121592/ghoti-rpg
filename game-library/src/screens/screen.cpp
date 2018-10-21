@@ -37,7 +37,7 @@ bool Screen::IsReady() {
 
 std::list<DrawableComponent*> Screen::CloneDrawables() {
     std::list<DrawableComponent*> tempListOfDrawableComponents = {};
-    for(Component* component : components) {
+    for(auto component : components) {
         auto drawableComponent = dynamic_cast<DrawableComponent*>(component);
         if(drawableComponent != nullptr) {
             tempListOfDrawableComponents.emplace_back(drawableComponent->Clone());

@@ -25,6 +25,7 @@
 #include "utilities/input/input_data.h"
 #include "components/primitive-components/component.h"
 #include "components/primitive-components/drawable_component.h"
+#include "components/drawable-components/button.h"
 
 /*
  * Notes:
@@ -46,7 +47,20 @@ public:
         components.clear();
     };
 
-    virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
+    virtual void Update(uint32_t deltaTime, InputData inputData) {
+        if(inputData.LeftClick.Clicked) {
+            for(auto component : components) {
+                auto button = dynamic_cast<Button*>(component);
+                if(button != nullptr && button->WithinButton(inputData.LeftClick.X, inputData.LeftClick.Y)) {
+                    button->Click();
+                }
+            }
+        }
+        if(inputData.Quit) {
+            nextScreen = nullptr;
+        }
+    };
+
     Screen* NextScreen();
     bool IsReady();
     std::list<DrawableComponent*> CloneDrawables();

@@ -19,9 +19,12 @@
 #ifndef INPUT_DATA_H
 #define INPUT_DATA_H
 
+#include "click_event.h"
+
 struct InputData {
 public:
     bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false;
+    ClickEvent LeftClick;
 };
 
 #endif

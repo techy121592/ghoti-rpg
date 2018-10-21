@@ -23,7 +23,5 @@ HelloScreen::HelloScreen() {
 }
 
 void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
+    Screen::Update(deltaTime, inputData);
 }

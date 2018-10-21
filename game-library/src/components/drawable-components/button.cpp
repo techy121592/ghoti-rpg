@@ -27,3 +27,8 @@ Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t
 void Button::Click() {
     onClick();
 }
+
+bool Button::WithinButton(int32_t x, int32_t y) {
+    return x >= locationRectangle.x && x <= locationRectangle.x + locationRectangle.w &&
+           y >= locationRectangle.y && y <= locationRectangle.y + locationRectangle.h;
+}

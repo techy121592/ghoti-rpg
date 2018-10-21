@@ -16,22 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/load_screen.h"
+#ifndef CLICK_EVENT_H
+#define CLICK_EVENT_H
 
-template <class T>
-LoadScreen<T>::LoadScreen() {
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+struct ClickEvent {
+public:
+    bool Clicked = false;
+    int32_t X = 0, Y = 0;
+};
 
-    ThreadPool::AddTask([this](){
-        nextScreen = new T();
-    }, false);
-}
-
-template<class T>
-void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
-    Screen::Update(deltaTime, inputData);
-}
-
-template class LoadScreen<HelloScreen>;
-template class LoadScreen<GameScreen>;
-template class LoadScreen<MainMenuScreen>;
+#endif
