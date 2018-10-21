@@ -27,8 +27,8 @@ MainMenuScreen::MainMenuScreen() {
         [this](){
             nextScreen = nullptr;
         });
-    components.emplace_back(startButton);
-    components.emplace_back(exitButton);
+    AddComponent(startButton);
+    AddComponent(exitButton);
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {

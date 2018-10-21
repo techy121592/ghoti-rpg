@@ -19,7 +19,7 @@
 #include "screens/hello_screen.h"
 
 HelloScreen::HelloScreen() {
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, "hello.bmp"));
+    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "hello.bmp"));
 }
 
 void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {

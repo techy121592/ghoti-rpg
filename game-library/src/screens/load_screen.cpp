@@ -20,7 +20,7 @@
 
 template <class T>
 LoadScreen<T>::LoadScreen() {
-    components.emplace_back(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
 
     ThreadPool::AddTask([this](){
         nextScreen = new T();

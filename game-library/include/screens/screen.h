@@ -36,6 +36,8 @@
 class Screen {
 protected:
     std::list<Component*> components = {};
+    std::list<Button*> clickableComponents = {};
+    std::list<DrawableComponent*> drawableComponents = {};
     Screen* nextScreen = nullptr;
 public:
     Screen();
@@ -49,10 +51,9 @@ public:
 
     virtual void Update(uint32_t deltaTime, InputData inputData) {
         if(inputData.LeftClick.Clicked) {
-            for(auto component : components) {
-                auto button = dynamic_cast<Button*>(component);
-                if(button != nullptr && button->WithinButton(inputData.LeftClick.X, inputData.LeftClick.Y)) {
-                    button->Click();
+            for(auto clickableComponent : clickableComponents) {
+                if(clickableComponent->WithinButton(inputData.LeftClick.X, inputData.LeftClick.Y)) {
+                    clickableComponent->Click();
                 }
             }
         }
@@ -64,6 +65,7 @@ public:
     Screen* NextScreen();
     bool IsReady();
     std::list<DrawableComponent*> CloneDrawables();
+    void AddComponent(Component* component);
 };
 
 #endif
