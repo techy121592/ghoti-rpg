@@ -39,8 +39,8 @@ void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
         // sqrt((d^2)/2) = x; new amount to move
         amountToMove = (uint32_t)round(sqrt(pow(amountToMove, 2) / 2));
     }
-    destinationRectangle.x += inputData.MoveLeft ? -amountToMove : 0 + inputData.MoveRight ? amountToMove : 0;
-    destinationRectangle.y += inputData.MoveUp ? -amountToMove : 0 + inputData.MoveDown ? amountToMove : 0;
+    destinationRectangle.x += (inputData.MoveLeft ? -amountToMove : 0) + (inputData.MoveRight ? amountToMove : 0);
+    destinationRectangle.y += (inputData.MoveUp ? -amountToMove : 0) + (inputData.MoveDown ? amountToMove : 0);
     locationRectangle = CalculateValidPosition(destinationRectangle, tileMap);
 }
 
