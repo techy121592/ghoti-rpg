@@ -25,6 +25,7 @@ struct InputData {
 public:
     bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false;
     ClickEvent LeftClick;
+    SDL_Point MouseLocation = {0, 0};
 };
 
 #endif

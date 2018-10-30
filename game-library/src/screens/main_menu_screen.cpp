@@ -19,11 +19,11 @@
 #include "screens/main_menu_screen.h"
 
 MainMenuScreen::MainMenuScreen() {
-    startButton = new Button(100,  100, 200, 75, 0, "start_button.png",
+    startButton = new Button(220,  150, 200, 75, 0, 1, "start_button.png",
         [this]() {
             nextScreen = new LoadScreen<GameScreen>();
         });
-    exitButton = new Button(100, 200, 200, 75, 0, "exit_button.png",
+    exitButton = new Button(220, 250, 200, 75, 0, 1, "exit_button.png",
         [this](){
             nextScreen = nullptr;
         });

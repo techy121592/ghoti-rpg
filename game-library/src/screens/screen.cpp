@@ -49,8 +49,8 @@ void Screen::AddComponent(Component* component) {
     if(drawableComponent != nullptr) {
         drawableComponents.emplace_back(drawableComponent);
     }
-    auto clickableComponent = dynamic_cast<Button*>(component);
-    if(clickableComponent != nullptr) {
-        clickableComponents.emplace_back(clickableComponent);
+    auto buttonComponent = dynamic_cast<Button*>(component);
+    if(buttonComponent != nullptr) {
+        buttonComponents.emplace_back(buttonComponent);
     }
 }

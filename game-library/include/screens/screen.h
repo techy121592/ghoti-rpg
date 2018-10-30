@@ -36,7 +36,7 @@
 class Screen {
 protected:
     std::list<Component*> components = {};
-    std::list<Button*> clickableComponents = {};
+    std::list<Button*> buttonComponents = {};
     std::list<DrawableComponent*> drawableComponents = {};
     Screen* nextScreen = nullptr;
 public:
@@ -50,12 +50,17 @@ public:
     };
 
     virtual void Update(uint32_t deltaTime, InputData inputData) {
-        if(inputData.LeftClick.Clicked) {
-            for(auto clickableComponent : clickableComponents) {
-                if(clickableComponent->WithinButton(inputData.LeftClick.X, inputData.LeftClick.Y)) {
-                    clickableComponent->Click();
+        for(auto button : buttonComponents) {
+            if(inputData.LeftClick.Clicked) {
+                if(button->WithinButton(inputData.LeftClick.Location)) {
+                    button->Click();
                     break;
                 }
+            }
+            if(button->WithinButton(inputData.MouseLocation)) {
+                button->Select();
+            } else {
+                button->Unselect();
             }
         }
         if(inputData.Quit) {

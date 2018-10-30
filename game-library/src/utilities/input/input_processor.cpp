@@ -44,8 +44,8 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
 }
 
 InputData InputProcessor::ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed) {
-    inputData.LeftClick.X = x;
-    inputData.LeftClick.Y = y;
+    inputData.LeftClick.Location.x = x;
+    inputData.LeftClick.Location.y = y;
     inputData.LeftClick.Clicked = pressed;
     return inputData;
 }
@@ -77,6 +77,10 @@ void InputProcessor::GetInputFromDevice() {
                 if(event.button.button == SDL_BUTTON_LEFT) {
                     inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, false);
                 }
+                break;
+            case SDL_MOUSEMOTION:
+                inputData.MouseLocation.x = event.motion.x;
+                inputData.MouseLocation.y = event.motion.y;
                 break;
             default:
                 break;

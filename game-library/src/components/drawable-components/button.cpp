@@ -18,17 +18,33 @@
 
 #include "components/drawable-components/button.h"
 
-Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, const std::string path,
+Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t defaultFrame, uint32_t selectedFrame, const std::string path,
                const std::function<void()> onClick)
-        : DrawableComponent(x, y, width, height, frame, path) {
+        : DrawableComponent(x, y, width, height, defaultFrame, path) {
     this->onClick = onClick;
+    this->defaultFrame = defaultFrame;
+    this->selectedFrame = selectedFrame;
 }
 
 void Button::Click() {
     onClick();
 }
 
-bool Button::WithinButton(int32_t x, int32_t y) {
-    return x >= locationRectangle.x && x <= locationRectangle.x + locationRectangle.w &&
-           y >= locationRectangle.y && y <= locationRectangle.y + locationRectangle.h;
+void Button::Select() {
+    if(!selected) {
+        selected = true;
+        SetFrame(selectedFrame);
+    }
+}
+
+void Button::Unselect() {
+    if(selected) {
+        selected = false;
+        SetFrame(defaultFrame);
+    }
+}
+
+bool Button::WithinButton(SDL_Point point) {
+    return point.x >= locationRectangle.x && point.x <= locationRectangle.x + locationRectangle.w &&
+            point.y >= locationRectangle.y && point.y <= locationRectangle.y + locationRectangle.h;
 }

@@ -23,11 +23,16 @@
 #include "components/primitive-components/drawable_component.h"
 
 class Button : public DrawableComponent {
+    bool selected;
+    uint32_t defaultFrame, selectedFrame;
+
     std::function<void()> onClick;
 public:
-    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, std::function<void()> onClick);
+    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t defaultFrame, uint32_t selectedFrame, std::string path, std::function<void()> onClick);
     void Click();
-    bool WithinButton(int32_t x, int32_t y);
+    void Select();
+    void Unselect();
+    bool WithinButton(SDL_Point point);
 };
 
 #endif

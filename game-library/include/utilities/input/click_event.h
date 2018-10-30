@@ -19,10 +19,12 @@
 #ifndef CLICK_EVENT_H
 #define CLICK_EVENT_H
 
+#import <SDL.h>
+
 struct ClickEvent {
 public:
     bool Clicked = false;
-    int32_t X = 0, Y = 0;
+    SDL_Point Location = {0, 0};
 };
 
 #endif

@@ -27,9 +27,12 @@
 class DrawableComponent : public Component {
 private:
     SDL_Rect sourceRectangle;
+    int32_t textureWidth, textureHeight, padding;
+    SDL_Rect CalculateFrameLocation(uint32_t frame);
 protected:
     SDL_Texture* texture;
     SDL_Rect locationRectangle;
+    void SetFrame(uint32_t frame);
 public:
     DrawableComponent(int32_t width, int32_t height);
     DrawableComponent(SDL_Rect locationRectangle, SDL_Rect sourceRectangle, SDL_Texture* texture);
