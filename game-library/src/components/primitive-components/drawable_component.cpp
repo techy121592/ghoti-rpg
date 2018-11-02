@@ -27,7 +27,7 @@ DrawableComponent::DrawableComponent(int32_t width, int32_t height) {
     texture = nullptr;
     auto renderQueue = new RenderQueue();
     renderQueue->AddCreateTexture(size, [this](void* data){
-        texture =  (SDL_Texture*)data;
+        texture =  static_cast<SDL_Texture*>(data);
         ready = true;
     });
     delete renderQueue;
@@ -49,7 +49,7 @@ DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_
     auto surface = ResourceLoader::LoadImage(path);
     auto renderQueue = new RenderQueue();
     renderQueue->AddConvertSurfaceToTexture(surface, [this, x, y, width, height, frame, path](void* data){
-        texture = (SDL_Texture*)data;
+        texture = static_cast<SDL_Texture*>(data);
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
         sourceRectangle.w = width;
         sourceRectangle.h = height;
@@ -110,8 +110,8 @@ void DrawableComponent::SetFrame(uint32_t frame) {
 SDL_Rect DrawableComponent::CalculateFrameLocation(uint32_t frame) {
     int32_t framesWide = (textureWidth + padding) / (sourceRectangle.w + padding);
     return {
-        ((int32_t)frame%framesWide) * (sourceRectangle.w + padding),
-        ((int32_t)frame/framesWide) * (sourceRectangle.h + padding),
+        (static_cast<int32_t>(frame%framesWide)) * (sourceRectangle.w + padding),
+        (static_cast<int32_t>(frame/framesWide)) * (sourceRectangle.h + padding),
         sourceRectangle.w,
         sourceRectangle.h
     };

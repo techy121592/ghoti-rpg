@@ -65,12 +65,12 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
         std::list<Tile*> tiles;
 
         auto rootElement = mapFile.FirstChildElement("map");
-        auto playerZ = (uint32_t)std::stoi(rootElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value"));
+        auto playerZ = static_cast<uint32_t>(std::stoi(rootElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value")));
         auto tileSetElement = rootElement->FirstChildElement("tileset");
         auto imageElement = tileSetElement->FirstChildElement("image");
         auto imageFileName = imageElement->Attribute("source");
-        auto tileWidth = (uint32_t)std::stoi(tileSetElement->Attribute("tilewidth"));
-        auto tileHeight = (uint32_t)std::stoi(tileSetElement->Attribute("tileheight"));
+        auto tileWidth = static_cast<uint32_t>(std::stoi(tileSetElement->Attribute("tilewidth")));
+        auto tileHeight = static_cast<uint32_t>(std::stoi(tileSetElement->Attribute("tileheight")));
 
         auto tileSet = new TileSet(tileWidth, tileHeight, 1, imageFileName);
         while(!tileSet->IsReady()) {
@@ -81,11 +81,11 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
         uint32_t maxCols = 0;
 
         for(auto layerElement = rootElement->FirstChildElement("layer"); layerElement != nullptr; layerElement = layerElement->NextSiblingElement("layer")) {
-            auto layerZ = (uint32_t)std::stoi(layerElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value"));
+            auto layerZ = static_cast<uint32_t>(std::stoi(layerElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value")));
             std::string layerWidthString = layerElement->Attribute("width");
             std::string layerHeightString = layerElement->Attribute("height");
-            auto layerWidth = (uint32_t)std::stoi(layerWidthString);
-            auto layerHeight = (uint32_t)std::stoi(layerHeightString);
+            auto layerWidth = static_cast<uint32_t>(std::stoi(layerWidthString));
+            auto layerHeight = static_cast<uint32_t>(std::stoi(layerHeightString));
 
             maxRows = maxRows >= layerHeight ? maxRows : layerHeight;
             maxCols = maxCols >= layerWidth ? maxCols : layerWidth;
@@ -100,7 +100,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
                 }
                 auto tileId = std::stoi(tileElement->Attribute("gid")) - 1;
                 if(tileId > -1) {
-                    tiles.emplace_back(tileSet->CreateTile(col, row, layerZ, (uint32_t)tileId));
+                    tiles.emplace_back(tileSet->CreateTile(col, row, layerZ, static_cast<uint32_t>(tileId)));
                 }
                 col++;
             }

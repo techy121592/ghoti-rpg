@@ -75,14 +75,14 @@ void RenderQueue::AddSetRenderTarget(SDL_Texture* texture, std::function<void()>
 
 void RenderQueue::AddQueryTexture(SDL_Texture* texture, std::function<void(uint32_t, int, int, int)> callback) {
     queue.emplace_back(RendererAction::QueryTexture, texture, [callback](void* data) {
-        auto textureInfo = (TextureInfo*)data;
+        auto textureInfo = static_cast<TextureInfo*>(data);
         callback(textureInfo->format, textureInfo->access, textureInfo->width, textureInfo->height);
     });
 }
 
 void RenderQueue::WatchLoop() {
     while(running) {
-        if(queue.size() > 0) {
+        if(!queue.empty()) {
             queueLock.lock();
             auto currentEntry = queue.front();
             queue.pop_front();
@@ -99,20 +99,20 @@ void RenderQueue::ProcessEntry(RenderQueue::RenderQueueEntry entry) {
     void* output = nullptr;
     switch(entry.action) {
         case RendererAction::SetUpRenderer:
-            CreateRenderer((SDL_Window*)entry.data);
+            CreateRenderer(static_cast<SDL_Window*>(entry.data));
             break;
         case RendererAction::ConvertSurfaceToTexture:
-            output = SDL_CreateTextureFromSurface(renderer, (SDL_Surface*)entry.data);
+            output = SDL_CreateTextureFromSurface(renderer, static_cast<SDL_Surface*>(entry.data));
             break;
         case RendererAction::CreateTexture:
         {
-            auto size = (SDL_Point*)entry.data;
+            auto size = static_cast<SDL_Point*>(entry.data);
             output = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, size->x, size->y);
             break;
         }
         case RendererAction::Draw:
         {
-            auto drawInfo = (DrawInfo*)entry.data;;
+            auto drawInfo = static_cast<DrawInfo*>(entry.data);
             SDL_RenderCopy(renderer, drawInfo->texture, &drawInfo->sourceRect, &drawInfo->destRect);
             break;
         }
@@ -128,7 +128,7 @@ void RenderQueue::ProcessEntry(RenderQueue::RenderQueueEntry entry) {
         case RendererAction::QueryTexture:
         {
             auto textureInfo = new TextureInfo();
-            SDL_QueryTexture((SDL_Texture*)entry.data, &textureInfo->format, &textureInfo->access, &textureInfo->width, &textureInfo->height);
+            SDL_QueryTexture(static_cast<SDL_Texture*>(entry.data), &textureInfo->format, &textureInfo->access, &textureInfo->width, &textureInfo->height);
             output = textureInfo;
             break;
         }
@@ -159,5 +159,5 @@ void RenderQueue::CreateRenderer(SDL_Window *win) {
 }
 
 bool RenderQueue::IsEmpty() {
-    return queue.size() == 0;
+    return queue.empty();
 }

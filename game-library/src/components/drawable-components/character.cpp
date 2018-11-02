@@ -28,7 +28,7 @@ void Character::SetInput(InputData inputData) {
 }
 
 void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
-    auto amountToMove = (uint32_t)round(speed * deltaTime);
+    auto amountToMove = static_cast<uint32_t>(round(speed * deltaTime));
     SDL_Rect destinationRectangle = locationRectangle;
     if((inputData.MoveUp || inputData.MoveDown) && (inputData.MoveLeft || inputData.MoveRight)) {
         // d = sqrt(x^2+y^2)
@@ -37,7 +37,7 @@ void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
         // d^2 = 2(x^2)
         // (d^2)/2 = x^2
         // sqrt((d^2)/2) = x; new amount to move
-        amountToMove = (uint32_t)round(sqrt(pow(amountToMove, 2) / 2));
+        amountToMove = static_cast<uint32_t>(round(sqrt(pow(amountToMove, 2) / 2)));
     }
     destinationRectangle.x += (inputData.MoveLeft ? -amountToMove : 0) + (inputData.MoveRight ? amountToMove : 0);
     destinationRectangle.y += (inputData.MoveUp ? -amountToMove : 0) + (inputData.MoveDown ? amountToMove : 0);

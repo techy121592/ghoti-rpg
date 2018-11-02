@@ -28,7 +28,7 @@ TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, std:
     auto surface = ResourceLoader::LoadImage(path);
     auto renderQueue = new RenderQueue();
     renderQueue->AddConvertSurfaceToTexture(surface, [this](void* data) {
-        texture = (SDL_Texture*)data;
+        texture = static_cast<SDL_Texture*>(data);
         ready = true;
     });
     delete renderQueue;

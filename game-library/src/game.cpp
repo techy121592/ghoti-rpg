@@ -71,7 +71,7 @@ void Game::CloseSDL(SDL_Window*& win, Screen*& screen) {
 }
 
 void Game::PauseForRestOfFrame(const uint32_t targetFrameLength, const uint32_t deltaTime) {
-    if(targetFrameLength > deltaTime) SDL_Delay((uint32_t)(targetFrameLength - deltaTime));
+    if(targetFrameLength > deltaTime) SDL_Delay(static_cast<uint32_t>(targetFrameLength - deltaTime));
 }
 
 void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData) {
@@ -129,7 +129,7 @@ bool Game::Step(const uint32_t deltaTime) {
 }
 
 bool Game::GameLoop() {
-    auto targetFrameLength = (uint32_t)(1000 / fps);
+    auto targetFrameLength = static_cast<uint32_t>(1000 / fps);
     uint32_t previousTime, currentTime, deltaTime;
     currentTime = SDL_GetTicks();
     InputProcessor::GetInputFromDevice();
