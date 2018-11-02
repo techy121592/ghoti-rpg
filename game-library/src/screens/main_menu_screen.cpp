@@ -27,10 +27,20 @@ MainMenuScreen::MainMenuScreen() {
         [this](){
             nextScreen = nullptr;
         });
+    startButton->SetButtonRelationship(exitButton, ButtonRelationship::Below);
     AddComponent(startButton);
     AddComponent(exitButton);
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
+    if(!defaultButtonSelected) {
+        startButton->Select();
+        defaultButtonSelected = true;
+    }
     Screen::Update(deltaTime, inputData);
+    for(auto button : buttonComponents) {
+        if(button->IsSelected()) {
+            button->ProcessInput(inputData);
+        }
+    }
 }

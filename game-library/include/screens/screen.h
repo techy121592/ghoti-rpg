@@ -59,8 +59,11 @@ public:
             }
             if(button->WithinButton(inputData.MouseLocation)) {
                 button->Select();
-            } else {
-                button->Unselect();
+                for(auto otherButton: buttonComponents) {
+                    if(button != otherButton) {
+                        otherButton->Unselect();
+                    }
+                }
             }
         }
         if(inputData.Quit) {

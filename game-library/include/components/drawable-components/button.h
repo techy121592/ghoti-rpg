@@ -21,11 +21,19 @@
 
 #include <functional>
 #include "components/primitive-components/drawable_component.h"
+#include "utilities/input/input_data.h"
+
+enum ButtonRelationship {
+    Above = -1,
+    Below = 1,
+    Left = -2,
+    Right = 2
+};
 
 class Button : public DrawableComponent {
     bool selected;
     uint32_t defaultFrame, selectedFrame;
-
+    Button *buttonAbove, *buttonBelow, *buttonLeft, *buttonRight;
     std::function<void()> onClick;
 public:
     Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t defaultFrame, uint32_t selectedFrame, std::string path, std::function<void()> onClick);
@@ -33,6 +41,9 @@ public:
     void Select();
     void Unselect();
     bool WithinButton(SDL_Point point);
+    void SetButtonRelationship(Button* button, ButtonRelationship relationship, bool propagate = true);
+    bool IsSelected();
+    void ProcessInput(InputData inputData);
 };
 
 #endif

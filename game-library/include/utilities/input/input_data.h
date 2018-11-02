@@ -23,7 +23,7 @@
 
 struct InputData {
 public:
-    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false;
+    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false, Action1 = false;
     ClickEvent LeftClick;
     SDL_Point MouseLocation = {0, 0};
 };

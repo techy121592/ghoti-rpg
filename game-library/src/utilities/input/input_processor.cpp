@@ -37,6 +37,9 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
         case SDLK_RIGHT: case SDLK_d:
             inputData.MoveRight = keyDown;
             break;
+        case SDLK_RETURN:
+            inputData.Action1 = keyDown;
+            break;
         default:
             break;
     }
