@@ -19,9 +19,13 @@
 #ifndef INPUT_DATA_H
 #define INPUT_DATA_H
 
+#include "click_event.h"
+
 struct InputData {
 public:
-    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false;
+    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false, Action1 = false;
+    ClickEvent LeftClick;
+    SDL_Point MouseLocation = {0, 0};
 };
 
 #endif

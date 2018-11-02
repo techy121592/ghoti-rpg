@@ -20,23 +20,16 @@
 
 GameScreen::GameScreen() {
     tileMap = ResourceLoader::LoadMap("test.tmx");
+    character = new Character(23, 23, 14, 14, 0, "character_placeholder.png", 0.075);
 
-    components.emplace_back(tileMap);
-    components.emplace_back(tileMap->GetBottomLayer());
-    components.emplace_back(new Character(23, 23, 14, 14, 0, "character_placeholder.png", 0.075));
-    components.emplace_back(tileMap->GetTopLayer());
+    AddComponent(tileMap);
+    AddComponent(tileMap->GetBottomLayer());
+    AddComponent(character);
+    AddComponent(tileMap->GetTopLayer());
 }
 
 void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
-    if (inputData.Quit) {
-        nextScreen = nullptr;
-    }
-
-    for(auto component : components) {
-        auto character = dynamic_cast<Character*>(component);
-        if(character != nullptr) {
-            character->SetInput(inputData);
-            character->Update(deltaTime, tileMap);
-        }
-    }
+    Screen::Update(deltaTime, inputData);
+    character->SetInput(inputData);
+    character->Update(deltaTime, tileMap);
 }

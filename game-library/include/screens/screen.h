@@ -25,6 +25,7 @@
 #include "utilities/input/input_data.h"
 #include "components/primitive-components/component.h"
 #include "components/primitive-components/drawable_component.h"
+#include "components/drawable-components/button.h"
 
 /*
  * Notes:
@@ -35,6 +36,8 @@
 class Screen {
 protected:
     std::list<Component*> components = {};
+    std::list<Button*> buttonComponents = {};
+    std::list<DrawableComponent*> drawableComponents = {};
     Screen* nextScreen = nullptr;
 public:
     Screen();
@@ -46,10 +49,32 @@ public:
         components.clear();
     };
 
-    virtual void Update(uint32_t deltaTime, InputData inputData) = 0;
+    virtual void Update(uint32_t deltaTime, InputData inputData) {
+        for(auto button : buttonComponents) {
+            if(inputData.LeftClick.Clicked) {
+                if(button->WithinButton(inputData.LeftClick.Location)) {
+                    button->Click();
+                    break;
+                }
+            }
+            if(button->WithinButton(inputData.MouseLocation)) {
+                button->Select();
+                for(auto otherButton: buttonComponents) {
+                    if(button != otherButton) {
+                        otherButton->Unselect();
+                    }
+                }
+            }
+        }
+        if(inputData.Quit) {
+            nextScreen = nullptr;
+        }
+    };
+
     Screen* NextScreen();
     bool IsReady();
     std::list<DrawableComponent*> CloneDrawables();
+    void AddComponent(Component* component);
 };
 
 #endif

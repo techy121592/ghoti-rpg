@@ -20,7 +20,7 @@
 #include <game.h>
 
 int main(int, char**) {
-    ThreadPool::Init(4, 1);
+    ThreadPool::Init(std::thread::hardware_concurrency(), std::thread::hardware_concurrency()/2);
     auto game = new Game(640, 480, 60);
 
     int returnValue = game->Run();

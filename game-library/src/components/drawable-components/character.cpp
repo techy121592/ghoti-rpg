@@ -18,7 +18,7 @@
 
 #include "components/drawable-components/character.h"
 
-Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path, float speed)
+Character::Character(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, const std::string path, float speed)
         : DrawableComponent(x, y, width, height, frame, path) {
     this->speed = speed;
 }
@@ -28,20 +28,19 @@ void Character::SetInput(InputData inputData) {
 }
 
 void Character::Update(uint32_t deltaTime, TileMap* tileMap) {
-    auto amountToMove = (uint32_t)(speed * deltaTime);
+    auto amountToMove = static_cast<uint32_t>(round(speed * deltaTime));
     SDL_Rect destinationRectangle = locationRectangle;
-    if(inputData.MoveUp) {
-        destinationRectangle.y -= amountToMove;
+    if((inputData.MoveUp || inputData.MoveDown) && (inputData.MoveLeft || inputData.MoveRight)) {
+        // d = sqrt(x^2+y^2)
+        // since x and y will be the same amount I can substitute x for y and then combine to get
+        // d = sqrt(2x^2)
+        // d^2 = 2(x^2)
+        // (d^2)/2 = x^2
+        // sqrt((d^2)/2) = x; new amount to move
+        amountToMove = static_cast<uint32_t>(round(sqrt(pow(amountToMove, 2) / 2)));
     }
-    if(inputData.MoveDown) {
-        destinationRectangle.y += amountToMove;
-    }
-    if(inputData.MoveLeft) {
-        destinationRectangle.x -= amountToMove;
-    }
-    if(inputData.MoveRight) {
-        destinationRectangle.x += amountToMove;
-    }
+    destinationRectangle.x += (inputData.MoveLeft ? -amountToMove : 0) + (inputData.MoveRight ? amountToMove : 0);
+    destinationRectangle.y += (inputData.MoveUp ? -amountToMove : 0) + (inputData.MoveDown ? amountToMove : 0);
     locationRectangle = CalculateValidPosition(destinationRectangle, tileMap);
 }
 

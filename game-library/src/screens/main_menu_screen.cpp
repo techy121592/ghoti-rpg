@@ -18,31 +18,29 @@
 
 #include "screens/main_menu_screen.h"
 
-Button* startButton = nullptr;
-
 MainMenuScreen::MainMenuScreen() {
-    //startButton = new Button(100,  100, 200, 75, 0, ResourceLoader::LoadImage("start_button.png"),
-    //    [this]() {
-    //        std::cout << "Start button clicked" << std::endl;
-    std::cout << "MainMenuScreen->LoadScreen" << std::endl;
-            this->nextScreen = new LoadScreen<GameScreen>();
-    //        std::cout << "Start button click end" << std::endl;
-    //    });
-    //components.emplace_back(startButton);
-    //components.emplace_back(new Button(100, 200, 200, 75, 0, ResourceLoader::LoadImage("start_button.png"),
-    //    [this](){
-    //        std::cout << "Exit button clicked" << std::endl;
-    //        nextScreen = nullptr;
-    //        std::cout << "Exit button click end" << std::endl;
-    //    }));
-    //std::cout << "Button creation end" << std::endl;
+    startButton = new Button(220,  150, 200, 75, 0, 1, "start_button.png",
+        [this]() {
+            nextScreen = new LoadScreen<GameScreen>();
+        });
+    exitButton = new Button(220, 250, 200, 75, 0, 1, "exit_button.png",
+        [this](){
+            nextScreen = nullptr;
+        });
+    startButton->SetButtonRelationship(exitButton, ButtonRelationship::Below);
+    AddComponent(startButton);
+    AddComponent(exitButton);
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
-    std::cout << "MainMenuScreen" << std::endl;
-    if(inputData.MoveUp) {
-        startButton->Click();
-    } else if(inputData.Quit) {
-        nextScreen = nullptr;
+    if(!defaultButtonSelected) {
+        startButton->Select();
+        defaultButtonSelected = true;
+    }
+    Screen::Update(deltaTime, inputData);
+    for(auto button : buttonComponents) {
+        if(button->IsSelected()) {
+            button->ProcessInput(inputData);
+        }
     }
 }

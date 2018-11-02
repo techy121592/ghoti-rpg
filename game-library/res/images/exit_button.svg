@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="start_button.svg">
+   sodipodi:docname="exit_button.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="267.52531"
+     inkscape:cx="1141.248"
      inkscape:cy="102.85719"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -55,13 +55,13 @@
      transform="translate(0,-222)">
     <g
        id="g4488"
-       transform="translate(269.02512,806.21554)"
+       transform="translate(282.42236,807.03549)"
        inkscape:export-xdpi="25.4"
        inkscape:export-ydpi="25.4">
       <rect
          style="fill:none;stroke:#ff0000;stroke-width:1.96392655;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         y="-583.23358"
-         x="-268.04315"
+         y="-584.05353"
+         x="-281.4404"
          height="73.036072"
          width="198.03607"
          id="rect3680" />
@@ -75,10 +75,10 @@
            y="-527.90637"
            x="-233.27393"
            id="tspan4487"
-           sodipodi:role="line">Start</tspan></text>
+           sodipodi:role="line">Exit</tspan></text>
     </g>
     <g
-       transform="translate(469.02512,806.21554)"
+       transform="translate(482.42236,807.03549)"
        id="g4496"
        inkscape:export-xdpi="25.4"
        inkscape:export-ydpi="25.4">
@@ -86,8 +86,8 @@
          id="rect4490"
          width="198.03607"
          height="73.036072"
-         x="-268.04315"
-         y="-583.23358"
+         x="-281.4404"
+         y="-584.05353"
          style="fill:none;stroke:#ffff00;stroke-width:1.96392655;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <text
          xml:space="preserve"
@@ -99,7 +99,7 @@
            id="tspan4492"
            x="-233.27393"
            y="-527.90637"
-           style="fill:#ffff00;stroke-width:1.29178822;">Start</tspan></text>
+           style="fill:#ffff00;stroke-width:1.29178822;">Exit</tspan></text>
     </g>
   </g>
 </svg>

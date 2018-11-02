@@ -18,13 +18,81 @@
 
 #include "components/drawable-components/button.h"
 
-Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t frame, std::string path,
-               std::function<void()> onClick)
-        : DrawableComponent(x, y, width, height, frame, path) {
-    std::cout << "Initiating button" << std::endl;
+Button::Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t defaultFrame, uint32_t selectedFrame, const std::string path,
+               const std::function<void()> onClick)
+        : DrawableComponent(x, y, width, height, defaultFrame, path) {
+    this->defaultFrame = defaultFrame;
+    this->selectedFrame = selectedFrame;
     this->onClick = onClick;
 }
 
 void Button::Click() {
     onClick();
+}
+
+void Button::Select() {
+    if(!selected) {
+        selected = true;
+        SetFrame(selectedFrame);
+    }
+}
+
+void Button::Unselect() {
+    if(selected) {
+        selected = false;
+        SetFrame(defaultFrame);
+    }
+}
+
+bool Button::WithinButton(SDL_Point point) {
+    return point.x >= locationRectangle.x && point.x <= locationRectangle.x + locationRectangle.w &&
+            point.y >= locationRectangle.y && point.y <= locationRectangle.y + locationRectangle.h;
+}
+
+void Button::SetButtonRelationship(Button* button, ButtonRelationship relationship, bool propagate) {
+    switch(relationship) {
+        case ButtonRelationship::Below:
+            buttonBelow = button;
+            break;
+        case ButtonRelationship::Above:
+            buttonAbove = button;
+            break;
+        case ButtonRelationship::Left:
+            buttonLeft = button;
+            break;
+        case ButtonRelationship::Right:
+            buttonRight = button;
+            break;
+    }
+    if(propagate) {
+        button->SetButtonRelationship(this, static_cast<ButtonRelationship>(relationship * -1), false);
+    }
+}
+
+bool Button::IsSelected() {
+    return selected;
+}
+
+void Button::ProcessInput(InputData inputData) {
+    if(inputData.Action1 || inputData.MoveDown || inputData.MoveUp || inputData.MoveLeft || inputData.MoveRight) {
+        Button* newSelectedButton = nullptr;
+
+        if(inputData.Action1) {
+            std::cout << "Clicking" << std::endl;
+            Click();
+        } else if(inputData.MoveUp && buttonAbove != nullptr) {
+            newSelectedButton = buttonAbove;
+        } else if(inputData.MoveDown && buttonBelow != nullptr) {
+            newSelectedButton = buttonBelow;
+        } else if(inputData.MoveLeft && buttonLeft != nullptr) {
+            newSelectedButton = buttonLeft;
+        } else if(inputData.MoveRight && buttonRight != nullptr) {
+            newSelectedButton = buttonRight;
+        }
+
+        if(newSelectedButton != nullptr) {
+            this->Unselect();
+            newSelectedButton->Select();
+        }
+    }
 }

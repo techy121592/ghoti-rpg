@@ -16,23 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
+#ifndef CLICK_EVENT_H
+#define CLICK_EVENT_H
 
-#include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "screen.h"
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_set.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "components/drawable-components/character.h"
+#import <SDL.h>
 
-class GameScreen : public Screen {
-    TileMap* tileMap;
-    Character* character;
+struct ClickEvent {
 public:
-    GameScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
+    bool Clicked = false;
+    SDL_Point Location = {0, 0};
 };
 
 #endif

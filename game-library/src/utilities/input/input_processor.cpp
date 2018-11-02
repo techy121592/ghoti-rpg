@@ -37,9 +37,19 @@ InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData i
         case SDLK_RIGHT: case SDLK_d:
             inputData.MoveRight = keyDown;
             break;
+        case SDLK_RETURN:
+            inputData.Action1 = keyDown;
+            break;
         default:
             break;
     }
+    return inputData;
+}
+
+InputData InputProcessor::ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed) {
+    inputData.LeftClick.Location.x = x;
+    inputData.LeftClick.Location.y = y;
+    inputData.LeftClick.Clicked = pressed;
     return inputData;
 }
 
@@ -60,6 +70,20 @@ void InputProcessor::GetInputFromDevice() {
                 break;
             case SDL_KEYUP:
                 inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, false);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if(event.button.button == SDL_BUTTON_LEFT) {
+                    inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, true);
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if(event.button.button == SDL_BUTTON_LEFT) {
+                    inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, false);
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                inputData.MouseLocation.x = event.motion.x;
+                inputData.MouseLocation.y = event.motion.y;
                 break;
             default:
                 break;

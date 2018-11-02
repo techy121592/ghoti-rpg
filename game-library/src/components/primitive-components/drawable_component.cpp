@@ -27,7 +27,7 @@ DrawableComponent::DrawableComponent(int32_t width, int32_t height) {
     texture = nullptr;
     auto renderQueue = new RenderQueue();
     renderQueue->AddCreateTexture(size, [this](void* data){
-        texture =  (SDL_Texture*)data;
+        texture =  static_cast<SDL_Texture*>(data);
         ready = true;
     });
     delete renderQueue;
@@ -40,21 +40,24 @@ DrawableComponent::DrawableComponent(int32_t width, int32_t height) {
     sourceRectangle = rect;
 }
 
-DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, std::string path)
+DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, const std::string path)
         : DrawableComponent(x, y, width, height, 0, frame, path) {
 }
 
 DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, std::string path) {
+    this->padding = padding;
     auto surface = ResourceLoader::LoadImage(path);
     auto renderQueue = new RenderQueue();
-    renderQueue->AddConvertSurfaceToTexture(surface, [this, x, y, width, height, padding, frame, path](void* data){
-        texture = (SDL_Texture*)data;
+    renderQueue->AddConvertSurfaceToTexture(surface, [this, x, y, width, height, frame, path](void* data){
+        texture = static_cast<SDL_Texture*>(data);
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+        sourceRectangle.w = width;
+        sourceRectangle.h = height;
         auto renderQueue = new RenderQueue();
-        renderQueue->AddQueryTexture(texture, [this, x, y, width, height, padding, frame](uint32_t format, int access, int textureWidth, int textureHeight) {
-            int32_t framesWide = (textureWidth + padding) / (width + padding);
-
-            sourceRectangle = {(frame%framesWide) * (width + padding), (frame/framesWide) * (height + padding), width, height};
+        renderQueue->AddQueryTexture(texture, [this, x, y, width, height, frame](uint32_t format, int32_t access, int32_t textureWidth, int32_t textureHeight) {
+            this->textureWidth = textureWidth;
+            this->textureHeight = textureHeight;
+            sourceRectangle = CalculateFrameLocation(frame);
             locationRectangle = {x, y, width, height};
             ready = true;
         });
@@ -67,9 +70,13 @@ DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_
     this->texture = texture;
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     auto renderQueue = new RenderQueue();
-    renderQueue->AddQueryTexture(texture, [this, texture, x, y, width, height, padding, frame](uint32_t format, int access, int textureWidth, int textureHeight) {
-        int32_t framesWide = (textureWidth + padding) / (width + padding);
-        sourceRectangle = {(frame%framesWide) * (width + padding), (frame/framesWide) * (height + padding), width, height};
+    this->padding = padding;
+    sourceRectangle.w = width;
+    sourceRectangle.h = height;
+    renderQueue->AddQueryTexture(texture, [this, texture, x, y, width, height, frame](uint32_t format, int access, int textureWidth, int textureHeight) {
+        this->textureWidth = textureWidth;
+        this->textureHeight = textureHeight;
+        sourceRectangle = CalculateFrameLocation(frame);
         locationRectangle = {x, y, width, height};
         ready = true;
     });
@@ -94,4 +101,18 @@ void DrawableComponent::Draw(RenderQueue* renderQueue) {
 
 DrawableComponent* DrawableComponent::Clone() {
     return new DrawableComponent(locationRectangle, sourceRectangle, texture);
+}
+
+void DrawableComponent::SetFrame(uint32_t frame) {
+    sourceRectangle = CalculateFrameLocation(frame);
+}
+
+SDL_Rect DrawableComponent::CalculateFrameLocation(uint32_t frame) {
+    int32_t framesWide = (textureWidth + padding) / (sourceRectangle.w + padding);
+    return {
+        (static_cast<int32_t>(frame%framesWide)) * (sourceRectangle.w + padding),
+        (static_cast<int32_t>(frame/framesWide)) * (sourceRectangle.h + padding),
+        sourceRectangle.w,
+        sourceRectangle.h
+    };
 }

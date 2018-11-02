@@ -122,10 +122,5 @@ void ThreadPool::AddTask(std::function<void()> task, bool locksLoop) {
 }
 
 bool ThreadPool::LoopLocked() {
-    activeTasksCountLock.lock();
-    loopLockCountLock.lock();
-    bool tasksRunning = activeTasksCount > 0 || loopLockCount > 0;
-    activeTasksCountLock.unlock();
-    loopLockCountLock.unlock();
-    return tasksRunning;
+    return activeTasksCount > 0 || loopLockCount > 0;
 }
