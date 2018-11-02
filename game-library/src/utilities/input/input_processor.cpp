@@ -81,6 +81,12 @@ void InputProcessor::GetInputFromDevice() {
                     inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, false);
                 }
                 break;
+            case SDL_FINGERDOWN:
+                inputData = ProcessMouseLeftClick(event.tfinger.x, event.tfinger.y, inputData, true);
+                break;
+            case SDL_FINGERUP:
+                inputData = ProcessMouseLeftClick(event.tfinger.x, event.tfinger.y, inputData, true);
+                break;
             case SDL_MOUSEMOTION:
                 inputData.MouseLocation.x = event.motion.x;
                 inputData.MouseLocation.y = event.motion.y;
