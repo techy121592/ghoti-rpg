@@ -24,6 +24,7 @@
 #include <mutex>
 #include <thread>
 #include <iostream>
+#include <functional>
 #include <SDL.h>
 #include <SDL_image.h>
 
