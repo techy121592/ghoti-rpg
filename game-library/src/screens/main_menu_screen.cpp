@@ -41,6 +41,7 @@ void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
     for(auto button : buttonComponents) {
         if(button->IsSelected()) {
             button->ProcessInput(inputData);
+            break;
         }
     }
 }

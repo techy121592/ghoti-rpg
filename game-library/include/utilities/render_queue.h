@@ -19,7 +19,7 @@
 #ifndef RENDER_QUEUE_H
 #define RENDER_QUEUE_H
 
-#include <atomic>
+#include <functional>
 #include <list>
 #include <mutex>
 #include <thread>
