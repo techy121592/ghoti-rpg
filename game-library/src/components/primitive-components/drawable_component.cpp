@@ -57,7 +57,7 @@ DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_
         renderQueue->AddQueryTexture(texture, [this, x, y, width, height, frame](uint32_t format, int32_t access, int32_t textureWidth, int32_t textureHeight) {
             this->textureWidth = textureWidth;
             this->textureHeight = textureHeight;
-            sourceRectangle = CalculateFrameLocation(frame);
+            sourceRectangle = CalculateFrameLocation((uint32_t)frame);
             locationRectangle = {x, y, width, height};
             ready = true;
         });
@@ -73,10 +73,10 @@ DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_
     this->padding = padding;
     sourceRectangle.w = width;
     sourceRectangle.h = height;
-    renderQueue->AddQueryTexture(texture, [this, texture, x, y, width, height, frame](uint32_t format, int access, int textureWidth, int textureHeight) {
+    renderQueue->AddQueryTexture(texture, [this, x, y, width, height, frame](uint32_t format, int access, int textureWidth, int textureHeight) {
         this->textureWidth = textureWidth;
         this->textureHeight = textureHeight;
-        sourceRectangle = CalculateFrameLocation(frame);
+        sourceRectangle = CalculateFrameLocation((uint32_t)frame);
         locationRectangle = {x, y, width, height};
         ready = true;
     });
