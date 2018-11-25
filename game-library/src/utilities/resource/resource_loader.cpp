@@ -111,3 +111,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
         return nullptr;
     }
 }
+
+void ResourceLoader::LoadControllerMap() {
+    SDL_GameControllerAddMappingsFromFile((ResourceLoader::GetResourcePath("") + "gamecontrollerdb.txt").c_str());
+}

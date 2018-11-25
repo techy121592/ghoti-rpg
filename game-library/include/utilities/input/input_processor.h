@@ -20,6 +20,7 @@
 #define INPUT_PROCESSOR_H
 
 #include <iostream>
+#include <list>
 #include <SDL.h>
 #include "input_processor.h"
 #include "input_data.h"
@@ -30,6 +31,7 @@ private:
 
     static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
     static InputData ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed);
+    static InputData ProcessControllerButtonEvent(uint8_t button, InputData inputData, bool pressed);
 public:
     static InputData GetInputData();
     static void GetInputFromDevice();
