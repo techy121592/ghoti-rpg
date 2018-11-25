@@ -35,6 +35,7 @@ private:
 public:
     static SDL_Surface* LoadImage(const std::string &fileName);
     static TileMap* LoadMap(const std::string &fileName);
+    static void LoadControllerMap();
 };
 
 #endif

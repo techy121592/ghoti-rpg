@@ -53,6 +53,30 @@ InputData InputProcessor::ProcessMouseLeftClick(int32_t x, int32_t y, InputData 
     return inputData;
 }
 
+InputData InputProcessor::ProcessControllerButtonEvent(uint8_t button, InputData inputData, bool pressed) {
+    switch(button) {
+        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+            inputData.MoveUp = pressed;
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+            inputData.MoveDown = pressed;
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+            inputData.MoveLeft = pressed;
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+            inputData.MoveRight = pressed;
+            break;
+        case SDL_CONTROLLER_BUTTON_A:
+            inputData.Action1 = pressed;
+            break;
+        case SDL_CONTROLLER_BUTTON_BACK:
+            inputData.Quit = pressed;
+            break;
+    }
+    return inputData;
+}
+
 InputData InputProcessor::GetInputData() {
     return inputData;
 }
@@ -66,19 +90,13 @@ void InputProcessor::GetInputFromDevice() {
                 inputData.Quit = true;
                 break;
             case SDL_KEYDOWN:
-                inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, true);
-                break;
             case SDL_KEYUP:
-                inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, false);
+                inputData = ProcessKeyEvent(event.key.keysym.sym, inputData, event.key.state == SDL_PRESSED);
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if(event.button.button == SDL_BUTTON_LEFT) {
-                    inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, true);
-                }
-                break;
             case SDL_MOUSEBUTTONUP:
                 if(event.button.button == SDL_BUTTON_LEFT) {
-                    inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, false);
+                    inputData = ProcessMouseLeftClick(event.button.x, event.button.y, inputData, event.button.state == SDL_PRESSED);
                 }
                 break;
             case SDL_FINGERDOWN:
@@ -91,6 +109,18 @@ void InputProcessor::GetInputFromDevice() {
                 inputData.MouseLocation.x = event.motion.x;
                 inputData.MouseLocation.y = event.motion.y;
                 break;
+            //case SDL_CONTROLLERDEVICEADDED:
+            //    controllers.emplace_back(SDL_GameControllerOpen(event.cdevice.which));
+            //    break;
+            //case SDL_CONTROLLERDEVICEREMOVED:
+            //    break;
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+                inputData = ProcessControllerButtonEvent(event.cbutton.button, inputData, event.cbutton.state == SDL_PRESSED);
+                break;
+            /*case SDL_JOYAXISMOTION:
+                inputData = ProcessControllerAxisEvent(event.jaxis.axis, inputData, event.jaxis.value);
+                break;*/
             default:
                 break;
         }
