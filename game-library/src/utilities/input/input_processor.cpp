@@ -19,6 +19,7 @@
 #include "utilities/input/input_processor.h"
 
 InputData InputProcessor::inputData;
+std::list<SDL_GameController*> InputProcessor::controllers;
 
 InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData inputData, const bool keyDown) {
     switch(keycode) {
@@ -103,18 +104,26 @@ void InputProcessor::GetInputFromDevice() {
                 inputData.MouseLocation.x = event.motion.x;
                 inputData.MouseLocation.y = event.motion.y;
                 break;
-            //case SDL_CONTROLLERDEVICEADDED:
-            //    controllers.emplace_back(SDL_GameControllerOpen(event.cdevice.which));
-            //    break;
-            //case SDL_CONTROLLERDEVICEREMOVED:
-            //    break;
+            case SDL_CONTROLLERDEVICEADDED:
+                if(SDL_IsGameController(event.cdevice.which)) {
+                    std::cout << "Controller plugged in" << std::endl;
+                    controllers.emplace_back(SDL_GameControllerOpen(event.cdevice.which));
+                }
+                break;
+            case SDL_CONTROLLERDEVICEREMOVED:
+                for(auto controller : controllers) {
+                    if(SDL_GameControllerGetAttached(controller) == SDL_FALSE) {
+                        std::cout << "Controller removed" << std::endl;
+                        SDL_GameControllerClose(controller);
+                        controllers.remove(controller);
+                        break;
+                    }
+                }
+                break;
             case SDL_CONTROLLERBUTTONDOWN:
             case SDL_CONTROLLERBUTTONUP:
                 inputData = ProcessControllerButtonEvent(event.cbutton.button, inputData, event.cbutton.state == SDL_PRESSED);
                 break;
-            /*case SDL_JOYAXISMOTION:
-                inputData = ProcessControllerAxisEvent(event.jaxis.axis, inputData, event.jaxis.value);
-                break;*/
             default:
                 break;
         }
