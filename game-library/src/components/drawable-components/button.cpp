@@ -74,25 +74,18 @@ bool Button::IsSelected() {
 }
 
 void Button::ProcessInput(InputData inputData) {
-    if(inputData.Action1 || inputData.MoveDown || inputData.MoveUp || inputData.MoveLeft || inputData.MoveRight) {
-        Button* newSelectedButton = nullptr;
+    if(inputData.Action1) {
+        return Click();
+    }
 
-        if(inputData.Action1) {
-            std::cout << "Clicking" << std::endl;
-            Click();
-        } else if(inputData.MoveUp && buttonAbove != nullptr) {
-            newSelectedButton = buttonAbove;
-        } else if(inputData.MoveDown && buttonBelow != nullptr) {
-            newSelectedButton = buttonBelow;
-        } else if(inputData.MoveLeft && buttonLeft != nullptr) {
-            newSelectedButton = buttonLeft;
-        } else if(inputData.MoveRight && buttonRight != nullptr) {
-            newSelectedButton = buttonRight;
-        }
+    Button* newSelectedButton = inputData.MoveUp && buttonAbove != nullptr ? buttonAbove :
+                                inputData.MoveDown && buttonBelow != nullptr ? buttonBelow :
+                                inputData.MoveLeft && buttonLeft != nullptr ? buttonLeft :
+                                inputData.MoveRight && buttonRight != nullptr ? buttonRight :
+                                nullptr;
 
-        if(newSelectedButton != nullptr) {
-            this->Unselect();
-            newSelectedButton->Select();
-        }
+    if(newSelectedButton != nullptr) {
+        this->Unselect();
+        newSelectedButton->Select();
     }
 }

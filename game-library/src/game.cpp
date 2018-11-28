@@ -42,8 +42,14 @@ Game::~Game() {
 }
 
 SDL_Window* Game::SetupSDL(const uint32_t width, const uint32_t height) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
         return nullptr;
+    }
+
+    for(auto i = 0; i < SDL_NumJoysticks(); i++) {
+        if(SDL_IsGameController(i)) {
+            SDL_GameControllerOpen(i);
+        }
     }
 
     SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
@@ -56,6 +62,8 @@ SDL_Window* Game::SetupSDL(const uint32_t width, const uint32_t height) {
     auto renderQueue = new RenderQueue();
     renderQueue->AddSetUpRenderer(win, [](){});
     delete renderQueue;
+
+    ResourceLoader::LoadControllerMap();
 
     return win;
 }
