@@ -106,14 +106,12 @@ void InputProcessor::GetInputFromDevice() {
                 break;
             case SDL_CONTROLLERDEVICEADDED:
                 if(SDL_IsGameController(event.cdevice.which)) {
-                    std::cout << "Controller plugged in" << std::endl;
                     controllers.emplace_back(SDL_GameControllerOpen(event.cdevice.which));
                 }
                 break;
             case SDL_CONTROLLERDEVICEREMOVED:
                 for(auto controller : controllers) {
                     if(SDL_GameControllerGetAttached(controller) == SDL_FALSE) {
-                        std::cout << "Controller removed" << std::endl;
                         SDL_GameControllerClose(controller);
                         controllers.remove(controller);
                         break;
