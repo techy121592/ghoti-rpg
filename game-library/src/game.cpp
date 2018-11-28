@@ -46,8 +46,11 @@ SDL_Window* Game::SetupSDL(const uint32_t width, const uint32_t height) {
         return nullptr;
     }
 
-    std::cout << SDL_NumJoysticks() << std::endl;
-    SDL_GameControllerOpen(0);
+    for(auto i = 0; i < SDL_NumJoysticks(); i++) {
+        if(SDL_IsGameController(i)) {
+            SDL_GameControllerOpen(i);
+        }
+    }
 
     SDL_Window* win = SDL_CreateWindow("Ghoti RPG/Action Adventure", 100, 100, width, height, SDL_WINDOW_SHOWN);
     if (win == nullptr) {

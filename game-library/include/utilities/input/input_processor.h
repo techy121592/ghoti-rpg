@@ -28,6 +28,7 @@
 class InputProcessor {
 private:
     static InputData inputData;
+    static std::list<SDL_GameController*> controllers;
 
     static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
     static InputData ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed);
