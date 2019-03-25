@@ -5,7 +5,7 @@ project(GhotiRPG)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GhotiRPG_SOURCE_DIR}/cmake")
 
 # Set an output directory for our binaries
-set(BIN_DIR ${GhotiRPG_SOURCE_DIR}/output/bin)
+set(BIN_DIR bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/bin)

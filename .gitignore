@@ -43,3 +43,6 @@ CMakeFiles/
 output/
 .idea/
 *.directory
+
+AppDir/
+*.AppImage
