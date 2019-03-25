@@ -44,5 +44,5 @@ output/
 .idea/
 *.directory
 
-/AppDir/
+AppDir/
 *.AppImage
