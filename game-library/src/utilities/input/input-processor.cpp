@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/input/input_processor.h"
+#include "utilities/input/input-processor.h"
 
 InputData InputProcessor::inputData;
 std::list<SDL_GameController*> InputProcessor::controllers;

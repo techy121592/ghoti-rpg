@@ -20,8 +20,8 @@
 #define BUTTON_H
 
 #include <functional>
-#include "components/primitive-components/drawable_component.h"
-#include "utilities/input/input_data.h"
+#include "components/primitive-components/drawable-component.h"
+#include "utilities/input/input-data.h"
 
 enum ButtonRelationship {
     Above = -1,

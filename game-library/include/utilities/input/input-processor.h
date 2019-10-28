@@ -16,22 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/load_screen.h"
+#ifndef INPUT_PROCESSOR_H
+#define INPUT_PROCESSOR_H
 
-template <class T>
-LoadScreen<T>::LoadScreen() {
-    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+#include <iostream>
+#include <list>
+#include <SDL.h>
+#include "input-processor.h"
+#include "input-data.h"
 
-    ThreadPool::AddTask([this](){
-        nextScreen = new T();
-    }, false);
-}
+class InputProcessor {
+private:
+    static InputData inputData;
+    static std::list<SDL_GameController*> controllers;
 
-template<class T>
-void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
-    Screen::Update(deltaTime, inputData);
-}
+    static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
+    static InputData ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed);
+    static InputData ProcessControllerButtonEvent(uint8_t button, InputData inputData, bool pressed);
+public:
+    static InputData GetInputData();
+    static void GetInputFromDevice();
+};
 
-template class LoadScreen<HelloScreen>;
-template class LoadScreen<GameScreen>;
-template class LoadScreen<MainMenuScreen>;
+#endif

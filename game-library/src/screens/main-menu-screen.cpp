@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/main_menu_screen.h"
+#include "screens/main-menu-screen.h"
 
 MainMenuScreen::MainMenuScreen() {
-    startButton = new Button(220,  150, 200, 75, 0, 1, "start_button.png",
+    startButton = new Button(220,  150, 200, 75, 0, 1, "start-button.png",
         [this]() {
             nextScreen = new LoadScreen<GameScreen>();
         });
-    exitButton = new Button(220, 250, 200, 75, 0, 1, "exit_button.png",
+    exitButton = new Button(220, 250, 200, 75, 0, 1, "exit-button.png",
         [this](){
             nextScreen = nullptr;
         });

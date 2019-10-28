@@ -22,9 +22,9 @@
 #include <list>
 #include <iostream>
 #include <SDL.h>
-#include "utilities/input/input_data.h"
+#include "utilities/input/input-data.h"
 #include "components/primitive-components/component.h"
-#include "components/primitive-components/drawable_component.h"
+#include "components/primitive-components/drawable-component.h"
 #include "components/drawable-components/button.h"
 
 /*

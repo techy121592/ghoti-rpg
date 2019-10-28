@@ -21,7 +21,7 @@
 
 #include <iostream>
 #include <SDL.h>
-#include "utilities/render_queue.h"
+#include "utilities/render-queue.h"
 #include "component.h"
 
 class DrawableComponent : public Component {

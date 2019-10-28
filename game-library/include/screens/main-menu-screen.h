@@ -16,15 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RENDERERABLE_DRAWABLE_COMPONENT_H
-#define RENDERERABLE_DRAWABLE_COMPONENT_H
+#ifndef MAIN_MENU_SCREEN_H
+#define MAIN_MENU_SCREEN_H
 
-#include "drawable_component.h"
+#include "screen.h"
+#include "load-screen.h"
+#include "game-screen.h"
+#include "components/drawable-components/button.h"
 
-class RenderableDrawableComponent : public DrawableComponent {
+class MainMenuScreen : public Screen {
+    Button* startButton;
+    Button* exitButton;
+    bool defaultButtonSelected = false;
 public:
-    RenderableDrawableComponent(uint32_t width, uint32_t height);
-    SDL_Texture* GetTexture();
+    MainMenuScreen();
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif

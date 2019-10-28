@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/resource/resource_loader.h"
+#include "utilities/resource/resource-loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 #ifdef _WIN32
@@ -113,5 +113,5 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
 }
 
 void ResourceLoader::LoadControllerMap() {
-    SDL_GameControllerAddMappingsFromFile((ResourceLoader::GetResourcePath("") + "gamecontrollerdb.txt").c_str());
+    SDL_GameControllerAddMappingsFromFile((ResourceLoader::GetResourcePath("settings") + "gamecontrollerdb.txt").c_str());
 }

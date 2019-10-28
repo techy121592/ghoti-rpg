@@ -16,20 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/game_screen.h"
+#include "components/primitive-components/rendererable-drawable-component.h"
 
-GameScreen::GameScreen() {
-    tileMap = ResourceLoader::LoadMap("test.tmx");
-    character = new Character(23, 23, 14, 14, 0, "character_placeholder.png", 0.075);
+RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height)
+        : DrawableComponent(width, height) {}
 
-    AddComponent(tileMap);
-    AddComponent(tileMap->GetBottomLayer());
-    AddComponent(character);
-    AddComponent(tileMap->GetTopLayer());
-}
-
-void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
-    Screen::Update(deltaTime, inputData);
-    character->SetInput(inputData);
-    character->Update(deltaTime, tileMap);
+SDL_Texture* RenderableDrawableComponent::GetTexture() {
+    return texture;
 }

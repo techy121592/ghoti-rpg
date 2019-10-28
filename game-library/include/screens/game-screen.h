@@ -16,20 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LOAD_SCREEN_H
-#define LOAD_SCREEN_H
+#ifndef GAME_SCREEN_H
+#define GAME_SCREEN_H
 
+#include <SDL.h>
+#include "utilities/resource/resource-loader.h"
 #include "screen.h"
-#include "hello_screen.h"
-#include "game_screen.h"
-#include "main_menu_screen.h"
-#include "utilities/resource/resource_loader.h"
-#include "utilities/thread_pool.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile-set.h"
+#include "components/drawable-components/tiles/tile-map.h"
+#include "components/drawable-components/character.h"
 
-template<class T>
-class LoadScreen : public Screen {
+class GameScreen : public Screen {
+    TileMap* tileMap;
+    Character* character;
 public:
-    LoadScreen();
+    GameScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

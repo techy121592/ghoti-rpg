@@ -16,21 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef MAIN_MENU_SCREEN_H
-#define MAIN_MENU_SCREEN_H
+#ifndef RESOURCE_LOADER_H
+#define RESOURCE_LOADER_H
 
-#include "screen.h"
-#include "load_screen.h"
-#include "game_screen.h"
-#include "components/drawable-components/button.h"
+#include <iostream>
+#include <string>
+#include <SDL.h>
+#include <SDL_image.h>
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile-map.h"
+#include "components/drawable-components/tiles/tile-set.h"
+#include "tinyxml2.h"
 
-class MainMenuScreen : public Screen {
-    Button* startButton;
-    Button* exitButton;
-    bool defaultButtonSelected = false;
+class ResourceLoader {
+private:
+    static std::string GetResourcePath(const std::string &subDir = "");
+
 public:
-    MainMenuScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
+    static SDL_Surface* LoadImage(const std::string &fileName);
+    static TileMap* LoadMap(const std::string &fileName);
+    static void LoadControllerMap();
 };
 
 #endif

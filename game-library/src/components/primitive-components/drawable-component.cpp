@@ -17,8 +17,8 @@
  */
 
 #include <SDL_image.h>
-#include <utilities/resource/resource_loader.h>
-#include "components/primitive-components/drawable_component.h"
+#include <utilities/resource/resource-loader.h>
+#include "components/primitive-components/drawable-component.h"
 
 DrawableComponent::DrawableComponent(int32_t width, int32_t height) {
     auto size = new SDL_Point();

@@ -16,16 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef INPUT_DATA_H
-#define INPUT_DATA_H
+#include "screens/hello-screen.h"
 
-#include "click_event.h"
+HelloScreen::HelloScreen() {
+    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "hello.bmp"));
+}
 
-struct InputData {
-public:
-    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false, Action1 = false;
-    ClickEvent LeftClick;
-    SDL_Point MouseLocation = {0, 0};
-};
-
-#endif
+void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
+    Screen::Update(deltaTime, inputData);
+}

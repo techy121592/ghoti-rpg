@@ -16,26 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_MAP_H
-#define TILE_MAP_H
+#include "screens/game-screen.h"
 
-#include <list>
-#include <utility>
-#include "tile.h"
-#include "components/primitive-components/drawable_component.h"
-#include "components/primitive-components/rendererable_drawable_component.h"
+GameScreen::GameScreen() {
+    tileMap = ResourceLoader::LoadMap("test2.tmx");
+    character = new Character(23, 23, 14, 14, 0, "character-placeholder.png", 0.075);
 
-class TileMap : public Component {
-    std::list<Tile*> tiles;
-    void PreRenderMap();
-    RenderableDrawableComponent* topLayer;
-    RenderableDrawableComponent* bottomLayer;
-    uint32_t playerZIndex;
-public:
-    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles);
-    DrawableComponent* GetTopLayer();
-    DrawableComponent* GetBottomLayer();
-    std::list<Tile*> CheckCollision(SDL_Rect targetRectangle);
-};
+    AddComponent(tileMap);
+    AddComponent(tileMap->GetBottomLayer());
+    AddComponent(character);
+    AddComponent(tileMap->GetTopLayer());
+}
 
-#endif
+void GameScreen::Update(uint32_t deltaTime, InputData inputData) {
+    Screen::Update(deltaTime, inputData);
+    character->SetInput(inputData);
+    character->Update(deltaTime, tileMap);
+}

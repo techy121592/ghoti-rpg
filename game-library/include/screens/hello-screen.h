@@ -16,26 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RESOURCE_LOADER_H
-#define RESOURCE_LOADER_H
+#ifndef HELLO_SCREEN_H
+#define HELLO_SCREEN_H
 
-#include <iostream>
-#include <string>
 #include <SDL.h>
-#include <SDL_image.h>
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "components/drawable-components/tiles/tile_set.h"
-#include "tinyxml2.h"
+#include "utilities/resource/resource-loader.h"
+#include "screen.h"
 
-class ResourceLoader {
-private:
-    static std::string GetResourcePath(const std::string &subDir = "");
-
+class HelloScreen : public Screen {
 public:
-    static SDL_Surface* LoadImage(const std::string &fileName);
-    static TileMap* LoadMap(const std::string &fileName);
-    static void LoadControllerMap();
+    HelloScreen();
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif

@@ -20,7 +20,7 @@
 #define TILE_H
 
 #include <SDL.h>
-#include "components/primitive-components/drawable_component.h"
+#include "components/primitive-components/drawable-component.h"
 
 class Tile : public DrawableComponent {
     uint32_t z;
