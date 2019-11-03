@@ -19,23 +19,23 @@
 #ifndef TILE_MAP_H
 #define TILE_MAP_H
 
-#include <list>
 #include <utility>
+#include <vector>
 #include "tile.h"
 #include "components/primitive-components/drawable-component.h"
 #include "components/primitive-components/rendererable-drawable-component.h"
 
 class TileMap : public Component {
-    std::list<Tile*> tiles;
+    std::vector<Tile*> tiles;
     void PreRenderMap();
     RenderableDrawableComponent* topLayer;
     RenderableDrawableComponent* bottomLayer;
     uint32_t playerZIndex;
 public:
-    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles);
+    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::vector<Tile*> tiles);
     DrawableComponent* GetTopLayer();
     DrawableComponent* GetBottomLayer();
-    std::list<Tile*> CheckCollision(SDL_Rect targetRectangle);
+    std::vector<Tile*> CheckCollision(SDL_Rect targetRectangle);
 };
 
 #endif

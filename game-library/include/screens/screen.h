@@ -19,7 +19,7 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <list>
+#include <vector>
 #include <iostream>
 #include <SDL.h>
 #include "utilities/input/input-data.h"
@@ -35,9 +35,9 @@
 
 class Screen {
 protected:
-    std::list<Component*> components = {};
-    std::list<Button*> buttonComponents = {};
-    std::list<DrawableComponent*> drawableComponents = {};
+    std::vector<Component*> components = {};
+    std::vector<Button*> buttonComponents = {};
+    std::vector<DrawableComponent*> drawableComponents = {};
     Screen* nextScreen = nullptr;
 public:
     Screen();
@@ -73,7 +73,7 @@ public:
 
     Screen* NextScreen();
     bool IsReady();
-    std::list<DrawableComponent*> CloneDrawables();
+    std::vector<DrawableComponent*> CloneDrawables();
     void AddComponent(Component* component);
 };
 

@@ -20,7 +20,8 @@
 #define INPUT_PROCESSOR_H
 
 #include <iostream>
-#include <list>
+#include <algorithm>
+#include <vector>
 #include <SDL.h>
 #include "input-processor.h"
 #include "input-data.h"
@@ -28,7 +29,7 @@
 class InputProcessor {
 private:
     static InputData inputData;
-    static std::list<SDL_GameController*> controllers;
+    static std::vector<SDL_GameController*> controllers;
 
     static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
     static InputData ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed);

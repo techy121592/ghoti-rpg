@@ -19,7 +19,7 @@
 #include "screens/game-screen.h"
 
 GameScreen::GameScreen() {
-    tileMap = ResourceLoader::LoadMap("test2.tmx");
+    tileMap = ResourceLoader::LoadMap("test.tmx");
     character = new Character(23, 23, 14, 14, 0, "character-placeholder.png", 0.075);
 
     AddComponent(tileMap);

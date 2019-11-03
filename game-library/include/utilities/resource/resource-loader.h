@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "components/drawable-components/tiles/tile.h"

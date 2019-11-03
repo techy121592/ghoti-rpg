@@ -40,11 +40,11 @@ DrawableComponent::DrawableComponent(int32_t width, int32_t height) {
     sourceRectangle = rect;
 }
 
-DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, const std::string path)
+DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t frame, const std::string& path)
         : DrawableComponent(x, y, width, height, 0, frame, path) {
 }
 
-DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, std::string path) {
+DrawableComponent::DrawableComponent(int32_t x, int32_t y, int32_t width, int32_t height, int32_t padding, int32_t frame, const std::string& path) {
     this->padding = padding;
     auto surface = ResourceLoader::LoadImage(path);
     auto renderQueue = new RenderQueue();

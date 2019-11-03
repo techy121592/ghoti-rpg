@@ -62,7 +62,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
         std::string filePath = ResourceLoader::GetResourcePath("maps") + fileName;
         tinyxml2::XMLDocument mapFile;
         mapFile.LoadFile(filePath.c_str());
-        std::list<Tile*> tiles;
+        std::vector<Tile*> tiles;
 
         auto rootElement = mapFile.FirstChildElement("map");
         auto playerZ = static_cast<uint32_t>(std::stoi(rootElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value")));

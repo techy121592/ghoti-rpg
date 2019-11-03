@@ -22,7 +22,7 @@
 #include <iostream>
 #include <string>
 #include <tuple>
-#include <list>
+#include <vector>
 #include <SDL.h>
 #include "utilities/resource/resource-loader.h"
 #include "utilities/input/input-data.h"
@@ -44,7 +44,7 @@ private:
     void CloseSDL(SDL_Window*& win, Screen*& screen);
     void PauseForRestOfFrame(uint32_t targetFrameLength, uint32_t deltaTime);
     void FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, uint32_t deltaTime, InputData inputData);
-    void Draw(std::list<DrawableComponent*> drawableComponentsData);
+    void Draw(const std::vector<DrawableComponent*>& drawableComponentsData);
     bool Step(uint32_t deltaTime);
     bool GameLoop();
 public:

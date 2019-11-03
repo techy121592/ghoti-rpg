@@ -20,7 +20,8 @@
 #define RENDER_QUEUE_H
 
 #include <functional>
-#include <list>
+#include <vector>
+#include <algorithm>
 #include <mutex>
 #include <thread>
 #include <iostream>
@@ -42,7 +43,7 @@ class RenderQueue {
 
     struct DrawInfo {
         SDL_Texture* texture;
-        SDL_Rect sourceRect, destRect;
+        SDL_Rect sourceRect{}, destRect{};
         DrawInfo(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect) {
             this->texture = texture;
             this->sourceRect = sourceRect;
@@ -59,35 +60,43 @@ class RenderQueue {
         RendererAction action;
         void* data;
         std::function<void(void*)> callback;
-        RenderQueueEntry(RendererAction action, void* data, std::function<void(void*)> callback) {
+        RenderQueueEntry(RendererAction action, void* data, const std::function<void(void*)>& callback) {
             this->action = action;
             this->data = data;
             this->callback = callback;
         }
     };
 
-    static std::list<RenderQueueEntry> queue;
+    static std::vector<RenderQueueEntry> queue;
     static std::mutex queueLock;
     static SDL_Renderer* renderer;
     static bool running;
 
     static void WatchLoop();
-    static void ProcessEntry(RenderQueueEntry entry);
+    static void ProcessEntry(const RenderQueueEntry& entry);
     static void CreateRenderer(SDL_Window *win);
+    static void AddSetUpRendererStatic(SDL_Window* window, const std::function<void()>& callback);
+    static void AddConvertSurfaceToTextureStatic(SDL_Surface* surface, const std::function<void(SDL_Texture*)>& callback);
+    static void AddCreateTextureStatic(SDL_Point* size, const std::function<void(SDL_Texture*)>& callback);
+    static void AddDrawStatic(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect, const std::function<void()>& callback);
+    static void AddClearStatic(const std::function<void()>& callback);
+    static void AddPresentStatic(const std::function<void()>& callback);
+    static void AddSetRenderTargetStatic(SDL_Texture* texture, const std::function<void()>& callback);
+    static void AddQueryTextureStatic(SDL_Texture* texture, const std::function<void(uint32_t, int, int, int)>& callback);
 
 public:
     RenderQueue();
     ~RenderQueue();
     static void StartQueueWatcher();
     static void StopQueueWatcher();
-    static void AddSetUpRenderer(SDL_Window* window, std::function<void()> callback);
-    static void AddConvertSurfaceToTexture(SDL_Surface* surface, std::function<void(SDL_Texture*)> callback);
-    static void AddCreateTexture(SDL_Point* size, std::function<void(SDL_Texture*)> callback);
-    static void AddDraw(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect, std::function<void()> callback);
-    static void AddClear(std::function<void()> callback);
-    static void AddPresent(std::function<void()> callback);
-    static void AddSetRenderTarget(SDL_Texture* texture, std::function<void()> callback);
-    static void AddQueryTexture(SDL_Texture* texture, std::function<void(uint32_t, int, int, int)> callback);
+    void AddSetUpRenderer(SDL_Window* window, const std::function<void()>& callback);
+    void AddConvertSurfaceToTexture(SDL_Surface* surface, const std::function<void(SDL_Texture*)>& callback);
+    void AddCreateTexture(SDL_Point* size, const std::function<void(SDL_Texture*)>& callback);
+    void AddDraw(SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destRect, const std::function<void()>& callback);
+    void AddClear(const std::function<void()>& callback);
+    void AddPresent(const std::function<void()>& callback);
+    void AddSetRenderTarget(SDL_Texture* texture, const std::function<void()>& callback);
+    void AddQueryTexture(SDL_Texture* texture, const std::function<void(uint32_t, int, int, int)>& callback);
     static bool IsEmpty();
 };
 

@@ -92,7 +92,7 @@ void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32
     }, true);
 }
 
-void Game::Draw(std::list<DrawableComponent*> drawableComponentsData) {
+void Game::Draw(const std::vector<DrawableComponent*>& drawableComponentsData) {
     auto renderQueue = new RenderQueue();
     renderQueue->AddClear([](){});
     for(DrawableComponent* drawableComponent : drawableComponentsData) {
@@ -109,7 +109,7 @@ bool Game::Step(const uint32_t deltaTime) {
         return true;
     }
 
-    std::list<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
+    std::vector<DrawableComponent*> drawableComponentsData = screen->CloneDrawables();
 
     FireOffThreadsToUpdateAndGetInput(screen, deltaTime, InputProcessor::GetInputData());
     Draw(drawableComponentsData);
