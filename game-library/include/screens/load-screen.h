@@ -16,20 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef MAIN_MENU_SCREEN_H
-#define MAIN_MENU_SCREEN_H
+#ifndef LOAD_SCREEN_H
+#define LOAD_SCREEN_H
 
 #include "screen.h"
-#include "load_screen.h"
-#include "game_screen.h"
-#include "components/drawable-components/button.h"
+#include "hello-screen.h"
+#include "game-screen.h"
+#include "main-menu-screen.h"
+#include "utilities/resource/resource-loader.h"
+#include "utilities/thread-pool.h"
 
-class MainMenuScreen : public Screen {
-    Button* startButton;
-    Button* exitButton;
-    bool defaultButtonSelected = false;
+template<class T>
+class LoadScreen : public Screen {
 public:
-    MainMenuScreen();
+    LoadScreen();
     void Update(uint32_t deltaTime, InputData inputData) override;
 };
 

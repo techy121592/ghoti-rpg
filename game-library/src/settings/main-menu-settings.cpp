@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 David Welch
+ * Copyright (C) 2019 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_H
-#define TILE_H
+#include "settings/main-menu-settings.h"
 
-#include <SDL.h>
-#include "components/primitive-components/drawable-component.h"
+#include <utility>
 
-class Tile : public DrawableComponent {
-    uint32_t z;
-public:
-    Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
-    uint32_t GetZ();
-    SDL_Rect GetLocation();
-};
+MainMenuSettings::MainMenuSettings(std::vector<ButtonSettings> buttonsSettingsVector) {
+    this->buttonSettingsVector = std::move(buttonsSettingsVector);
+}
 
-#endif
+std::vector<ButtonSettings> MainMenuSettings::GetButtonSettings() {
+    return buttonSettingsVector;
+}

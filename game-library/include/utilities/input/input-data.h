@@ -16,15 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef RENDERERABLE_DRAWABLE_COMPONENT_H
-#define RENDERERABLE_DRAWABLE_COMPONENT_H
+#ifndef INPUT_DATA_H
+#define INPUT_DATA_H
 
-#include "drawable_component.h"
+#include "click-event.h"
 
-class RenderableDrawableComponent : public DrawableComponent {
+struct InputData {
 public:
-    RenderableDrawableComponent(uint32_t width, uint32_t height);
-    SDL_Texture* GetTexture();
+    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false, Action1 = false;
+    ClickEvent LeftClick;
+    SDL_Point MouseLocation = {0, 0};
 };
 
 #endif

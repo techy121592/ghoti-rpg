@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 David Welch
+ * Copyright (C) 2019 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,16 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef INPUT_DATA_H
-#define INPUT_DATA_H
+#ifndef BUTTON_TYPE_H
+#define BUTTON_TYPE_H
 
-#include "click_event.h"
-
-struct InputData {
-public:
-    bool Quit = false, MoveUp = false, MoveDown = false, MoveLeft = false, MoveRight = false, Action1 = false;
-    ClickEvent LeftClick;
-    SDL_Point MouseLocation = {0, 0};
+enum ButtonType {
+    LoadMap,
+    ExitGame,
+    None
 };
 
 #endif

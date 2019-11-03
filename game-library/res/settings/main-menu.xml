@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<main-menu background="main-menu-background.png">
+  <load-map name="start-button" default="true" target="text.tmx" image="start-button.png" x="220" y="150" width="200" height="75" defaultFrame="0" selectedFrame="1" above="" below="" left="" right="" />
+  <!--<load-screen target="load" image="load-button.png" x="220" y="150" width="200" height="75" defaultFrame="0" selectedFrame="1" />-->
+  <!--<load-screen target="options" image="options-button.png" x="220" y="150" width="200" height="75" defaultFrame="0" selectedFrame="1" />-->
+  <exit-game name="exit-button" image="exit-button.png" default="false" x="220" y="250" width="200" height="75" defaultFrame="0" selectedFrame="1" above="" below="start-button" left="" right="" />
+</main-menu>

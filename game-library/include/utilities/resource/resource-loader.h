@@ -21,21 +21,27 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "components/drawable-components/tiles/tile.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "components/drawable-components/tiles/tile_set.h"
 #include "tinyxml2.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile-map.h"
+#include "components/drawable-components/tiles/tile-set.h"
+#include "components/drawable-components/button.h"
+#include "screens/screen.h"
+#include "settings/main-menu-settings.h"
 
 class ResourceLoader {
 private:
     static std::string GetResourcePath(const std::string &subDir = "");
+    static tinyxml2::XMLDocument* LoadSettingsFile(const std::string &fileName);
 
 public:
     static SDL_Surface* LoadImage(const std::string &fileName);
     static TileMap* LoadMap(const std::string &fileName);
     static void LoadControllerMap();
+    static MainMenuSettings LoadMainMenuSettings();
 };
 
 #endif

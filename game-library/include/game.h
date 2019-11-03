@@ -22,17 +22,17 @@
 #include <iostream>
 #include <string>
 #include <tuple>
-#include <list>
+#include <vector>
 #include <SDL.h>
-#include "utilities/resource/resource_loader.h"
-#include "utilities/input/input_data.h"
-#include "utilities/input/input_processor.h"
-#include "utilities/thread_pool.h"
-#include "utilities/render_queue.h"
-#include "components/primitive-components/drawable_component.h"
+#include "utilities/resource/resource-loader.h"
+#include "utilities/input/input-data.h"
+#include "utilities/input/input-processor.h"
+#include "utilities/thread-pool.h"
+#include "utilities/render-queue.h"
+#include "components/primitive-components/drawable-component.h"
 #include "screens/screen.h"
-#include "screens/main_menu_screen.h"
-#include "screens/load_screen.h"
+#include "screens/main-menu-screen.h"
+#include "screens/load-screen.h"
 
 class Game {
 private:
@@ -44,7 +44,7 @@ private:
     void CloseSDL(SDL_Window*& win, Screen*& screen);
     void PauseForRestOfFrame(uint32_t targetFrameLength, uint32_t deltaTime);
     void FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, uint32_t deltaTime, InputData inputData);
-    void Draw(std::list<DrawableComponent*> drawableComponentsData);
+    void Draw(const std::vector<DrawableComponent*>& drawableComponentsData);
     bool Step(uint32_t deltaTime);
     bool GameLoop();
 public:

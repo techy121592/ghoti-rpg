@@ -35,8 +35,8 @@ bool Screen::IsReady() {
     return true;
 }
 
-std::list<DrawableComponent*> Screen::CloneDrawables() {
-    std::list<DrawableComponent*> tempListOfDrawableComponents = {};
+std::vector<DrawableComponent*> Screen::CloneDrawables() {
+    std::vector<DrawableComponent*> tempListOfDrawableComponents = {};
     for(auto drawableComponent : drawableComponents) {
         tempListOfDrawableComponents.emplace_back(drawableComponent->Clone());
     }

@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/input/input_processor.h"
+#include "utilities/input/input-processor.h"
 
 InputData InputProcessor::inputData;
-std::list<SDL_GameController*> InputProcessor::controllers;
+std::vector<SDL_GameController*> InputProcessor::controllers;
 
 InputData InputProcessor::ProcessKeyEvent(const SDL_Keycode keycode, InputData inputData, const bool keyDown) {
     switch(keycode) {
@@ -74,6 +74,8 @@ InputData InputProcessor::ProcessControllerButtonEvent(uint8_t button, InputData
         case SDL_CONTROLLER_BUTTON_BACK:
             inputData.Quit = pressed;
             break;
+        default:
+            break;
     }
     return inputData;
 }
@@ -119,7 +121,8 @@ void InputProcessor::GetInputFromDevice() {
                 for(auto controller : controllers) {
                     if(SDL_GameControllerGetAttached(controller) == SDL_FALSE) {
                         SDL_GameControllerClose(controller);
-                        controllers.remove(controller);
+                        auto iterator = std::find(controllers.begin(), controllers.end(), controller);
+                        controllers.erase(iterator, iterator + 1);
                         break;
                     }
                 }

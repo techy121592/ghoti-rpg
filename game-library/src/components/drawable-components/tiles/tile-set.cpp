@@ -17,8 +17,8 @@
  */
 
 #include <SDL_image.h>
-#include <utilities/resource/resource_loader.h>
-#include "components/drawable-components/tiles/tile_set.h"
+#include <utilities/resource/resource-loader.h>
+#include "components/drawable-components/tiles/tile-set.h"
 
 TileSet::TileSet(uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, std::string path) {
     this->ready = false;

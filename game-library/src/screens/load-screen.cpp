@@ -16,21 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LOAD_SCREEN_H
-#define LOAD_SCREEN_H
+#include "screens/load-screen.h"
 
-#include "screen.h"
-#include "hello_screen.h"
-#include "game_screen.h"
-#include "main_menu_screen.h"
-#include "utilities/resource/resource_loader.h"
-#include "utilities/thread_pool.h"
+template <class T>
+LoadScreen<T>::LoadScreen() {
+    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+
+    ThreadPool::AddTask([this](){
+        nextScreen = new T();
+    }, false);
+}
 
 template<class T>
-class LoadScreen : public Screen {
-public:
-    LoadScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
-};
+void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
+    Screen::Update(deltaTime, inputData);
+}
 
-#endif
+template class LoadScreen<HelloScreen>;
+template class LoadScreen<GameScreen>;
+template class LoadScreen<MainMenuScreen>;

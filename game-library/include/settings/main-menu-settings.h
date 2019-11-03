@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 David Welch
+ * Copyright (C) 2019 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/load_screen.h"
+#ifndef MAIN_MENU_SETTINGS_H
+#define MAIN_MENU_SETTINGS_H
 
-template <class T>
-LoadScreen<T>::LoadScreen() {
-    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
+#include <vector>
+#include "button-settings.h"
 
-    ThreadPool::AddTask([this](){
-        nextScreen = new T();
-    }, false);
-}
+class MainMenuSettings {
+private:
+    std::vector<ButtonSettings> buttonSettingsVector;
+public:
+    explicit MainMenuSettings(std::vector<ButtonSettings> buttonsSettingsVector);
+    std::vector<ButtonSettings> GetButtonSettings();
+};
 
-template<class T>
-void LoadScreen<T>::Update(uint32_t deltaTime, InputData inputData) {
-    Screen::Update(deltaTime, inputData);
-}
-
-template class LoadScreen<HelloScreen>;
-template class LoadScreen<GameScreen>;
-template class LoadScreen<MainMenuScreen>;
+#endif

@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "components/drawable-components/tiles/tile_map.h"
+#include "components/drawable-components/tiles/tile-map.h"
 
-TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::list<Tile*> tiles) : Component() {
+TileMap::TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZIndex, std::vector<Tile*> tiles) : Component() {
     topLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
     bottomLayer = new RenderableDrawableComponent(cols * tileWidth, rows * tileHeight);
 
@@ -57,8 +57,8 @@ DrawableComponent* TileMap::GetBottomLayer() {
     return bottomLayer;
 }
 
-std::list<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
-    std::list<Tile*> tilesColliding;
+std::vector<Tile*> TileMap::CheckCollision(SDL_Rect targetRect) {
+    std::vector<Tile*> tilesColliding;
     for(auto tile : tiles) {
         auto tileLocation = tile->GetLocation();
 

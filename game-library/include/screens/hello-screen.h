@@ -16,26 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_MAP_H
-#define TILE_MAP_H
+#ifndef HELLO_SCREEN_H
+#define HELLO_SCREEN_H
 
-#include <list>
-#include <utility>
-#include "tile.h"
-#include "components/primitive-components/drawable_component.h"
-#include "components/primitive-components/rendererable_drawable_component.h"
+#include <SDL.h>
+#include "utilities/resource/resource-loader.h"
+#include "screen.h"
 
-class TileMap : public Component {
-    std::list<Tile*> tiles;
-    void PreRenderMap();
-    RenderableDrawableComponent* topLayer;
-    RenderableDrawableComponent* bottomLayer;
-    uint32_t playerZIndex;
+class HelloScreen : public Screen {
 public:
-    TileMap(uint32_t rows, uint32_t cols, uint32_t tileWidth, uint32_t tileHeight, uint32_t playerZ, std::list<Tile*> tiles);
-    DrawableComponent* GetTopLayer();
-    DrawableComponent* GetBottomLayer();
-    std::list<Tile*> CheckCollision(SDL_Rect targetRectangle);
+    HelloScreen();
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif

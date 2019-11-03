@@ -16,7 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/resource/resource_loader.h"
+#include <settings/button-type.h>
+#include "utilities/resource/resource-loader.h"
 
 std::string ResourceLoader::GetResourcePath(const std::string &subDir) {
 #ifdef _WIN32
@@ -62,7 +63,7 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
         std::string filePath = ResourceLoader::GetResourcePath("maps") + fileName;
         tinyxml2::XMLDocument mapFile;
         mapFile.LoadFile(filePath.c_str());
-        std::list<Tile*> tiles;
+        std::vector<Tile*> tiles;
 
         auto rootElement = mapFile.FirstChildElement("map");
         auto playerZ = static_cast<uint32_t>(std::stoi(rootElement->FirstChildElement("properties")->FirstChildElement("property")->Attribute("value")));
@@ -113,5 +114,41 @@ TileMap* ResourceLoader::LoadMap(const std::string &fileName) {
 }
 
 void ResourceLoader::LoadControllerMap() {
-    SDL_GameControllerAddMappingsFromFile((ResourceLoader::GetResourcePath("") + "gamecontrollerdb.txt").c_str());
+    SDL_GameControllerAddMappingsFromFile((ResourceLoader::GetResourcePath("settings") + "gamecontrollerdb.txt").c_str());
+}
+
+MainMenuSettings ResourceLoader::LoadMainMenuSettings() {
+    std::vector<ButtonSettings> buttonsSettingsVector;
+    std::string filePath = ResourceLoader::GetResourcePath("settings") + "main-menu.xml";
+    tinyxml2::XMLDocument mainMenuSettingsXMLDocument;
+    mainMenuSettingsXMLDocument.LoadFile(filePath.c_str());;
+    auto rootElement = mainMenuSettingsXMLDocument.FirstChildElement("main-menu");
+
+    for(auto buttonElement = rootElement->FirstChildElement(); buttonElement != nullptr; buttonElement = buttonElement->NextSiblingElement()) {
+        auto x = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("x")));
+        auto y = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("y")));
+        auto width = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("width")));
+        auto height = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("height")));
+        auto defaultFrame = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("defaultFrame")));
+        auto selectedFrame = static_cast<uint32_t>(std::stoi(buttonElement->Attribute("selectedFrame")));
+        auto imagePath = buttonElement->Attribute("image");
+        auto type = buttonElement->Name();
+        bool defaultButton = strncmp(buttonElement->Attribute("default"), "true", 4) == 0;
+        auto buttonType = ButtonType::None;
+        std::string above = buttonElement->Attribute("above");
+        std::string below = buttonElement->Attribute("below");
+        std::string left = buttonElement->Attribute("left");
+        std::string right = buttonElement->Attribute("right");
+        std::string name = buttonElement->Attribute("name");
+
+        if (strncmp(type, "load-map", 8) == 0) {
+            buttonType = ButtonType::LoadMap;
+        } else if (strncmp(type, "exit-game", 9) == 0) {
+            buttonType = ButtonType::ExitGame;
+        }
+
+        buttonsSettingsVector.emplace_back(ButtonSettings(x, y, width, height, defaultFrame, selectedFrame, imagePath, buttonType, defaultButton, above, below, left, right, name));
+    }
+
+    return MainMenuSettings(buttonsSettingsVector);
 }

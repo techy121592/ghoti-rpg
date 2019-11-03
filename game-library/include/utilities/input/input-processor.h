@@ -16,18 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef INPUT_PROCESSOR_H
+#define INPUT_PROCESSOR_H
 
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #include <SDL.h>
-#include "components/primitive-components/drawable-component.h"
+#include "input-processor.h"
+#include "input-data.h"
 
-class Tile : public DrawableComponent {
-    uint32_t z;
+class InputProcessor {
+private:
+    static InputData inputData;
+    static std::vector<SDL_GameController*> controllers;
+
+    static InputData ProcessKeyEvent(SDL_Keycode keycode, InputData inputData, bool keyDown);
+    static InputData ProcessMouseLeftClick(int32_t x, int32_t y, InputData inputData, bool pressed);
+    static InputData ProcessControllerButtonEvent(uint8_t button, InputData inputData, bool pressed);
 public:
-    Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
-    uint32_t GetZ();
-    SDL_Rect GetLocation();
+    static InputData GetInputData();
+    static void GetInputFromDevice();
 };
 
 #endif

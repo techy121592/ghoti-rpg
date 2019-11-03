@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "utilities/thread_pool.h"
+#include "utilities/thread-pool.h"
 
 bool ThreadPool::running = false;
 
@@ -29,8 +29,8 @@ uint32_t ThreadPool::delayTime = 2;
 
 std::mutex ThreadPool::queueLock, ThreadPool::queueCountLock, ThreadPool::loopLockCountLock, ThreadPool::activeTasksCountLock;
 
-std::list<std::thread> ThreadPool::threads = {};
-std::list<std::tuple<std::function<void()>, bool>> ThreadPool::tasks = {};
+std::vector<std::thread> ThreadPool::threads = {};
+std::vector<std::tuple<std::function<void()>, bool>> ThreadPool::tasks = {};
 
 void ThreadPool::Init() {
     ThreadPool::running = true;
@@ -51,7 +51,7 @@ void ThreadPool::TerminateThreads() {
     for(int i = threadCount; i > 0; i--) {
         std::thread* threadWaitingOn = &threads.front();
         threadWaitingOn->join();
-        threads.pop_front();
+        threads.erase(threads.begin(), threads.begin() + 1);
     }
 }
 
@@ -73,7 +73,7 @@ void ThreadPool::TaskCheckLoop() {
             queueLock.lock();
             queueCountLock.unlock();
             std::tuple<std::function<void()>, bool> task = tasks.front();
-            tasks.pop_front();
+            tasks.erase(tasks.begin(), tasks.begin() + 1);
             queueLock.unlock();
 
             bool locksLoop = std::get<1>(task);
@@ -99,7 +99,7 @@ void ThreadPool::TaskCheckLoop() {
     }
 }
 
-void ThreadPool::AddTask(std::function<void()> task, bool locksLoop) {
+void ThreadPool::AddTask(const std::function<void()>& task, bool locksLoop) {
     queueCountLock.lock();
     queueCount++;
     queueLock.lock();
@@ -109,7 +109,7 @@ void ThreadPool::AddTask(std::function<void()> task, bool locksLoop) {
         loopLockCountLock.lock();
         loopLockCount++;
         loopLockCountLock.unlock();
-        tasks.push_front(std::make_tuple(task, true));
+        tasks.emplace(tasks.begin(), std::make_tuple(task, true));
     } else {
         tasks.emplace_back(std::make_tuple(task, false));
     }

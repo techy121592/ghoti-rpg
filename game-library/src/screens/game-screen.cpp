@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/game_screen.h"
+#include "screens/game-screen.h"
 
 GameScreen::GameScreen() {
     tileMap = ResourceLoader::LoadMap("test.tmx");
-    character = new Character(23, 23, 14, 14, 0, "character_placeholder.png", 0.075);
+    character = new Character(23, 23, 14, 14, 0, "character-placeholder.png", 0.075);
 
     AddComponent(tileMap);
     AddComponent(tileMap->GetBottomLayer());

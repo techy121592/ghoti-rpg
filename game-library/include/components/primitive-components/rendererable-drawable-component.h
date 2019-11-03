@@ -16,12 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "screens/hello_screen.h"
+#ifndef RENDERERABLE_DRAWABLE_COMPONENT_H
+#define RENDERERABLE_DRAWABLE_COMPONENT_H
 
-HelloScreen::HelloScreen() {
-    AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "hello.bmp"));
-}
+#include "drawable-component.h"
 
-void HelloScreen::Update(uint32_t deltaTime, InputData inputData) {
-    Screen::Update(deltaTime, inputData);
-}
+class RenderableDrawableComponent : public DrawableComponent {
+public:
+    RenderableDrawableComponent(uint32_t width, uint32_t height);
+    SDL_Texture* GetTexture();
+};
+
+#endif

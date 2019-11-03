@@ -19,9 +19,9 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "components/primitive-components/drawable_component.h"
-#include "components/drawable-components/tiles/tile_map.h"
-#include "utilities/input/input_data.h"
+#include "components/primitive-components/drawable-component.h"
+#include "components/drawable-components/tiles/tile-map.h"
+#include "utilities/input/input-data.h"
 
 class Character : public DrawableComponent {
     float speed;

@@ -16,11 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "components/primitive-components/rendererable_drawable_component.h"
+#ifndef MAIN_MENU_SCREEN_H
+#define MAIN_MENU_SCREEN_H
 
-RenderableDrawableComponent::RenderableDrawableComponent(uint32_t width, uint32_t height)
-        : DrawableComponent(width, height) {}
+#include <map>
+#include "screen.h"
+#include "load-screen.h"
+#include "game-screen.h"
+#include "components/drawable-components/button.h"
 
-SDL_Texture* RenderableDrawableComponent::GetTexture() {
-    return texture;
-}
+class MainMenuScreen : public Screen {
+    Button* defaultButton;
+    bool defaultButtonSelected = false;
+public:
+    MainMenuScreen();
+    void Update(uint32_t deltaTime, InputData inputData) override;
+};
+
+#endif

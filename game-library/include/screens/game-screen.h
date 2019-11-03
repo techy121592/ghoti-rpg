@@ -16,18 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef GAME_SCREEN_H
+#define GAME_SCREEN_H
 
 #include <SDL.h>
-#include "components/primitive-components/drawable-component.h"
+#include "utilities/resource/resource-loader.h"
+#include "screen.h"
+#include "components/drawable-components/tiles/tile.h"
+#include "components/drawable-components/tiles/tile-set.h"
+#include "components/drawable-components/tiles/tile-map.h"
+#include "components/drawable-components/character.h"
 
-class Tile : public DrawableComponent {
-    uint32_t z;
+class GameScreen : public Screen {
+    TileMap* tileMap;
+    Character* character;
 public:
-    Tile(uint32_t x, uint32_t y, uint32_t z, uint32_t tileIndex, uint32_t tileWidth, uint32_t tileHeight, uint32_t padding, SDL_Texture* texture);
-    uint32_t GetZ();
-    SDL_Rect GetLocation();
+    GameScreen();
+    void Update(uint32_t deltaTime, InputData inputData) override;
 };
 
 #endif
