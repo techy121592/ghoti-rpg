@@ -19,22 +19,49 @@
 #include "screens/main-menu-screen.h"
 
 MainMenuScreen::MainMenuScreen() {
-    startButton = new Button(220,  150, 200, 75, 0, 1, "start-button.png",
-        [this]() {
-            nextScreen = new LoadScreen<GameScreen>();
-        });
-    exitButton = new Button(220, 250, 200, 75, 0, 1, "exit-button.png",
-        [this](){
-            nextScreen = nullptr;
-        });
-    startButton->SetButtonRelationship(exitButton, ButtonRelationship::Below);
-    AddComponent(startButton);
-    AddComponent(exitButton);
+    auto mainMenuSettings = ResourceLoader::LoadMainMenuSettings();
+    auto buttonSettingsVector = mainMenuSettings.GetButtonSettings();
+    std::map<std::string, Button*> buttonMap;
+
+    for (auto buttonSettings : buttonSettingsVector) {
+        auto buttonType = buttonSettings.GetButtonType();
+        std::function<void()> onClick = nullptr;
+
+        if (buttonType == ButtonType::LoadMap) {
+            onClick = [this]() {
+                nextScreen = new LoadScreen<GameScreen>();
+            };
+        } else if (buttonType == ButtonType::ExitGame) {
+            onClick = [this](){
+                nextScreen = nullptr;
+            };
+        }
+
+        auto button = new Button(buttonSettings.GetX(), buttonSettings.GetY(), buttonSettings.GetWidth(), buttonSettings.GetHeight(), buttonSettings.GetDefaultFrame(), buttonSettings.GetSelectedFrame(), buttonSettings.GetImagePath(), onClick);
+        buttonMap.emplace(buttonSettings.GetName(), button);
+
+        if (!buttonSettings.GetAbove().empty()) {
+            button->SetButtonRelationship(buttonMap.at(buttonSettings.GetAbove()), ButtonRelationship::Below);
+        }
+        if (!buttonSettings.GetBelow().empty()) {
+            button->SetButtonRelationship(buttonMap.at(buttonSettings.GetBelow()), ButtonRelationship::Above);
+        }
+        if (!buttonSettings.GetLeft().empty()) {
+            button->SetButtonRelationship(buttonMap.at(buttonSettings.GetLeft()), ButtonRelationship::Left);
+        }
+        if (!buttonSettings.GetRight().empty()) {
+            button->SetButtonRelationship(buttonMap.at(buttonSettings.GetRight()), ButtonRelationship::Right);
+        }
+        AddComponent(button);
+        if (buttonSettings.IsDefault()) {
+            defaultButton = button;
+        }
+    }
 }
 
 void MainMenuScreen::Update(uint32_t deltaTime, InputData inputData) {
     if(!defaultButtonSelected) {
-        startButton->Select();
+        defaultButton->Select();
         defaultButtonSelected = true;
     }
     Screen::Update(deltaTime, inputData);

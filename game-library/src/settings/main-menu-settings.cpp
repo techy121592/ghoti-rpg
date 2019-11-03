@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 David Welch
+ * Copyright (C) 2019 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef MAIN_MENU_SCREEN_H
-#define MAIN_MENU_SCREEN_H
+#include "settings/main-menu-settings.h"
 
-#include <map>
-#include "screen.h"
-#include "load-screen.h"
-#include "game-screen.h"
-#include "components/drawable-components/button.h"
+#include <utility>
 
-class MainMenuScreen : public Screen {
-    Button* defaultButton;
-    bool defaultButtonSelected = false;
-public:
-    MainMenuScreen();
-    void Update(uint32_t deltaTime, InputData inputData) override;
-};
+MainMenuSettings::MainMenuSettings(std::vector<ButtonSettings> buttonsSettingsVector) {
+    this->buttonSettingsVector = std::move(buttonsSettingsVector);
+}
 
-#endif
+std::vector<ButtonSettings> MainMenuSettings::GetButtonSettings() {
+    return buttonSettingsVector;
+}
