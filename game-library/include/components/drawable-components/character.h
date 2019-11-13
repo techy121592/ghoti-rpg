@@ -19,6 +19,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
+#include <cmath>
 #include "components/primitive-components/drawable-component.h"
 #include "components/drawable-components/tiles/tile-map.h"
 #include "utilities/input/input-data.h"
