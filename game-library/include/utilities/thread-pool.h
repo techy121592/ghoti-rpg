@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <tuple>
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class ThreadPool {
 private:

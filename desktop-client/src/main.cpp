@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 David Welch
+ * Copyright (C) 2019 David Welch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 int main(int, char**) {
     ThreadPool::Init(std::thread::hardware_concurrency(), std::thread::hardware_concurrency()/2);
-    auto game = new Game(640, 480, 60);
+    auto game = new Game(800, 600, 60);
 
     int returnValue = game->Run();
     delete game;

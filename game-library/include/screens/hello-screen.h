@@ -19,7 +19,7 @@
 #ifndef HELLO_SCREEN_H
 #define HELLO_SCREEN_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "utilities/resource/resource-loader.h"
 #include "screen.h"
 

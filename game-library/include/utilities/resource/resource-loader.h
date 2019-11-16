@@ -22,8 +22,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "tinyxml2.h"
 #include "components/drawable-components/tiles/tile.h"
 #include "components/drawable-components/tiles/tile-map.h"

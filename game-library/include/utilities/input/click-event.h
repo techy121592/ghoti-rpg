@@ -19,7 +19,7 @@
 #ifndef CLICK_EVENT_H
 #define CLICK_EVENT_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 struct ClickEvent {
 public:

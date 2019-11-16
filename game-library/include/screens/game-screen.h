@@ -19,7 +19,7 @@
 #ifndef GAME_SCREEN_H
 #define GAME_SCREEN_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "utilities/resource/resource-loader.h"
 #include "screen.h"
 #include "components/drawable-components/tiles/tile.h"

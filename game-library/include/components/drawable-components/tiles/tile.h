@@ -19,7 +19,7 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "components/primitive-components/drawable-component.h"
 
 class Tile : public DrawableComponent {

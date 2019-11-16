@@ -20,7 +20,7 @@
 #define DRAWABLE_COMPONENT_H
 
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "utilities/render-queue.h"
 #include "component.h"
 

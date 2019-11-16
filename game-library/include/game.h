@@ -23,7 +23,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "utilities/resource/resource-loader.h"
 #include "utilities/input/input-data.h"
 #include "utilities/input/input-processor.h"

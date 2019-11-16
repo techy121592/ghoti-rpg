@@ -19,7 +19,7 @@
 #ifndef TILE_SET_H
 #define TILE_SET_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "tile.h"
 
 class TileSet {

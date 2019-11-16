@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "utilities/input/input-data.h"
 #include "components/primitive-components/component.h"
 #include "components/primitive-components/drawable-component.h"

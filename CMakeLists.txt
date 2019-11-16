@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.8.10)
 project(GhotiRPG)
 
-# Use our modified FindSDL2* modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GhotiRPG_SOURCE_DIR}/cmake")
-
 # Set an output directory for our binaries
 set(BIN_DIR bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
@@ -34,13 +31,6 @@ set(CMAKE_COLOR_MAKEFILE ON)
 if (WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif ()
-
-# Look up SDL2 and add the include directory to our include path
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
-
-find_package(SDL2_image REQUIRED)
-include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
 # Look in the subdirectorys to find its CMakeLists.txt so we can build the executable and library
 add_subdirectory(game-library)
