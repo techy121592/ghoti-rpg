@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 2.8.10)
 
 project(GhotiRPGDesktop)
 
-file(GLOB CPP_FILES src/*.cpp)
+file(GLOB_RECURSE CPP_FILES "src/*.cpp")
 
-include_directories(include)
-include_directories(../game-library/include)
+include_directories(include ../game-library/include)
 
 add_executable(${PROJECT_NAME} ${CPP_FILES})
 target_link_libraries(${PROJECT_NAME} GhotiRPGLibrary)

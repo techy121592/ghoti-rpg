@@ -32,6 +32,11 @@ if (WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif ()
 
+include(FindPkgConfig)
+
+pkg_search_module(SDL2 REQUIRED sdl2)
+pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image>=2.0.0)
+
 # Look in the subdirectorys to find its CMakeLists.txt so we can build the executable and library
 add_subdirectory(game-library)
 add_subdirectory(desktop-client)
