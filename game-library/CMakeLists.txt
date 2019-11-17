@@ -8,4 +8,4 @@ include_directories(include ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} STATIC ${CPP_FILES})
 
-target_link_libraries(${PROJECT_NAME} pthread ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})

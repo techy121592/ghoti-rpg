@@ -35,7 +35,6 @@
 class ResourceLoader {
 private:
     static std::string GetResourcePath(const std::string &subDir = "");
-    static tinyxml2::XMLDocument* LoadSettingsFile(const std::string &fileName);
 
 public:
     static SDL_Surface* LoadImage(const std::string &fileName);
