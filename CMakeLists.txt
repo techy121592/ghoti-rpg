@@ -32,22 +32,6 @@ if (WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif ()
 
-if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-	message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-	file(DOWNLOAD "https://github.com/conan-io/cmake-conan/raw/v0.14/conan.cmake"
-			"${CMAKE_BINARY_DIR}/conan.cmake")
-endif()
-
-include(${CMAKE_BINARY_DIR}/conan.cmake)
-
-conan_add_remote(NAME bincrafters INDEX 1 URL https://api.bintray.com/conan/bincrafters/public-conan)
-
-conan_cmake_run(REQUIRES sdl2/2.0.10@bincrafters/stable
-		sdl2_image/2.0.5@bincrafters/stable
-		BASIC_SETUP CMAKE_TARGETS
-		BUILD missing
-		BUILD_TYPE "None")
-
 # Look in the subdirectorys to find its CMakeLists.txt so we can build the executable and library
 add_subdirectory(game-library)
 add_subdirectory(desktop-client)
