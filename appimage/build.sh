@@ -9,8 +9,9 @@ if [ ! -d ./AppDir/ ]; then
     rm -R ./AppDir
 fi
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 make -j8
 make install DESTDIR=AppDir
 cp -R ../game-library/res ./AppDir/usr/bin/
 ./linuxdeploy-x86_64.AppImage --appdir AppDir -d ./ghoti-rpg.desktop -i ./ghoti-rpg.svg --output appimage
+mv ./Ghoti_RPG-*-x86_64.AppImage /output
