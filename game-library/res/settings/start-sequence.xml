@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<start-sequence>
+    <step source="ghoti-games.png" />
+    <step source="sdl2.png" />
+    <step source="theora-play.png" />
+    <step source="tinyxml.png" />
+    <step source="ghoti-rpg.png" />
+</start-sequence>

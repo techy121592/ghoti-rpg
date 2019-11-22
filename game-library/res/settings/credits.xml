@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<credits>
+    <section name="Contributors">
+        <entry column1="David Welch" column2="Sole contributor" />
+    </section>
+    <section name="Libraries">
+        <entry column1="SDL2" column2="Graphics, audio, and gamepad input" />
+        <entry column1="TinyXML" column2="XML parsing" />
+    </section>
+    <section name="Tools">
+        <entry column1="Tiled" column2="Tiled-map editor" />
+    </section>
+</credits>
