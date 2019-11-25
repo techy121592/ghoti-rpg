@@ -3,6 +3,7 @@
 if [ ! -f ./linuxdeploy-x86_64.AppImage ]; then
     wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
     chmod +x ./linuxdeploy-x86_64.AppImage
+    sed -i 's|AI\x02|\x00\x00\x00|' ./linuxdeploy-x86_64.AppImage
 fi
 
 if [ ! -d ./AppDir/ ]; then
