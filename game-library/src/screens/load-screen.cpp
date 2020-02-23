@@ -22,9 +22,9 @@ template <class T>
 LoadScreen<T>::LoadScreen() {
     AddComponent(new DrawableComponent(0, 0, 640, 480, 0, "loading.png"));
 
-    ThreadPool::AddTask([this](){
+    //ThreadPool::AddTask([this](){
         nextScreen = new T();
-    }, false);
+    //}, false);
 }
 
 template<class T>

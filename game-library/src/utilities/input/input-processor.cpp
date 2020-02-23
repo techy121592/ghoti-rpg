@@ -86,8 +86,13 @@ InputData InputProcessor::GetInputData() {
 
 void InputProcessor::GetInputFromDevice() {
     SDL_Event event;
-
+    auto functionStartTime = SDL_GetTicks();
+    auto pollStartTime = SDL_GetTicks();
+    int eventCount = 0;
     while(SDL_PollEvent(&event)) {
+        eventCount++;
+        auto pollEndTime = SDL_GetTicks();
+        std::cout << "SDL_PollEvent took " << pollEndTime - pollStartTime << " ticks" << std::endl;
         switch(event.type) {
             case SDL_QUIT:
                 inputData.Quit = true;
@@ -134,8 +139,12 @@ void InputProcessor::GetInputFromDevice() {
             default:
                 break;
         }
+        pollStartTime = SDL_GetTicks();
         if(inputData.Quit) {
             break;
         }
     }
+    auto functionEndTime = SDL_GetTicks();
+    auto functionTickCount = functionEndTime - functionStartTime;
+    std::cout << "Took " << functionTickCount << " ticks to process " << eventCount << " events" << std::endl;
 }

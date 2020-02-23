@@ -79,17 +79,20 @@ void Game::CloseSDL(SDL_Window*& win, Screen*& screen) {
 }
 
 void Game::PauseForRestOfFrame(const uint32_t targetFrameLength, const uint32_t deltaTime) {
-    if(targetFrameLength > deltaTime) SDL_Delay(static_cast<uint32_t>(targetFrameLength - deltaTime));
+    if(targetFrameLength > deltaTime) {
+        std::cout << "Pause for " << targetFrameLength - deltaTime << "ms" << std::endl;
+        SDL_Delay(static_cast<uint32_t>(targetFrameLength - deltaTime));
+    }
 }
 
 void Game::FireOffThreadsToUpdateAndGetInput(Screen* screenPointer, const uint32_t deltaTime, const InputData inputData) {
-    ThreadPool::AddTask([screenPointer, deltaTime, inputData]() {
+    //ThreadPool::AddTask([screenPointer, deltaTime, inputData]() {
         screenPointer->Update(deltaTime, inputData);
-    }, true);
+    //}, true);
 
-    ThreadPool::AddTask([]() {
+    //ThreadPool::AddTask([]() {
         InputProcessor::GetInputFromDevice();
-    }, true);
+    //}, true);
 }
 
 void Game::Draw(const std::vector<DrawableComponent*>& drawableComponentsData) {
@@ -147,12 +150,19 @@ bool Game::GameLoop() {
             previousTime = currentTime;
             currentTime = SDL_GetTicks();
             deltaTime = currentTime - previousTime;
+            std::cout << "deltaTime: " << deltaTime << std::endl;
+            if (deltaTime > 100) {
+                std::cout << "Really long frame" << std::endl;
+            }
 
             if(!Step(deltaTime)) {
                 break;
             }
-
-            PauseForRestOfFrame(targetFrameLength, SDL_GetTicks() - currentTime);
+            auto ticks = SDL_GetTicks();
+            std::cout << "SDL_GetTicks(): " << ticks << std::endl << "currentTime: " << currentTime << std::endl;
+            auto frameLength = ticks - currentTime;
+            std::cout << "targetFrameLength: " << targetFrameLength << std::endl << "frameLength: " << frameLength << std::endl;
+            PauseForRestOfFrame(targetFrameLength, frameLength);
         }
     } catch (const std::exception& ex) {
         std::cerr << "Game::GameLoop() failed: " << ex.what() << std::endl;
